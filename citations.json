@@ -1,0 +1,2137 @@
+[
+  {
+    "author": "X Leroy",
+    "title": "A formally verified compiler back-end",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "D Sangiorgi",
+    "title": "Introduction to bisimulation and coinduction",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Ramana Kumar",
+    "title": "CakeML: a verified implementation of ML",
+    "doi": "10.1145/2535838.2535841",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "S Blazy",
+    "title": "Mechanized semantics for the Clight subset of the C language",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "A. Chlipala",
+    "title": "A verified compiler for an impure functional language",
+    "doi": "10.1145/1706299.1706312",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Nick Benton",
+    "title": "Biorthogonality, step-indexing and compiler correctness",
+    "doi": "10.1145/1596550.1596567",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "U Dal Lago",
+    "title": "Probabilistic operational semantics for the lambda calculus",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "S Owens",
+    "title": "Functional big-step semantics",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "G Rosu",
+    "title": "One-path reachability logic",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Max Schäfer",
+    "title": "Dynamic determinacy analysis",
+    "doi": "10.1145/2491956.2462168",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "A Charguéraud",
+    "title": "Pretty-big-step semantics",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Nada Amin",
+    "title": "Type soundness proofs with definitional interpreters",
+    "doi": "10.1145/3009837.3009866",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "RJ Krebbers",
+    "title": "The C standard formalized in Coq",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Li-yao Xia",
+    "title": "Interaction trees: representing recursive and impure programs in Coq",
+    "doi": "10.1145/3371119",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "NA Danielsson",
+    "title": "Operational semantics using the partiality monad",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "N. Danner",
+    "title": "Denotational cost semantics for functional languages with inductive types",
+    "doi": "10.1145/2784731.2784749",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "A Cave",
+    "title": "Programming with binders and indexed data-types",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "NA Danielsson",
+    "title": "Subtyping, declaratively",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "K Nakata",
+    "title": "Trace-based coinductive operational semantics for while",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "K Nakata",
+    "title": "Resumptions, weak bisimilarity and big-step semantics for while with interactive I/O: An exercise in mixed induction-coinduction",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "P Herms",
+    "title": "A certified multi-prover verification condition generator",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "X Liu",
+    "title": "Deepfuzz: Automatic generation of syntax valid c programs for fuzz testing",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "L Correnson",
+    "title": "Combining analyses for C program verification",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "N Danner",
+    "title": "A static cost analysis for a higher-order language",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "G Roşu",
+    "title": "Towards a unified theory of operational and axiomatic semantics",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "RJ Simmons",
+    "title": "Substructural logical specifications",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "NA Danielsson",
+    "title": "Beating the productivity checker using embedded languages",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Peng Wang",
+    "title": "Compiler verification meets cross-language linking via data abstraction",
+    "doi": "10.1145/2714064.2660201",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Keiko Nakata",
+    "title": "A Hoare logic for the coinductive trace-based big-step semantics of While",
+    "doi": "10.2168/LMCS-11(1:1)2015",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Magnus O. Myreen",
+    "title": "Proof-producing synthesis of ML from higher-order logic",
+    "doi": "10.1145/2364527.2364545",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "D. Ancona",
+    "title": "Regular corecursion in Prolog",
+    "doi": "10.1145/2245276.2232088",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "F Dagnino",
+    "title": "Generalizing inference systems by coaxioms",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "D. Ancona",
+    "title": "Idealized coinductive type systems for imperative object-oriented programs",
+    "doi": "10.1051/ita/2011009",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "PN Tollitte",
+    "title": "Producing certified functional code from inductive specifications",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "D Ancona",
+    "title": "Corecursive featherweight java",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "X Leroy",
+    "title": "Mechanized semantics",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "D Ancona",
+    "title": "Sound and complete subtyping between coinductive types for object-oriented languages",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "T Ramananandro",
+    "title": "A compositional semantics for verified separate compilation and linking",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Ł Czajka",
+    "title": "A coinductive confluence proof for infinitary lambda-calculus",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "S Cooksey",
+    "title": "Modular relaxed dependencies in weak memory concurrency",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "M Bodin",
+    "title": "Certified abstract interpretation with pretty-big-step semantics",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "M Eberl",
+    "title": "A decision procedure for univariate real polynomials in Isabelle/HOL",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "X Leroy",
+    "title": "Mechanized semantics for compiler verification",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "C Bach Poulsen",
+    "title": "Deriving pretty-big-step semantics from small-step semantics",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "AW Appel",
+    "title": "A list-machine benchmark for mechanized metatheory",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "F Gava",
+    "title": "Formal Semantics of a Subset of the Paderborn's BSPlib",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "D Ancona",
+    "title": "Soundness of object-oriented languages with coinductive big-step semantics",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "J Lubin",
+    "title": "Program sketching with live bidirectional evaluation",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "NA Danielsson",
+    "title": "Mixing induction and coinduction",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "V Allombert",
+    "title": "Multi-ML: programming multi-BSP algorithms in ML",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Francesco Dagnino",
+    "title": "Coaxioms: flexible coinductive definitions by inference systems",
+    "doi": "10.23638/LMCS-15(1:26)2019",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "T. Bourke",
+    "title": "Mechanized semantics and verified compilation for a dataflow synchronous language with reset",
+    "doi": "10.1145/3371112",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "A Momigliano",
+    "title": "A supposedly fun thing I may have to do again: A HOAS encoding of Howe's method",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "D. Ancona",
+    "title": "Reasoning on divergent computations with coaxioms",
+    "doi": "10.1145/3133905",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "MJ Parreira Pereira",
+    "title": "Tools and techniques for the verification of modular stateful code",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Eric Koskinen",
+    "title": "Local temporal reasoning",
+    "doi": "10.1145/2603088.2603138",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "P Herms",
+    "title": "Certification of a tool chain for deductive program verification",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "R Kumar",
+    "title": "Self-compilation and self-verification",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "M Bartoletti",
+    "title": "Circular causality in event structures",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "J Cheney",
+    "title": "Advances in Property-Based Testing for Prolog",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "C Bach Poulsen",
+    "title": "Scopes describe frames: A uniform model for memory layout in dynamic semantics",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Ş Ciobâcă",
+    "title": "From small-step semantics to big-step semantics, automatically",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "D. Ancona",
+    "title": "Semantic subtyping for imperative object-oriented languages",
+    "doi": "10.1145/2983990.2983992",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "D Ancona",
+    "title": "Modeling infinite behaviour by corules",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "D. Ancona",
+    "title": "How to prove type soundness of Java-like languages without forgoing big-step semantics",
+    "doi": "10.1145/2635631.2635846",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "CB Poulsen",
+    "title": "Flag-based big-step semantics",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "RJ Colvin",
+    "title": "Structural operational semantics through context-dependent behaviour",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "A Flores Montoya",
+    "title": "Cost analysis of programs based on the refinement of cost relations",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "JADM Kuśmierek",
+    "title": "Big-step operational semantics revisited",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "J Åman Pohjola",
+    "title": "Characteristic formulae for liveness properties of non-terminating CakeML programs",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "F Kunze",
+    "title": "Formal small-step verification of a call-by-value lambda calculus machine",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "L Rodríguez",
+    "title": "Proving correctness of a compiler using step-indexed logical relations",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Ł Czajka",
+    "title": "Coinductive techniques in infinitary lambda-calculus",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "L Xia",
+    "title": "Interaction trees",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Ł Czajka",
+    "title": "A new coinductive confluence proof for infinitary lambda calculus",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "V Allombert",
+    "title": "Functional abstraction for programming multi-level architectures: formalisation and implementation",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "JD Kusmierek",
+    "title": "A Mixin Based Object-Oriented Calculus: True Modularity in Object-Oriented Programming",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "H Nestra",
+    "title": "Transfinite semantics in the form of greatest fixpoint",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "S Jost",
+    "title": "Automated amortised analysis",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "X Shi",
+    "title": "Certification of an instruction set simulator",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "L Czajka",
+    "title": "Confluence of nearly orthogonal infinitary term rewriting systems",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "A Ciaffaglione",
+    "title": "A coinductive semantics of the unlimited register machine",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Francesco Dagnino",
+    "title": "Foundations of regular coinduction",
+    "doi": "10.46298/lmcs-17(4:2)2021",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "S Schneider",
+    "title": "Semantics of an intermediate language for program transformation",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "F Dagnino",
+    "title": "Flexible coinductive logic programming",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "DJ Pearce",
+    "title": "Flow-Sensitive Types for Whiley",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Z Paraskevopoulou",
+    "title": "Compositional optimizations for certicoq",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "F Gava",
+    "title": "Two formal semantics of a subset of the paderborn university bsplib",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "RL Ford",
+    "title": "Dafny Reference Manual",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "D Ancona",
+    "title": "Sound regular corecursion in coFJ",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "KRM Leino",
+    "title": "Well-founded Functions and Extreme Predicates in Dafny: A Tutorial.",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "BM Moore",
+    "title": "Coinductive program verification",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "F Dagnino",
+    "title": "Soundness Conditions for Big-Step Semantics.",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "I Zerny",
+    "title": "The Interpretation and Inter-derivation of Small-step and Big-step Specifications",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "D. Ancona",
+    "title": "Coinductive big-step operational semantics for type soundness of Java-like languages",
+    "doi": "10.1145/2076674.2076679",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "L Ciccone",
+    "title": "Flexible coinduction in agda",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Yannick Zakowski",
+    "title": "Modular, compositional, and executable formal semantics for LLVM IR",
+    "doi": "10.1145/3473572",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "L Ciccone",
+    "title": "Flexible coinduction in Agda",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "L Cohen",
+    "title": "Integrating induction and coinduction via closure operators and proof cycles",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "H Grall",
+    "title": "Proving fixed points",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "D Ancona",
+    "title": "A big step from finite to infinite computations",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "T Uustalu",
+    "title": "Coinductive big-step semantics for concurrency",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Georges-Axel Jaloyan",
+    "title": "Verification of Programs with Pointers in SPARK",
+    "doi": "10.1007/978-3-030-63406-3_4",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "J Fortin",
+    "title": "BSP-Why: a Tool for Deductive Verification of BSP Programs",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "PE Dagand",
+    "title": "Language support for reliable operating systems",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "JB Jensen",
+    "title": "Techniques for model construction in separation logic",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "T Cimoli",
+    "title": "A theory of agreements and protection",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "HM Gualandi",
+    "title": "Typing dynamic languages–a review",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "K Altisen",
+    "title": "Squeezing Streams and Composition of Self-stabilizing Algorithms",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "D Ancona",
+    "title": "RML: Theory and practice of a domain specific language for runtime verification",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "U Dal Lago",
+    "title": "Infinitary lambda calculi from a linear perspective",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "CB Poulsen",
+    "title": "Extensible transition system semantics",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "L Rodríguez",
+    "title": "A Certified Extension of the Krivine Machine for a Call-by-Name Higher-Order Imperative Language",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Ł Czajka",
+    "title": "Coinduction: an elementary approach",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "M Mizuno",
+    "title": "Formal verifications of call-by-need and call-by-name evaluations with mutual recursion",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "DJ Pearce",
+    "title": "Flow-sensitive types for whiley",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "I Sergey",
+    "title": "Programs and proofs",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "LM Rodríguez",
+    "title": "Compilación Certificada sobre Máquinas Abstractas de evaluación normal",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Péter Bereczky",
+    "title": "A Comparison of Big-step Semantics Definition Styles",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "D Racordon",
+    "title": "Featherweight swift: A core calculus for swift's type system",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "CB Poulsen",
+    "title": "Divergence as state in coinductive big-step semantics",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "V Allombert",
+    "title": "A formal semantics of the MULTI-ML language",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "C Bach Poulsen",
+    "title": "Imperative polymorphism by store-based types as abstract interpretations",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "RJ Simmons",
+    "title": "A logical correspondence between natural semantics and abstract machines",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "GA Jaloyan",
+    "title": "Borrowing safe pointers from rust in spark",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "A Jobin",
+    "title": "Dioïdes et idéaux de polynômes en analyse statique",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "K Nguyen",
+    "title": "Langage de combinateurs pour XML Conception Typage Implantation",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "G Henry",
+    "title": "Typer la désérialisation sans sérialiser les types",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Angel Zúñiga",
+    "title": "Coinductive Natural Semantics for Compiler Verification in Coq",
+    "doi": "10.3390/MATH8091573",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "A Lochbihler",
+    "title": "A Machine-Checked, Type-Safe Model of Java Concurrency",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "D Juliano",
+    "title": "Position paper: Towards transparent machine learning",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "A Sinkarovs",
+    "title": "A lambda calculus for transfinite arrays: Unifying arrays and streams",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "M Degen",
+    "title": "Java (X): A Type-Based Program Analysis Framework",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Jérôme Vouillon",
+    "title": "Order Theory for Big-Step Semantics",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Z Paraskevopoulou",
+    "title": "Verified Optimizations for Functional Languages",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Stefan Wils",
+    "title": "Certifying C program correctness with respect to CompCert with VeriFast",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "A Zúniga",
+    "title": "A Correct Compiler from Mini-ML to a Big-Step Machine Verified Using Natural Semantics in Coq",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "L Rodríguez",
+    "title": "Proving compiler correctness using step-indexed logical relations",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "JM Madiot",
+    "title": "Specification of imperative languages using operational semantics in Coq",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "DA NAUMANN",
+    "title": "Theory for Software Verification—draft January 25, 2009",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "UD Lago",
+    "title": "Infinitary -Calculi from a Linear Perspective (Long Version)",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Ferdinand Vesely",
+    "title": "One Step at a Time",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "G Nerjes",
+    "title": "A multimedia information server with mixed workload scheduling",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "PN Tollitte",
+    "title": "Extraction de code fonctionnel certifié à partir de spécifications inductives",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "DA NAUMANN",
+    "title": "Theory for Software Verification—draft January 20, 2009",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "NA Danielsson",
+    "title": "Total Definitional Interpreters for Time and Space Complexity",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Francesco Dagnino",
+    "title": "A Meta-theory for Big-step Semantics",
+    "doi": "10.1145/3522729",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "RL Ford",
+    "title": "Draft Dafny Reference Manual",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "P HERMS",
+    "title": "CENTRE D'ORSAY",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "D Racordon",
+    "title": "Implementation Strategies for Mutable Value Semantics.",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "T Ramananandro",
+    "title": "A Compositional Framework for Certified Separate Compilation and Modular Program Verification",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "A Ștefănescu",
+    "title": "Toward language-independent program verification",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "R Kumar",
+    "title": "First Year Report",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "MA Pirog",
+    "title": "Completely iterative monads in semantics of coinductive programs",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Roberto Blanco",
+    "title": "On the Proof Theory of Property-Based Testing of Coinductive Specifications, or: PBT to Infinity and beyond",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "A Momigliano",
+    "title": "A Supposedly Fun Thing I May Have to Do Again",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "T Altenkirch",
+    "title": "Partiality, Revisited",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "F Gava",
+    "title": "Habilitation thesis",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "J Fortin",
+    "title": "Formal Operational Semantics of a Core Imperative BSP language",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "S Krishnamurthi",
+    "title": "Scopes Describe Frames: A Uniform Model for Memory Layout",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "A. Charguéraud",
+    "title": "Omnisemantics: Smoother Handling of Nondeterminism",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "M Degen",
+    "title": "Java (X)",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "X Liu",
+    "title": "Neural Program Synthesis for Compiler Fuzzing",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "ZJ Sullivan",
+    "title": "Deriving Practical Implementations of First-Class Functions",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "A Charguéraud",
+    "title": "Great-Step Semantics",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "RJ Simmons",
+    "title": "Substructural Logical Specifications (Third committee draft–missing Theorem 8. 4, Section 10.3)",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "D Ancona",
+    "title": "A coinductive effect system for precise global type analysis of object-oriented languages",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "A. Momigliano",
+    "title": "Why Proof-Theory Matters in Specification-Based Testing",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "J Chrzaszcz",
+    "title": "Coq Support in HAHA",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "K Nakata",
+    "title": "Resumptions, Weak Bisimilarity and Big-Step Semantics for While with Interactive I/O",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "R Cantoro",
+    "title": "Improved Test Solutions for COTS-Based Systems in Space Applications",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "M Strygin",
+    "title": "Semantics and logics for signals",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "T Wang",
+    "title": "Functional description extraction of code based on formal semantics of Clight",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "K Nakano",
+    "title": "Shall we juggle, coinductively?",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "F Dagnino",
+    "title": "A framework for big-step semantics",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "GA JALOYAN",
+    "title": "A Semantic Approach to Machine-Level Software Security",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "C Beck",
+    "title": "Modular, Compositional, and Executable Formal Semantics for LLVM IR",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "L FRANCESCHINI",
+    "title": "Corecursion in abstract compilation of object-oriented languages",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "M Daniel",
+    "title": "Programming Language Operational Semantics",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "A Chlipala",
+    "title": "Syntactic Proofs of Compositional Compiler Correctness",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "A. Charguéraud",
+    "title": "CPS Semantics: Smoother Nondeterminism in Operational Semantics",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "P Szkupien",
+    "title": "The Effect of Transition Granularity in the Model Checking of Reactive Systems",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "N. Veltri",
+    "title": "Inductive and Coinductive Predicate Liftings for Effectful Programs",
+    "doi": "10.4204/EPTCS.351.16",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "L Okawa Ericson",
+    "title": "Simple formally verified compiler in Lean",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "R Bianchini",
+    "title": "Tipi globali per reti asincrone: un approccio coinduttivo",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "NA DANIELSSON",
+    "title": "Total Definitional Interpreters for Looping Programs",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "RL Ford",
+    "title": "Draft Dafny Reference Manual Manuscript Dafny Reference",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "V Bono",
+    "title": "The Magda language: ten years after",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "F Sieczkowski",
+    "title": "Automated Derivation of Abstract Machines from Reduction Semantics",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "DS Hardin",
+    "title": "Synthesis of Verified Architectural Components for Critical Systems Hosted on a Verified Microkernel.",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "D Ancona",
+    "title": "A Big Step from Finite to Infinite Computations (SCICO Journal-first)",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "R Krebbers",
+    "title": "Draft of PhD thesis: The C standard formalized in Coq",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "A Schubert",
+    "title": "Formalisation of a frame stack semantics for a Java-like language",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "R Garcia",
+    "title": "Coinductive Definition: A Counterpoint to Inductive Definition",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "RL Ford",
+    "title": "richford@ microsoft. com K. Rustan M. Leino leino@ microsoft. com",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "L Cohen",
+    "title": "Non-well-founded Deduction for Induction and Coinduction.",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "E de Vries",
+    "title": "Fixed-Point vs Proof Theoretic Approach to Inference Systems",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "H Im",
+    "title": "Coinductive Subtyping for Recursive and Union Types",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "A Corradi",
+    "title": "Infinite derivations as failures.",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "P. Giannini",
+    "title": "A Provably Correct Compilation of Functional Languages into Scripting Languages",
+    "doi": "10.7561/SACS.2017.1.19",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "F Dagnino",
+    "title": "Flexible Coinduction for Infinite Behaviour.",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "J Lopez",
+    "title": "Breaking boundaries between programming languages and databases",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "MA Asperti",
+    "title": "Sémantiques formelles",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "SC Boulakia",
+    "title": "doctorat",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "J Fortin",
+    "title": "BSP-Why, un outil pour la vérification déductive de programmes BSP: machine-checked semantics and application to distributed state-space algorithms",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "水野雅之， 住井英二郎",
+    "title": "無限の入出力を行う関数型プログラムの K 正規化の形式的検証",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "B Lélio",
+    "title": "Sémantique Mécanisée et Compilation Vérifiée pour un Langage Synchrone à Flots de Données avec Réinitialisation",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Alain Giorgetti",
+    "title": "Spécification et vérification de systèmes paramétrés",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "JDM Ku±mierek",
+    "title": "Obiektowy j¦ zyk programowania oparty na mixinach Prawdziwa modularno±¢ wj¦ zykach obiektowych",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "P NOM",
+    "title": "Programmer des applications réparties",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "I Garnier",
+    "title": "Formalisme pour la conception haut-niveau et détaillée de systèmes de contrôle-commande critiques",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "지수환， 임현승",
+    "title": "파이썬을 이용한 구조적 실행 의미구조 구현",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "J Lopez",
+    "title": "Au-delà des frontières entre langages de programmation et bases de données",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "V Allombert",
+    "title": "Abstraction fonctionnelle pour la programmation d'architecture multi-niveaux: formalisation et implantation",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "임현승",
+    "title": "재귀 타입과 합집합 타입을 위한 코인덕션 서브타이핑",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "王涛， 陈敏翼， 齐军",
+    "title": "基于 Clight 形式语义的代码功能描述提取",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "L Brun",
+    "title": "Sémantique mécanisée et compilation vérifiée pour un langage synchrone à flots de données avec réinitialisation",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "S. Goncharov",
+    "title": "Stateful Structural Operational Semantics",
+    "doi": "10.4230/LIPIcs.FSCD.2022.30",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Dimitri Racordon",
+    "title": "Implementation Strategies for Mutable Value Semantics",
+    "doi": "10.5381/jot.2022.21.2.a2",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Zoe Paraskevopoulou",
+    "title": "Compositional optimizations for CertiCoq",
+    "doi": "10.1145/3473591",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "L. Ciccone",
+    "title": "Flexible Coinduction in Agda",
+    "doi": "10.4230/LIPIcs.ITP.2021.13",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "L. Cohen",
+    "title": "Non-well-founded Deduction for Induction and Coinduction",
+    "doi": "10.1007/978-3-030-79876-5_1",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "D. Ancona",
+    "title": "Sound Regular Corecursion in coFJ",
+    "doi": "10.4230/LIPIcs.ECOOP.2020.1",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "M. Paviotti",
+    "title": "Modular Relaxed Dependencies in Weak Memory Concurrency",
+    "doi": "10.1007/978-3-030-44914-8_22",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Francesco Dagnino",
+    "title": "Soundness Conditions for Big-Step Semantics",
+    "doi": "10.1007/978-3-030-44914-8_7",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Lukasz Czajka",
+    "title": "A new coinductive confluence proof for infinitary lambda-calculus",
+    "doi": "10.23638/LMCS-16(1:31)2020",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Shang-Wei Lin",
+    "title": "Formal Methods and Software Engineering: 22nd International Conference on Formal Engineering Methods, ICFEM 2020, Singapore, Singapore, March 1–3, 2021, Proceedings",
+    "doi": "10.1007/978-3-030-63406-3",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "D. Hardin",
+    "title": "Synthesis of Verified Architectural Components for Critical Systems Hosted on a Verified Microkernel",
+    "doi": "10.24251/hicss.2020.779",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Dustin Juliano",
+    "title": "Position Paper: Towards Transparent Machine Learning",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Justin Lubin",
+    "title": "Program Synthesis with Live Bidirectional Evaluation",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Xiao Liu",
+    "title": "DeepFuzz: Automatic Generation of Syntax Valid C Programs for Fuzz Testing",
+    "doi": "10.1609/AAAI.V33I01.33011044",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "C. Hur",
+    "title": "Interaction Trees",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "F. Kunze",
+    "title": "Formal Small-step Verification of a Call-by-value Lambda Calculus Machine",
+    "doi": "10.1007/978-3-030-02768-1_15",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Georges-Axel Jaloyan",
+    "title": "Borrowing Safe Pointers from Rust in SPARK",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Victor Allombert",
+    "title": "Functional abstraction for programming multi-level architectures : formalisation and implementation. (Abstraction fonctionnelle pour la programmation d'architecture multi-niveaux : formalisation et implantation)",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "D. Ancona",
+    "title": "Generalizing Inference Systems by Coaxioms",
+    "doi": "10.1007/978-3-662-54434-1_2",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Thorsten Altenkirch",
+    "title": "Partiality, Revisited: The Partiality Monad as a Quotient Inductive-Inductive Type",
+    "doi": "10.1007/978-3-662-54458-7_31",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Antonio Flores-Montoya",
+    "title": "Cost Analysis of Programs Based on the Refinement of Cost Relations",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Chengnian Sun",
+    "title": "Finding compiler bugs via live code mutation",
+    "doi": "10.1145/2983990.2984038",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Alberto Ciaffaglione",
+    "title": "Towards Turing computability via coinduction",
+    "doi": "10.1016/j.scico.2016.02.004",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Casper Bach Poulsen",
+    "title": "Scopes Describe Frames: A Uniform Model for Memory Layout in Dynamic Semantics (Artifact)",
+    "doi": "10.4230/DARTS.2.1.10",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "J. Cheney",
+    "title": "Advances in Property-Based Testing for \\alpha Prolog",
+    "doi": "10.1007/978-3-319-41135-4_3",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "J. Cheney",
+    "title": "Advances in Property-Based Testing for $α$Prolog",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Ugo Dal Lago",
+    "title": "Infinitary $\\lambda$-Calculi from a Linear Perspective (Long Version)",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Nada Amin",
+    "title": "Dependent Object Types",
+    "doi": "10.5075/EPFL-THESIS-7156",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "K. Leino",
+    "title": "Well-founded Functions and Extreme Predicates in Dafny: A Tutorial",
+    "doi": "10.29007/v2m3",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Leonardo Rodríguez",
+    "title": "Proving Correctness of a Compiler Using Step-indexed Logical Relations",
+    "doi": "10.1016/J.ENTCS.2016.06.013",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Jan Hoffmann",
+    "title": "Type-based amortized resource analysis with integers and arrays*",
+    "doi": "10.1017/S0956796815000192",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Lukasz Czajka",
+    "title": "Coinductive Techniques in Infinitary Lambda-Calculus",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Martin Bodin",
+    "title": "Certified Abstract Interpretation with Pretty-Big-Step Semantics",
+    "doi": "10.1145/2676724.2693174",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Casper Bach Poulsen",
+    "title": "Imperative Polymorphism by Store-Based Types as Abstract Interpretations",
+    "doi": "10.1145/2678015.2682545",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "D. Ancona",
+    "title": "Sound and Complete Subtyping between Coinductive Types for Object-Oriented Languages",
+    "doi": "10.1007/978-3-662-44202-9_12",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Jan Hoffmann",
+    "title": "Type-Based Amortized Resource Analysis with Integers and Arrays",
+    "doi": "10.1007/978-3-319-07151-0_10",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "K. Leino",
+    "title": "Co-induction Simply - Automatic Co-inductive Proofs in a Program Verifier",
+    "doi": "10.1007/978-3-319-06410-9_27",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Casper Bach Poulsen",
+    "title": "Deriving Pretty-Big-Step Semantics from Small-Step Semantics",
+    "doi": "10.1007/978-3-642-54833-8_15",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "T. Uustalu",
+    "title": "Coinductive Big-Step Semantics for Concurrency",
+    "doi": "10.4204/EPTCS.137.6",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Xiaomu Shi",
+    "title": "Certification of an Instruction Set Simulator",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "G. Rosu",
+    "title": "One-Path Reachability Logic",
+    "doi": "10.1109/LICS.2013.42",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Stefan Ciobaca",
+    "title": "From Small-Step Semantics to Big-Step Semantics, Automatically",
+    "doi": "10.1007/978-3-642-38613-8_24",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "A. Charguéraud",
+    "title": "Pretty-Big-Step Semantics",
+    "doi": "10.1007/978-3-642-37036-6_3",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Massimo Bartoletti",
+    "title": "A Theory of Agreements and Protection",
+    "doi": "10.1007/978-3-642-36830-1_10",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Paolo Herms",
+    "title": "Certification of a Tool Chain for Deductive Program Verification. (Certification d'une chaine de vérification déductive de programmes)",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Paolo Herms",
+    "title": "of a Tool Chain for Deductive Program Verication",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Pierre-Nicolas Tollitte",
+    "title": "Producing Certified Functional Code from Inductive Specifications",
+    "doi": "10.1007/978-3-642-35308-6_9",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Jan Hoffmann",
+    "title": "Multivariate amortized resource analysis",
+    "doi": "10.1145/1926385.1926427",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Loïc Correnson",
+    "title": "Combining Analyses for C Program Verification",
+    "doi": "10.1007/978-3-642-32469-7_8",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Ilias Garnier",
+    "title": "Formalisme pour la conception haut-niveau et détaillée de systèmes de contrôle-commande critiques. (Formalism for the high-level design of hard real-time embedded systems)",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Ilias Garnier",
+    "title": "emes de contr^ ole-commande critiques",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Alberto Ciaffaglione",
+    "title": "A coinductive semantics of the Unlimited Register Machine",
+    "doi": "10.4204/EPTCS.73.7",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "P. Cousot",
+    "title": "Grammar semantics, analysis and parsing by abstract interpretation",
+    "doi": "10.1016/j.tcs.2011.06.005",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "I. Garnier",
+    "title": "On the reaction time of some synchronous systems",
+    "doi": "10.4204/EPTCS.59.7",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Nils Anders Danielsson",
+    "title": "Beating the Productivity Checker Using Embedded Languages",
+    "doi": "10.4204/EPTCS.43.3",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Jan Hoffmann",
+    "title": "Amortized Resource Analysis with Polymorphic Recursion and Partial Big-Step Operational Semantics",
+    "doi": "10.1007/978-3-642-17164-2_13",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "X. Leroy",
+    "title": "Mechanized semantics - with applications to program proof and compiler verification",
+    "doi": "10.3233/978-1-60750-100-8-195",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Keiko Nakata",
+    "title": "Resumptions, Weak Bisimilarity and Big-Step Semantics for While with Interactive I/O: An Exercise in Mixed Induction-Coinduction",
+    "doi": "10.4204/EPTCS.32.5",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Nils Anders Danielsson",
+    "title": "Subtyping, declaratively: an exercise in mixed induction and coinduction",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "E. Cariou",
+    "title": "Actes des deuxièmes journées nationales du Groupement de Recherche CNRS du Génie de la Programmation et du Logiciel",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "J. Kusmierek",
+    "title": "Big-step Operational Semantics Revisited",
+    "doi": "10.3233/FI-2010-323",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "David J. Pearce",
+    "title": "Structural and Flow-Sensitive Types for Whiley",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Dale Miller",
+    "title": "Fixed Points and Proof Theory: An Extended Abstract",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Rennes-Bretagne-Atlantique",
+    "title": "Project-Team ASCOLA ASpect and COmposition LAnguages",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Härmel Nestra",
+    "title": "Transfinite Semantics in the Form of Greatest Fixpoint",
+    "doi": "10.1016/j.jlap.2009.03.001",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "X. Leroy",
+    "title": "A Formally Verified Compiler Back-end",
+    "doi": "10.1007/s10817-009-9155-4",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "P. Cousot",
+    "title": "Bi-inductive structural semantics",
+    "doi": "10.1016/j.ic.2008.03.025",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Sandrine Blazy",
+    "title": "Mechanized Semantics for the Clight Subset of the C Language",
+    "doi": "10.1007/s10817-009-9148-3",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "G. Barthe",
+    "title": "Certificate translation for optimizing compilers",
+    "doi": "10.1145/1538917.1538919",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "A. Charguéraud",
+    "title": "Interactive Verification of Call-by-Value Functional Programs",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "F. Pfenning",
+    "title": "The logical basis of evaluation order and pattern-matching",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "D. Naumann",
+    "title": "Theory for Software Verification — Draft",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Pierre-Évariste Dagand",
+    "title": "Language Support for Reliable Operating Systems",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "César Kunz",
+    "title": "Préservation des preuves et transformation de programmes",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Kim Nguyễn",
+    "title": "Langage de combinateurs pour XML : conception, typage, implantation",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "B. Emir",
+    "title": "Translation Correctness for First-Order Object-Oriented Pattern Matching",
+    "doi": "10.1007/978-3-540-76637-7_5",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Zaynah Dargaye",
+    "title": "Mechanized Verification of CPS Transformations",
+    "doi": "10.1007/978-3-540-75560-9_17",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "P. Cousot",
+    "title": "Bi-inductive Structural Semantics: (Extended Abstract)",
+    "doi": "10.1016/j.entcs.2007.08.015",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "A. Appel",
+    "title": "Separation Logic for Small-Step cminor",
+    "doi": "10.1007/978-3-540-74591-4_3",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Sylvain Boulmé",
+    "title": "Intuitionistic Refinement Calculus",
+    "doi": "10.1007/978-3-540-73228-0_6",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "P. Cousot",
+    "title": "Varieties of Static Analyzers: A Comparison with ASTREE",
+    "doi": "10.1109/TASE.2007.55",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "R. Bagnara",
+    "title": "On the Design of Generic Static Analyzers for Modern Imperative Languages",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "R. V. Glabbeek",
+    "title": "Structural Operational Semantics",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "A. Appel",
+    "title": "Separation Logic for Small-step Cminor (extended version)",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Sandrine Blazy",
+    "title": "Comment gagner confiance en C",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "B. Emir",
+    "title": "Object-oriented pattern matching",
+    "doi": "10.5075/EPFL-THESIS-3899",
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Rocquencourt",
+    "title": "Project-Team Cristal Type-safe programming , modularity and compilation",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  },
+  {
+    "author": "Paris Rocquencourt",
+    "title": "Project-team Gallium Programming Languages, Types, Compilation and Proofs",
+    "doi": null,
+    "abstract": null,
+    "publisher": null
+  }
+]
