@@ -1,0 +1,71 @@
+-*- mode: org; fill-column:70 -*-
+#+title: Agenda presentazione MiniAgda
+#+date: 2022-10-03
+
+* Introduzione
+
+  ** *Perché*: ossia, /structural descent/ e /guardedness/ (spiegata dal Prof?).
+
+  ** *Citazioni agli approcci alternativi*: /guard condition/ di Coq e /foetus/ di Agda.
+  Entrambi sono *untyped*; che svantaggi hanno? 
+
+* MiniAgda 
+
+  ** *Intuizione*: indiciare i tipi con una /size/ che indica *un upper bound*
+  sulla dimensione dei valori di quel tipo; questo permette di controllare la
+  terminazione delle definizioni di *funzioni ricorsive* controllando che la
+  dimensione degli argomenti sia decrescente ([1]) [2]. 
+
+  ** *Perché MiniAgda*: è tra le prime implementazioni di un sistema basato su
+  sized-types non simply-typed. Il punto di vista del paper (e pertanto anche
+  della presentazione) è più implementativo che strettamente teorico.
+
+* Tipi induttivi 
+
+  ** *Intuizione*:
+    1. Associare una /taglia/ ~i~ ad ogni tipo induttivo ~D~;
+    2. Controllare che la taglia diminuisca nelle chiamate ricorsive.  
+
+  ** *Implementazione*:
+    - Concetto di /altezza/ ed esempio i numeri naturali (in generale, non in MiniAgda).
+
+    - Come una taglia è associata all'altezza: un elemento ~d \in D^i~ di
+      taglia ~i~ ha un altezza che è strettamente minore di ~i~.
+
+    - Migliorie derivanti dall'uso di un sistema dependently typed,
+      implementazione dell'esempio in MiniAgda, ossia i tipi sono ~Size->Set~; 
+      esempio definizione ~pred~ con /dot pattern/.
+
+    - Parametricità delle funzioni rispetto alle taglie: in particolare, "The
+      result of a function should never be influenced by the size of its
+      arguments, and we should not be allowed to pattern match on sizes."
+      Mentre il risultato deve essere indipendente dalla taglia, il suo /tipo/
+      dipende da esso.
+      # Decidere se includere anche una discussione sull'uso dei tipi intersezione.
+
+  # Nell'articolo, nella sezione successiva, non c'è una vera e propria
+  # dimostrazione del fatto che i sized-types permettono in generale di
+  # controllare la terminazione di una definizione: ci sono due esempi (la
+  # definizione della funzione ~minus~ e la definizione della funzione ~div~) e
+  # semplicemente viene mostrato il fatto che nella definizione le taglie dei
+  # tipi nelle chiamate ricorsive diminuiscono; questo fatto viene esposto
+  # senza dire "questa cosa non si può fare negli altri sistemi", probabilmente
+  # viene lasciato implicitamente inteso per chi sa perfettamente cosa si può e
+  # non si può fare con la guardedness. La stessa cosa viene fatta nella
+  # sezione successiva, in cui viene specificato però che le definizioni
+  # mutuali di tipi induttivi (cosa che viene fatta con Rose Trees e liste)
+  # sono più semplici da fare con sized-types piuttosto che con Coq e Agda
+  # pre-sized types; sicuramente questo va incluso nella discussione: decidere
+  # come.
+ 
+* Tipi co-induttivi
+
+ 
+
+# [1]: il paper dice che questo fatto comporta "by well-foundedness" che la
+# funzione sia terminante. E' il caso di analizzare nel dettaglio questo
+# fatto? 
+# [2]: nell'introduzione il paper non cita in che modo verranno
+# utilizzati i sized-types per controllare la produttività di definizioni
+# co-induttive.
+# [3]: l'esempio 
