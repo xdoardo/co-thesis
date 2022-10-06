@@ -33,35 +33,12 @@ layout: default
 * ## Introduzione
   Controlli di terminazione e produttività, approcci alternativi
 * ## Sized-types 
-  *Intuizione* dei sized-types e perché MiniAgda
+  *Intuizione* dei sized-types in MiniAgda
 * ## Tipi induttivi 
-  Regole (intuitive) per il controllo della terminazione e implementazione del
-  controllo di terminazione in MiniAgda
+  Regole (intuitive) per il controllo della terminazione e implementazione in MiniAgda
 * ## Tipi co-induttivi
-  *Guardedness* non tipata (sintattica) e tipata.
+  *Guardedness* non tipata (sintattica) e tipata
 
-<div class="absolute bottom-10 right-10">
-  <span class="font-700">
-    <SlideCurrentNo /> / <SlidesTotal />
-  </span>
-</div>
----
-layout: default
----
-# Introduzione 
-* ## Induzione 
-``` coq
-Inductive Nat : Set := 
-  | zero : Nat
-  | suc : Nat -> Nat.
-```
-* ## Co-Induzione
-``` coq
-CoInductive NatStream := cons {
-  hd: nat ; 
-  tail: NatStream
-}.
-```
 <div class="absolute bottom-10 right-10">
   <span class="font-700">
     <SlideCurrentNo /> / <SlidesTotal />
@@ -243,17 +220,78 @@ layout: default
 --- 
 layout: default
 ---
-# Implementazione: altezza 
+# Tipi induttivi: implementazione
+* ## Altezza
 L'**altezza** di un elemento $d \in D$ è il *numero di costruttori* di $d$.
-Possiamo immaginare $d$ come un albero in cui i nodi sono i costruttori.
+Possiamo immaginare $d$ come un albero in cui i nodi sono i costruttori: per
+esempio, l'altezza di un numero naturale $n$ è $n+1$. 
 
-  jasdjajds
+* ## Taglia 
+Indiciamo quindi il tipo $D$ con $i$ ottenendo un tipo $D^i$ che contiene solo
+quei $d$ la cui altezza **è minore** di $i$. In un linguaggio d.t. possiamo
+modellare la taglia come un tipo $Size$ con un successore $\$: Size \rightarrow
+Size$; i *sized-types* sono quindi membri di $Size \rightarrow Set$. 
 
-<div class="absolute right-50">
+* ## Sottotipi
+Siccome le taglie sono <u>**upper bound**</u> dell'altezza di un elemento,
+viene naturale la regola 
+$$
+D^i \leq D^{\$i} \leq \cdots \leq D^{\omega}
+$$
+dove $D^{\omega}$ è un elemento la cui altezza è ignota.
+
+<div class="absolute bottom-10 right-10">
   <span class="font-700">
-    <img src="/figures/tree_cons.png" width="50" height="100">
+    <SlideCurrentNo /> / <SlidesTotal />
   </span>
 </div>
+
+--- 
+layout: default
+---
+# Tipi induttivi: implementazione 
+* ## Esempio
+
+``` agda
+data SNat : Size -> Set
+  zero : (i : Size) -> SNat ($ i); 
+  succ : (i : Size) -> SNat i -> SNat ($ i)
+```
+
+* ## Parametricità
+Le taglie sono utili sono durante il type checking e devono essere rimosse una
+volta concluso. Pertanto, i risultati di una funzione non devono essere
+dipendenti dalle taglie.
+
+* ## Dot patterns 
+E' necessario utilizzare dei *pattern inaccessibili* per evitare la
+non-linearità del lato sinistro del pattern match. 
+``` agda
+pred : (i : Size) -> SNat ($$ i) -> SNat ($ i)
+pred i (succ .($ i) n) = n
+pred i (zero .($ i)) = zero i
+
+```
+<div class="absolute bottom-10 right-10">
+  <span class="font-700">
+    <SlideCurrentNo /> / <SlidesTotal />
+  </span>
+</div>
+
+--- 
+layout: default
+---
+# Tipi induttivi: terminazione 
+Introduciamo i *size patterns* $i > j$ per legare una variabile $j$ e
+"ricordarsi" che $i > j$.
+``` agda
+minus : (i : Size) -> SNat i -> SNat ω -> SNat i
+minus i (zero (i > j)) y = zero j
+minus i x (zero .ω) = x
+minus i (succ (i > j) x) (succ .ω y) = minus j x y
+```
+Siccome nella chiamata ricorsiva la taglia decresce in tutti e tre gli
+argomenti la terminazione può essere dimostrata.
 
 <div class="absolute bottom-10 right-10">
   <span class="font-700">
@@ -262,12 +300,87 @@ Possiamo immaginare $d$ come un albero in cui i nodi sono i costruttori.
 </div>
 
 
+--- 
+layout: default
 ---
-layout: image-right
-image: '/figures/tree_cons.png'
+# Tipi co-induttivi 
+Questa definizione è accettata per *guardedness*:
+``` agda 
+repeat : (A : Set) -> (a:A) -> Stream A 
+repeat A a = cons A a (repeat A a)
+```
+
+Questa dipende da $f$:
+``` agda 
+repeatf : (A : Set) -> (a:A) -> Stream A 
+repeatf A a = cons A a (f repeat A a)
+```
+se $f$ è, esempio, $tail$, la definizione si riduce a sé stessa dopo una ricorsione: 
+```
+tail (repeat a) -> tail (a :: tail repeat a) -> tail repeat a -> ...
+```
+se invece $f$ mantiene la lunghezza dello stream o la incrementa, `repeatf` è
+produttiva; i controlli puramente sintattici, però, non possono catturare
+questo aspetto.
+
+<div class="absolute bottom-10 right-10">
+  <span class="font-700">
+    <SlideCurrentNo /> / <SlidesTotal />
+  </span>
+</div>
+
+--- 
+layout: default
 ---
+# Tipi co-induttivi: implementazione
+* ## Profondità
+La **profondità** di un elemento coinduttivo $d \in D$ è il *numero di
+co-costruttori* di $d$. Uno stream interamente costruito avrà profondità $\omega$.
 
-# Slide Title
-## Slide Subtitle
+* ## Taglia 
+Indiciamo quindi il tipo $D$ con $i$ ottenendo un tipo $D^i$ che contiene solo
+quei $d$ la cui altezza **è maggiore** di $i$; in altre parole, la taglia $i$
+di un tipo coinduttivo $D^i$ è un **lower bound** dell'altezza degli elementi
+di $D^i$.
+``` agda
+codata NatStream : Size -> Set
+  cons : (i : Size) -> Nat -> NatStream i -> NatStream ($ i)
 
-* Slide bullet text
+hd : (i : Size) -> NatStream $i -> Nat
+hd i (cons .i a s) = a
+
+tl : (i : Size) -> NatStream $i -> NatStream i
+tl i (cons .i a s) = s
+```
+<div class="absolute bottom-10 right-10">
+  <span class="font-700">
+    <SlideCurrentNo /> / <SlidesTotal />
+  </span>
+</div>
+
+--- 
+layout: default
+---
+# Tipi co-induttivi: produttività
+La funzione `repeat` con i sized-types:
+``` agda
+repeat: Nat -> (i:Size) -> NatStream i
+repeat n ($i) = cons i n (repeat n i)
+```
+Assumiamo che `repeat n i` produca uno stream *ben definito* di profondità $i$
+e automaticamente mostriamo che `repeat n ($i)` produce uno stream di
+profondità $n+1$. 
+
+* ## Successor pattern
+Perché possiamo fare il matching su `($i)`? 
+Se `j = ($i) = n + 1` allora $i =
+n$; se `j = ω`, allora `i = ω`; se `j = 0`, allora possiamo produrre ciò che
+vogliamo.
+
+<div class="absolute bottom-10 right-10">
+  <span class="font-700">
+    <SlideCurrentNo /> / <SlidesTotal />
+  </span>
+</div>
+
+
