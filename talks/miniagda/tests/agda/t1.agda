@@ -25,4 +25,3 @@ div (↑i) (succ i x) y = succ i (div i (minus i x y) y)
 
 _ : (div _ (succ _ (succ _ (succ _ (succ _ (zero _) )))) (succ _ (succ _ (zero _)))) ≡ (succ _ (succ _ (zero _)))
 _ = refl
-

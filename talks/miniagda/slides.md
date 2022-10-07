@@ -1,5 +1,5 @@
 ---
-theme: theme
+theme: myTheme
 paginate: true
 marp: true
 markdown.marp.breaks: "off"
@@ -31,7 +31,7 @@ Terminazione e produttività con *sized-types*.
 ## Introduzione 
 Oltre ai motivi di consistenza logica, in un linguaggio con tipi dipendenti la **totalità** è necessaria anche per assicurare la terminazione della fase di type-checking.
 
-``` haskell
+``` agda
  fooIsTrue : foo == true
  fooIsTrue = refl
 ```
@@ -39,9 +39,9 @@ Per mostrare che `refl` sia una dimostrazione del fatto che `foo == true`, Agda 
 
 ---
 
-## Tipi induttivi 
+## Tipi induttivi: terminazione
 
-Le seguenti definizioni sono accettate
+Esempio basilare in Coq
 ``` coq 
 Inductive Nat : Type := 
   | zero : Nat 
@@ -56,9 +56,8 @@ Fixpoint minus (x y : Nat) : Nat :=
                | succ y' => minus x' y' 
                end
   end.
-```
-Questa?
-``` coq
+
+(* termina? *)
 Fixpoint div (x y : Nat) :  Nat := z
 match x with 
 | zero => zero
@@ -67,34 +66,66 @@ end.
 ```
 ---
 
+## Tipi induttivi: terminazione
+...e in Agda
+``` agda
+data Nat : Set where 
+  zero : Nat 
+  succ : Nat -> Nat 
+
+minus : Nat -> Nat -> Nat 
+minus zero _ = zero
+minus (succ x) zero = succ x
+minus (succ x) (succ y) = minus x y
+
+
+-- termina?
+div : Nat -> Nat -> Nat 
+div zero _ = zero 
+div (succ x) y = succ (div (minus x y) y)
+```
+
+Le definizioni di `div` ovviamente terminano, verranno per forza accettate...
+
+---
+
 <!-- _class: fact -->
-# ...no!
+## no
 ``` coq
 Cannot guess decreasing argument of fix.
 ```
-
-Coq, come anche Agda, basa il controllo della terminazione su elementi sintattici e non è in grado di catturare delle sfaccettature semantiche decisamente rilevanti.
+``` agda
+Termination checking failed for the following functions:
+  div
+Problematic calls:
+  div (minus x y) y
+```
+Coq e Agda basano il controllo della terminazione sulla sintassi: non sono pertanto in grado di catturare delle sfaccettature semantiche decisamente rilevanti.
 
 *"The **untyped** approaches have some shortcomings, including the sensitivity of the termination checker to syntactical reformulations of the programs, and a lack of means to propagate size information through function calls."*  [[A. Abel, MiniAgda]](https://arxiv.org/abs/1012.4896)
 
 ---
 
-## Tipi induttivi: terminazione 
+## Tipi induttivi: terminazione (in agda) 
 
-*"Not all recursive functions are permitted - Agda accepts only these recursive schemas that it can mechanically prove terminating [...] a given argument must be exactly one constructor smaller in each recursive call [...] <alternatively> recursive calls <must be> on a (strict) subexpression of the argument; this is more general that just taking away one constructor at a time. It also means that arguments may decrease in an lexicographic order - this can be thought of as nested primitive recursion [...]"* [[ref]](https://wiki.portal.chalmers.se/agda/ReferenceManual/Totality#Terminationchecking)
+ Non tutte le funzioni ricorsive sono permesse: Agda, per esempio, accetta solo quegli schemi ricorsivi che riesce a dimostrare, meccanicamente, terminanti. 
 
+- **Ricorsione primitiva**
+Un argomento di una chiamata ricorsiva deve essere *esattamente* più piccola "di un costruttore".
 ``` agda 
--- ricorsione primitiva 
 plus : Nat -> Nat -> Nat
 plus zero    m = m
 plus (suc n) m = suc (plus n m)
-
--- ricorsione strutturale 
-ack : Nat -> Nat -> Nat
-ack zero    m       = suc m
-ack (suc n) zero    = ack n (suc zero)
-ack (suc n) (suc m) = ack n (ack (suc n) m)
 ```
+- **Ricorsione strutturale**
+Un argomento di una chiamata ricorsiva deve esser una *sottoespressione*.
+``` agda
+fib : Nat -> Nat
+  fib zero          = zero
+  fib (suc zero)    = suc zero
+  fib (suc (suc n)) = plus (fib n) (fib (suc n))
+```
+[[ref]](https://wiki.portal.chalmers.se/agda/ReferenceManual/Totality#Terminationchecking)
 
 ---
 
