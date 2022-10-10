@@ -1,3 +1,4 @@
+{-# OPTIONS --sized-types #-}
 data Nat : Set where 
   zero : Nat 
   succ : Nat -> Nat 
