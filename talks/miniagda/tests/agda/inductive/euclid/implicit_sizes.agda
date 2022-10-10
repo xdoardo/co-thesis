@@ -22,6 +22,5 @@ div : {i : Size} -> SNat i -> SNat ∞ -> SNat i
 div zero y = zero
 div (succ x) y = succ (div (minus x y) y)
 
-
 _ : (div  (succ  (succ  (succ  (succ  zero)))) (succ  (succ zero))) ≡ (succ  (succ  (zero )))
 _ = refl

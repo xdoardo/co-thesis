@@ -30,18 +30,3 @@ match x with
 | succ x' => succ (div (minus x y) y)
 end.
 (* Compute div (succ (succ (succ (succ zero)))) (succ (succ zero)). *)
-
-
-
-(*  *)
-CoInductive Stream {A: Type} : Type := cons {
-  hd: A;
-  tail: Stream
-}.
-
-CoFixpoint repeat {A:Type} (a:A) : Stream := cons A a (repeat a).
-Compute hd (repeat 0).
-Compute hd (tail (repeat 0)).
-
-CoFixpoint countFrom (n:Nat) := cons Nat n (countFrom (succ n)).
-
