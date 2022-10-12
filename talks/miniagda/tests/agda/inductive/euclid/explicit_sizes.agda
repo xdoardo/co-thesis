@@ -4,24 +4,15 @@
 {-# BUILTIN SIZESUC  ↑_       #-}  --  ↑_       : Size → Size
 {-# BUILTIN SIZEINF  ∞        #-}  --  ∞        : Size
 
-data SNat : Size -> Set where
-  zero : (i : Size) -> SNat (↑ i)
-  succ : (i : Size) -> SNat (i) -> SNat (↑ i) 
+data Nat : {i : Size} -> Set where
+    zero : {i : Size} -> Nat {↑ i} 
+    succ : {i : Size} -> Nat {i} -> Nat {↑ i}
 
-minus : (j : Size) -> SNat j -> SNat ∞ -> SNat j
-minus (↑i) (zero i) y = zero i
-minus (↑i) x (zero .∞) = x
-minus (↑i) (succ i x) (succ .∞ y) = minus i x y
+monus : {i : Size} -> Nat {i} -> Nat {∞} -> Nat {i}
+monus .{↑ j} (zero {j}) n = zero {j}
+monus .{↑ j} (succ {j} x) (zero {∞}) = succ {j} x
+monus .{↑ j} (succ {j} x) (succ {∞} y) = monus {j} x y
 
-
-open import Agda.Builtin.Equality
-_ : minus _ (succ _ (zero _)) (succ _ (zero _ )) ≡ zero _
-_ = refl
-
-div : (i : Size) -> SNat i -> SNat ∞ -> SNat i
-div (↑i) (zero i) y = zero i
-div (↑i) (succ i x) y = succ i (div i (minus i x y) y)
-
-
-_ : (div _ (succ _ (succ _ (succ _ (succ _ (zero _) )))) (succ _ (succ _ (zero _)))) ≡ (succ _ (succ _ (zero _)))
-_ = refl
+div : {i : Size} -> Nat {i} -> Nat {∞} -> Nat {i}
+div .{↑ j} (zero {j}) y = zero {j}
+div .{↑ j} (succ {j} x) y = succ (div {j} (monus {j} x y) y)
