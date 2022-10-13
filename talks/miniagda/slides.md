@@ -257,6 +257,8 @@ record NatStream : Set where
     head : Nat
     tail : NatStream
 
+open NatStream public 
+
 countFrom : Nat -> NatStream 
 head (countFrom x) = x 
 tail (countFrom x) = countFrom (x + 1)
@@ -266,7 +268,7 @@ tail (countFrom x) = countFrom (x + 1)
 ## Tipi co-induttivi: guardedness
 Non possiamo richiedere la *terminazione* di una funzione come `countFrom` (che, per definizione, non termina); invece, richiediamo la **produttività**: *"[...] we require productivity, which means that the next portion can always be produced in finite time. A simple criterion for productivity which can be checked syntactically is guardedness.."* [[ref]](https://arxiv.org/pdf/1012.4896.pdf)
 
-In Agda, il controllo della produttività di una funzione co-ricorsiva è basato sulla *guardedness* della definizione, ossia richiediamo che la definizione di una funzione (la parte destra) sia un (co-)costruttore e che ogni chiamata ricorsiva sia direttamente "sotto" esso. Questa definizione è accettata per *guardedness*, direttamente dall'uso dei co-patterns (che non verranno approfonditi in questa presentazione)
+In Agda, il controllo della produttività di una funzione co-ricorsiva è basato sulla *guardedness* della definizione, ossia richiediamo che la definizione di una funzione (la parte destra) sia un (co-)costruttore e che ogni chiamata ricorsiva sia direttamente "sotto" esso. Questa definizione è accettata per *guardedness*:
 ``` agda 
 repeat : Nat -> NatStream
 head (repeat x) = x 
@@ -278,9 +280,9 @@ tail (repeat x) = repeat x
 ## Tipi co-induttivi: guardedness
 Questa dipende da $F$:
 ``` agda 
-repeatF : (NatStream -> NatStream) -> Nat -> NatStream
-head (repeatF _ x) = x 
-tail (repeatF F x) = F (repeatF F x)
+repeatF : Nat -> (NatStream -> NatStream) -> NatStream
+head (repeatF x _) = x 
+tail (repeatF x f) = f (repeatF x f)
 ```
 se $F$ è, esempio, $tail$, la definizione si riduce a sé stessa dopo una ricorsione: 
 ```
@@ -307,7 +309,6 @@ record NatStream {i : Size} : Set where
     --          |-----| j di tipo `Size` minore di `i`
     --          v     v
     tail : {j : Size< i} -> NatStream {j}
-
 ```
 ---
 ## Tipi co-induttivi sized: implementazione
@@ -321,10 +322,15 @@ tail (countFrom {j} x) {i}  = countFrom {i} (x + 1)
 
 - **Sottotipi**
 Dualmente, se per i tipi induttivi vale $I^i \leq I^{\uparrow i} \leq \cdots \leq I^{\omega}$, per i tipi co-induttivi vale l'opposto: $C^i \geq C^{\uparrow i} \geq \cdots \geq C^{\omega}$ dove $C^{\omega}$ è un elemento la cui profondità è ignota.
-<!-- Servirebbe spiegare come questo giustifica il {j : Size< i} -> NatStream {j} nella definizione di NatStream...-->
 
+Possiamo quindi definire `repeatF` come segue:
 ``` agda
-repeatF : {i : Size} ->  (f : {j : Size< i} -> NatStream {j} -> NatStream {j}) -> Nat -> NatStream {i}
-head (repeatF _ x) = x 
-tail (repeatF f x) = f (repeatF f x)
+repeatF : {i : Size}  -> Nat -> ({j : Size< i} -> NatStream {j} -> NatStream {j})  -> NatStream {i}
+head (repeatF n _) = n 
+tail (repeatF n f) = f (repeatF n f)
 ```
+in questo modo assicuriamo al type checker che la funzione `f` non diminuisce la profondità del suo argomento. 
+
+---
+## Sized-types: caveat 
+![](Untitled.png)

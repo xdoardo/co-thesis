@@ -4,15 +4,18 @@
 {-# BUILTIN SIZESUC  ↑_       #-}  --  ↑_       : Size → Size
 {-# BUILTIN SIZEINF  ∞        #-}  --  ∞        : Size
 
-open import Agda.Builtin.Nat 
-
-record NatStream {i : Size} : Set where
+record Stream {A : Set} {i : Size} : Set where 
   coinductive
-  constructor _::_
   field
-    head : Nat
-    tail : ∀ {j : Size< i} → NatStream {j}
+    head : A
+    tail : {j : Size< i} -> Stream {A} {j}
 
-countFrom : {j : Size} -> Nat -> NatStream {j}
-head (countFrom {_} x) = x
-tail (countFrom {j} x) {i}  = countFrom {i} (x + 1)
+open Stream public 
+
+repeat : {A : Set} -> {i : Size} -> A -> Stream {A} {i}
+head (repeat {A} {i} x) = x
+tail (repeat {A} {i} x) {j} = repeat {A} {j} x
+
+map : {A : Set} -> {B : Set} -> {i : Size} -> (A -> B) -> Stream {A} {i} -> Stream {B} {i}
+head (map {A} {B} {i} f s) = f (head s)
+tail (map {A} {B} {i} f s) {j} = map {A} {B} {j} f (tail s)
