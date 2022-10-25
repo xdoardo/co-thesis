@@ -1,0 +1,459 @@
+% !TEX program = xelatex
+\documentclass[t,aspectratio=169,10pt]{beamer}
+\usetheme{gumint}
+
+\usepackage{
+  minted,
+  tcolorbox,
+  fontspec,
+  verbatim,
+  hyperref
+}
+
+\hypersetup{
+  colorlinks=false,% hyperlinks will be black
+    pdfborderstyle={/S/U/W 0.1}, % underline links instead of boxes
+    linkbordercolor=GumintPrimary,       % color of internal links
+    citebordercolor=GumintPrimary,     % color of links to bibliography
+    filebordercolor=GumintPrimary,   % color of file links
+    urlbordercolor=GumintPrimary        % color of external links
+}
+
+\tcbuselibrary{listings, minted, skins}
+\tcbset{listing engine=minted}
+\setmonofont{PragmataPro Mono Liga}
+
+\title{MiniAgda}
+\subtitle{Terminazione e produttività con \textit{sized types}}
+\date{}
+\author{Edoardo Marangoni}
+\email{ecmm@anche.no}
+
+\begin{document}
+
+\frame[plain]{\titlepage}
+
+\begin{frame}[t,plain]
+	\frametitle{Agenda}
+	\tableofcontents
+\end{frame}
+
+
+\section[intro]{Introduzione}
+\subsection[totalità]{Totalità}
+\begin{frame}[fragile]{Totalità}
+	Nei proof assistant, la totalità è necessaria per mantenere la
+	\textbf{consistenza} del sistema: se, infatti, ammettiamo definizioni ricorsive
+	non terminanti, si possono dimostrare teoremi falsi.
+	\vfill
+	\begin{minted}{coq}
+Parameter bad : nat -> nat.
+Axiom bad_ax : forall x, bad x = 1 + (bad x).
+
+Theorem n_neq_sn : forall (x:nat), (x = S x) -> False.
+Proof. intros.  induction x.
+  + inversion H.
+  + inversion H.  apply IHx in H1. assumption.
+Qed.
+
+Theorem zero_eq_one: 0 = 1.
+  assert (bad 0 = 1 + (bad 0)).
+  + apply bad_ax.
+  + destruct bad; simpl in H.
+    * assumption.
+    * apply n_neq_sn in H. exfalso. assumption.
+Qed.
+\end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Totalità}
+	Oltre ai motivi di consistenza logica, in un linguaggio con tipi dipendenti la
+		{\bf totalità} è necessaria anche per assicurare la terminazione della fase di
+	type-checking.
+
+	\begin{minted}{agda}
+ fooIsTrue : foo == true
+ fooIsTrue = refl
+\end{minted}
+
+	Per mostrare che \texttt{refl} sia una dimostrazione del fatto che \texttt{foo
+		== true}, Agda impiega il type checker per mostrare che \texttt{foo} sia
+	effettivamente ``riscrivibile'' in \texttt{true}; se \texttt{foo} non termina,
+	allora nemmeno il type-checker termina. In questa esposizione ci concentriamo su
+		{\bf terminazione} e {\bf produttività}, ossia due criteri per decidere se
+	permettere delle definizioni di funzione ricorsive e co-ricorsive in linguaggi
+	totali.
+\end{frame}
+
+\section[induttivi]{Tipi induttivi}
+\subsection{Introduzione}
+
+\begin{frame}[fragile]{Introduzione}
+	Numeri naturali (induttivi) in Coq
+	\begin{minted}{coq}
+Inductive Nat : Type := 
+  | zero : Nat 
+  | succ : Nat -> Nat
+
+(* ricorsione primitiva *)
+Fixpoint monus (x y : Nat) : Nat := 
+  match x with 
+  | zero => zero 
+  | succ x' => match y with 
+               | zero => succ x'
+               | succ y' => monus x' y' 
+               end
+  end.
+
+(* termina? *)
+Fixpoint div (x y : Nat) :  Nat := z
+match x with 
+| zero => zero
+| succ x' => succ (div (monus x y) y)
+end.
+  \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Introduzione}
+	...e in Agda
+	\begin{minted}{agda}
+data Nat : Set where 
+  zero : Nat 
+  succ : Nat -> Nat 
+
+-- ricorsione primitiva
+monus : Nat -> Nat -> Nat 
+monus zero _ = zero
+monus (succ x) zero = succ x
+monus (succ x) (succ y) = monus x y
+
+-- termina?
+div : Nat -> Nat -> Nat 
+div zero _ = zero 
+div (succ x) y = succ (div (monus x y) y)
+\end{minted}
+	Le definizioni di \texttt{div} ovviamente terminano: vengono accettate?
+\end{frame}
+
+\subsection{Terminazione}
+
+\begin{frame}[fragile,plain,standout]
+	\begin{center}
+		\color{GumintPrimary}\Large\textbf{No!}
+	\end{center}
+	Coq:
+	\begin{minted}{coq}
+Cannot guess decreasing argument of fix.
+\end{minted}
+
+	Agda:
+	\begin{minted}{agda}
+Termination checking failed for the following functions:
+  div
+Problematic calls:
+  div (monus x y) y
+\end{minted}
+
+	Coq e Agda basano il controllo della terminazione sulla sintassi e non sono
+	pertanto in grado di catturare informazioni semantiche rilevanti come, per
+	esempio, il fatto che per ogni argomento $x$ e $y$, $monus ~ x ~ y \leq x$:
+	pertanto, la definizione di $div$ non può essere accettata.
+	\vfill
+\end{frame}
+
+\begin{frame}[fragile]{Terminazione (in Agda)}
+	Non tutte le funzioni ricorsive sono permesse: \href{https://wiki.portal.chalmers.se/agda/ReferenceManual/Totality\#Terminationchecking}{Agda}, per esempio,
+	accetta solo quegli schemi ricorsivi che riesce a dimostrare
+	terminanti.
+	\begin{itemize}
+		\item {{\bf Ricorsione primitiva:}
+		      un argomento di una chiamata ricorsiva deve essere
+			      {\it esattamente} più piccola ``di un costruttore''.
+		      \begin{minted}{agda}
+plus : Nat -> Nat -> Nat
+plus zero    m = m
+plus (suc n) m = suc (plus n m)
+\end{minted}
+		      }
+		      \item{{\bf Ricorsione strutturale:}
+		                  Un argomento di una chiamata ricorsiva deve essere una
+			                  {\it sottoespressione}.
+		                  \begin{minted}{agda}
+fib : Nat -> Nat
+fib zero          = zero
+fib (suc zero)    = suc zero
+fib (suc (suc n)) = plus (fib n) (fib (suc n))
+		      \end{minted}
+		            }
+	\end{itemize}
+
+\end{frame}
+
+\section[induttivi sized]{Tipi induttivi sized}
+\subsection{Sized-types: intuizione}
+\begin{frame}{Sized-types: intuizione}
+	Sono un approccio {\bf tipato}: annotiamo i tipi con una {\it size} (o
+		{\it taglia}) che esprime un'informazione sulla dimensione dei valori di
+	quel tipo. MiniAgda è ``la prima implementazione matura di un sistema con
+	sized-types''. \href{https://arxiv.org/abs/1012.4896}{[ref]}
+
+	\vskip15pt
+
+	{
+	\center
+	``The {\bf untyped} approaches have some shortcomings, including
+	the sensitivity of the termination checker to syntactical
+	reformulations of the programs, and a lack of means to propagate
+	size information through function calls.''
+	\href{https://arxiv.org/abs/1012.4896}{[A. Abel, MiniAgda]}
+	}
+
+	\vskip15pt
+
+	Per quanto riguarda la terminazione, l'idea di base è la seguente:
+	\begin{enumerate}
+		\item {Associamo una {\it taglia} $i$ ad ogni tipo induttivo $D$;}
+		\item {Controlliamo che la taglia diminuisca nelle chiamate ricorsive.}
+	\end{enumerate}
+\end{frame}
+\subsection{Implementazione}
+\begin{frame}{Implementazione}
+	\begin{itemize}
+		\item{
+		L'{\bf altezza} di un elemento induttivo $d \in N$ è il
+			{\it numero di costruttori} di $d$. Possiamo immaginare $d$ come
+		un albero in cui i nodi sono i costruttori: per esempio,
+		l'altezza di un numero naturale $n$ è $n+1$ (perché c'è il
+		costruttore $zero$ come foglia con $n$ costruttori $succ$);
+		l'altezza di una lista di lunghezza $n$ è $n+1$ (perché c'è
+		il costruttore $nil$).
+		}
+		\item {
+		      Dato un certo tipo induttivo $N$ associamo ad esso una {\bf
+				      taglia} $i$, ottenendo un tipo $N^i$ che contiene solo quei
+		      $d$ la cui altezza {\bf è minore} di $i$, ossia ogni $d \in
+			      N^i$ ha un'altezza che ha come {\bf upper bound} la taglia
+		      $i$. In altre parole, dato un elemento induttivo $d \in
+			      N^{i}$, sappiamo che possiamo ``smontare'' $d$ nei suoi
+		      costruttori al più $i-1$ volte. }
+		\item  {
+		      In un linguaggio d.t. possiamo modellare la taglia come un
+		      tipo $Size$ e i {\bf sized-types} come membri di $Size
+			      \rightarrow Set$ (nel caso più semplice senza polimorfismo
+		      del tipo sottostante). Definiamo, inoltre, la funzione {\it
+				      successore}\footnote{nell'articolo di Abel la funzione
+			      successore è indicata col simbolo $\$$. Ci atteniamo alle
+			      definizioni della libreria di Agda e usiamo $\uparrow$.} sulle
+		      taglie $\uparrow : Size \rightarrow Size$ tale per cui
+		      $(\uparrow i) > i$.
+		      }
+	\end{itemize}
+\end{frame}
+\begin{frame}[fragile]{Implementazione}
+	Definiamo i numeri naturali {\it sized} come membri di $Size \rightarrow Set$.
+	\begin{minted}{agda}
+-- Naturali *sized*
+--         |--------| parametro implicito
+--         v        v
+data Nat : {i : Size} -> Set where
+    zero : {i : Size} -> Nat {↑ i} 
+    succ : {i : Size} -> Nat {i} -> Nat {↑ i}
+\end{minted}
+	Il costruttore $zero$ ha tipo $\forall i ~ SNat^{\uparrow i}$ perché la taglia è
+	un {\it upper bound}: anche se interpretiamo il costruttore \texttt{zero} come un albero
+	con un singolo nodo (pertanto con altezza $1$), vogliamo modellare il fatto che
+	la sua taglia sia $i \geq 1$.
+\end{frame}
+\begin{frame}{Implementazione}
+	\begin{itemize}
+		\item {{\bf Sottotipi}
+		      Per quanto appena detto, viene naturale per i tipi induttivi la regola
+		      di sottotipizzazione $N^i \leq N^{\uparrow i} \leq \cdots \leq
+			      N^{\omega}$ dove $N^{\omega}$ è un elemento la cui altezza è ignota
+		      (nella sintassi di Agda, la {\it taglia ignota} è $\infty$).
+		      }
+		\item {{\bf Dot patterns}
+		      Definendo alcune funzioni (come \texttt{monus} nella prossima slide),
+		      per mantenere la linearità della parte sinistra del pattern-match è
+		      necessario utilizzare i {\it dot patterns}, usati quando l'unico valore ben
+		      tipato per un argomento è definito da un pattern per un altro argomento,
+		      distinguendo quindi tra patterni ordinari e pattern {\it inaccessibili}.
+		      }
+	\end{itemize}
+\end{frame}
+\begin{frame}[fragile]{Implementazione}
+	\begin{minted}{agda}
+monus : {i : Size} -> Nat {i} -> Nat {∞} -> Nat {i}
+monus .{↑ j} (zero {j}) n = zero {j}
+monus .{↑ j} (succ {j} x) (zero {∞}) = succ {j} x
+-- anche se `monus x y` ha una taglia strettamente minore di i, il tipo del
+-- risultato è SNat i (e questo caso, `monus x y`, è ben tipato per
+-- sottotipizzazione); in altre parole, l'informazione che in questo caso il
+-- risultato ha taglia strettamente minore di x è persa. 
+monus .{↑ j} (succ {j} x) (succ {∞} y) = monus {j} x y
+
+-- Divisione euclidea *sized*
+div : {i : Size} -> Nat {i} -> Nat {∞} -> Nat {i}
+div .{↑ j} (zero {j}) y = zero {j}
+div .{↑ j} (succ {j} x) y = succ (div {j} (monus {j} x y) y)
+\end{minted}
+	Nella definizione di $div$, siccome $x$ ha taglia $j < i$, lo stesso vale anche
+	per $monus~x~y$: la chiamata ricorsiva a $div$ avviene sulla taglia $j$
+	strettamente minore di $i$; questo permette di dimostrare la terminazione della
+	funzione.
+\end{frame}
+\begin{frame}[fragile]{Esempio più complesso}
+	\begin{minted}{agda}
+data List (A : Set) : Set where
+  nil : List A 
+  cons : A -> List A -> List A
+
+mapList : {A : Set} -> {B : Set} -> (A -> B) -> List A -> List B
+mapList f nil = nil 
+mapList f (cons a x) = cons (f a) (mapList f x)
+
+data Rose (A : Set) : Size → Set where
+  rose : {i : Size} -> A -> List (Rose A i) → Rose A (↑ i)
+
+mapRose : {A : Set} -> {B : Set} -> (A -> B) -> {i : Size} -> Rose A i -> Rose B i
+mapRose f (rose a rs) = rose (f a) (mapList (mapRose f) rs)
+\end{minted}
+	Senza {\it sized-types}:
+	\begin{minted}{agda}
+Termination checking failed for the following functions:
+  mapRose
+Problematic calls:
+  mapRose f
+\end{minted}
+\end{frame}
+\section[coinduttivi]{Tipi co-induttivi}
+\subsection{Introduzione}
+\begin{frame}[fragile]{Introduzione}
+	Nonostante sia necessaria la totalità, possiamo lo stesso ``osservare'' oggetti
+	infiniti tramite la {\bf co-induzione}, concetto duale all'induzione. L'esempio
+	principale dei tipi co-induttivi è quello degli {\bf stream}. Esempio basilare in
+	Coq
+	\begin{minted}{coq}
+CoInductive NatStream : Type := cons { hd: nat; tail: NatStream }.
+CoFixpoint countFrom (n:nat) := cons nat n (countFrom (n+1)). (* =*> (cons n (cons n+1 (cons n+2 (...)))) *)
+\end{minted}
+	...e in Agda
+	\begin{minted}{agda}
+record NatStream : Set where
+  coinductive
+  constructor _::_
+  field
+    head : Nat
+    tail : NatStream
+
+open NatStream public 
+
+countFrom : Nat -> NatStream 
+head (countFrom x) = x 
+tail (countFrom x) = countFrom (x + 1)
+\end{minted}
+\end{frame}
+\subsection{Guardedness}
+\begin{frame}[fragile]{Guardedness}
+	Non possiamo richiedere la {\it terminazione} di una funzione come
+	\texttt{countFrom} (che, per definizione, non termina);
+	invece, richiediamo la {\bf produttività}: \textit{``[...]
+	we require productivity, which means that the next portion can always be
+	produced in finite time. A simple criterion for productivity which can be
+	checked syntactically is guardedness..''}
+	\href{https://arxiv.org/pdf/1012.4896.pdf}{[ref]}
+
+	\vfill
+
+	In Agda, il controllo della produttività di una funzione co-ricorsiva è basato
+	sulla {\it guardedness} della definizione, ossia richiediamo che la definizione di
+	una funzione (la parte destra) sia un (co-)costruttore e che ogni chiamata
+	ricorsiva sia direttamente ``sotto'' esso. Questa definizione è accettata per
+	guardedness:
+	\begin{minted}{agda}
+repeat : Nat -> NatStream
+head (repeat x) = x 
+tail (repeat x) = repeat x
+\end{minted}
+\end{frame}
+\begin{frame}[fragile]{Guardedness}
+	La seguente dipende da $F$:
+
+	\begin{minted}{agda}
+repeatF : Nat -> (NatStream -> NatStream) -> NatStream
+head (repeatF x _) = x 
+tail (repeatF x f) = f (repeatF x f)
+\end{minted}
+
+	se $F$ è, esempio, $tail$, la definizione si riduce a sé stessa dopo una ricorsione:
+
+	\begin{minted}{agda}
+tail (repeat a) -> tail (a :: tail repeat a) -> tail repeat a -> ...
+\end{minted}
+	se invece $F$ mantiene la lunghezza dello stream o la incrementa,
+	\texttt{repeatF} è produttiva; i controlli puramente sintattici, però, non
+	possono catturare questo aspetto.
+
+	(Nota: tornando agli esempi precedenti, il controllo sulla terminazione della
+	funzione \texttt{div} fallisce perché il controllo sintattico non riesce a
+	``capire'' che \texttt{monus} diminuisce (o lascia intatto) il parametro
+	\texttt{x}; qui accade l'opposto: il controllo fallisce se non riesce a
+	``capire'' che `F` incrementa lo stream o lo lascia intatto.)
+\end{frame}
+\section[coinduttivi sized]{Tipi coinduttivi sized}
+\subsection{Implementazione}
+\begin{frame}[fragile]{Implementazione}
+	\begin{itemize}
+		\item{{\bf Profondità}
+		            La \textbf{profondità} di un elemento coinduttivo $d \in D$ è il
+		            \textit{numero di co-costruttori} di $d$. Uno stream interamente
+		            costruito avrà profondità $\omega$.
+		      }
+		\item{{\bf Taglia}
+		Dato un certo tipo co-induttivo $C$ associamo ad esso una taglia $i$,
+		ottenendo un tipo $C^i$ che contiene solo quei $d$ la cui profondità {\bf
+		è maggiore} di $i$, ossia ogni $d \in C^i$ ha una profondità che ha come
+			{\bf lower bound} la taglia $i$. In altre parole, dato un elemento
+		co-induttivo $d \in C^{i}$, sappiamo che possiamo ``osservare'' $d$ nei
+		suoi costruttori almeno $i$ volte.
+		}
+	\end{itemize}
+
+	\begin{minted}{agda}
+record NatStream {i : Size} : Set where 
+  coinductive
+  field 
+    head : Nat 
+    --          |-----| j di tipo `Size` minore di `i`
+    --          v     v
+    tail : {j : Size< i} -> NatStream {j}
+  \end{minted}
+\end{frame}
+\begin{frame}[fragile]{Implementazione}
+	La funzione \texttt{countFrom} con i sized-types:
+	\begin{minted}{agda}
+countFrom : {j : Size} -> Nat -> NatStream {j}
+head (countFrom {_} x) = x
+tail (countFrom {j} x) {i}  = countFrom {i} (x + 1)
+\end{minted}
+	\begin{itemize}
+		\item{{\bf Sottotipi}
+		            Dualmente, se per i tipi induttivi vale $I^i \leq
+			            I^{\uparrow i} \leq \cdots \leq I^{\omega}$, per i
+		            tipi co-induttivi vale l'opposto: $C^i \geq
+			            C^{\uparrow i} \geq \cdots \geq C^{\omega}$ dove
+		            $C^{\omega}$ è un elemento la cui profondità è
+		            ignota.
+		      }
+	\end{itemize}
+
+	Possiamo quindi definire \texttt{repeatF} come segue:
+	\begin{minted}{agda}
+repeatF : {i : Size}  -> Nat -> ({j : Size< i} -> NatStream {j} -> NatStream {j})  -> NatStream {i}
+head (repeatF n _) = n 
+tail (repeatF n f) = f (repeatF n f)
+\end{minted}
+	in questo modo assicuriamo al type checker che la funzione \texttt{f} non
+	diminuisce la profondità del suo argomento.
+\end{frame}
+\end{document}

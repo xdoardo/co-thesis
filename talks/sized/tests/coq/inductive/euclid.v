@@ -29,4 +29,3 @@ match x with
 | zero => zero
 | succ x' => succ (div (minus x y) y)
 end.
-(* Compute div (succ (succ (succ (succ zero)))) (succ (succ zero)). *)

@@ -4,7 +4,6 @@
 {-# BUILTIN SIZESUC  ↑_       #-}  --  ↑_       : Size → Size
 {-# BUILTIN SIZEINF  ∞        #-}  --  ∞        : Size
 
-
 mutual
   data Delay (i : Size) (A : Set) : Set where
     now : A → Delay i A

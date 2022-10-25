@@ -9,6 +9,7 @@ minus (succ x) zero = succ x
 minus (succ x) (succ y) = minus x y
 
 
+-- Non accettata
 div : Nat -> Nat -> Nat 
 div zero _ = zero 
 div (succ x) y = succ (div (minus x y) y)
