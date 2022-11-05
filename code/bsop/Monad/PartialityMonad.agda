@@ -6,9 +6,9 @@ module Monad.PartialityMonad where
 open import Category.Monad
 open import Function 
 open import Lambda.Syntax
-import Monad.DelayMonad as DelayMonad
-import Data.Maybe as MaybeMonad
-import Data.Maybe.Categorical as MaybeCategorical
+open import Agda.Builtin.Size
+open import Monad.DelayMonad using (Delay ; delayMonad)
+open import Monad.SizedMaybeMonad using (Maybe ; maybeMonadT)
 
-PartialityFunctor : RawMonad  (DelayMonad.Delay ∘ MaybeMonad.Maybe)
-PartialityFunctor = MaybeCategorical.monadT DelayMonad.delayMonad
+PartialityMonad : ∀ {i : Size} -> RawMonad (Delay {i} ∘ (Maybe {i}))
+PartialityMonad {i} = maybeMonadT delayMonad
