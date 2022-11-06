@@ -16,13 +16,13 @@ mutual
   -- later. If it is later then we get an element of ∞Delay which we can force
   -- again, and so forth.
 
-  data Delay {i : Size} (A : Set) : Set where
-    now : A -> Delay {i} A
-    later : ∞Delay {i} A -> Delay {i} A
+  data Delay (i : Size) (A : Set) : Set where
+    now : A -> Delay i A
+    later : ∞Delay i A -> Delay i A
 
-  record ∞Delay {i : Size} (A : Set) : Set where
+  record ∞Delay (i : Size) (A : Set) : Set where
     coinductive
-    field force : {j : Size< i} -> Delay {j} A
+    field force : {j : Size< i} -> Delay j A
 
 -- The Delay monad is a monad. `now` is its `return`. The implementation of
 -- `bind` follows a common scheme when working with Delay: we define two
@@ -30,16 +30,11 @@ mutual
 -- second by copattern matching on ∞Delay.
 module Bind where
 mutual
-  _>>=_ : ∀ {i A B} -> Delay {i} A -> (A -> Delay {i} B) -> Delay {i} B
+  _>>=_ : ∀ {i A B} -> Delay i A -> (A -> Delay i B) -> Delay i B
   (now a) >>= f = f a
   (later ∞a) >>= f = later (∞a ∞>>= f)
 
-  _∞>>=_ : ∀ {i A B} -> ∞Delay {i} A -> (A -> Delay {i} B) -> ∞Delay {i} B
+  _∞>>=_ : ∀ {i A B} -> ∞Delay i A -> (A -> Delay i B) -> ∞Delay i B
   ∞Delay.force (a ∞>>= f) = (∞Delay.force a) >>= f
 
-delayMonad : ∀ {i} → RawMonad (Delay {i})
-delayMonad {i} = record
-  {
-    return = now
-    ; _>>=_ = _>>=_ {i}
-  } where open Bind
+open Bind public
