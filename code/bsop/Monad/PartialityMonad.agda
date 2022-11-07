@@ -3,23 +3,36 @@
 ---------------------------------------------------------------------------
 module Monad.PartialityMonad where
 
+open import Agda.Builtin.Size
 open import Category.Monad
 open import Function 
 open import Lambda.Syntax
-open import Agda.Builtin.Size
-open import Monad.DelayMonad using (Delay) renaming (_>>=_ to _D>>=_)
-open import Monad.SizedMaybeMonad using (Maybe) renaming (_>>=_ to _M>>=_)
+open import Monad.DelayMonad using (Delay ; ∞Delay) 
+open import Monad.SizedMaybeMonad using (Maybe) 
+---
 
+open Delay 
+open ∞Delay
+open Maybe
+---
 
--- How to make this sized?
---maybe : {A : Set} {B : Maybe A → Set} →
---        ((x : A) → B (just x)) → B nothing → (x : Maybe A) → B x
---maybe j n (just x) = j x
---maybe j n nothing  = n
+partial : ∀ {i : Size} {A : Set} {B : Set} -> Maybe i A -> (A -> Delay i (Maybe i B)) -> Delay i (Maybe i B)
+partial nothing f = now nothing
+partial (just x) f = f x
+
+module Bind where 
+mutual
+  _>>=_ : ∀ {i A B} -> Delay i (Maybe i A) -> (A -> Delay i (Maybe i B)) -> Delay i (Maybe i B)
+  now nothing >>= f = now nothing
+  now (just x) >>= f = f x  
+  later x >>= f =  later (x ∞>>= f)
+
+  _∞>>=_ : ∀ {i A B} -> ∞Delay i (Maybe i A) -> (A -> Delay i (Maybe i B)) -> ∞Delay i (Maybe i B)
+  force (a ∞>>= f) = (force a) >>= f
 
 PartialityMonad : ∀ {i : Size} -> RawMonad (Delay i ∘ (Maybe i))
 PartialityMonad {i} = record 
   {
-    return = Delay.now ∘ Maybe.just 
-    ; _>>=_ = λ m f -> m D>>= λ v -> ?
-  }
+    return = now ∘ just
+    ; _>>=_ = _>>=_ {i}
+  } where open Bind

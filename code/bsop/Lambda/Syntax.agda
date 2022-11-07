@@ -5,6 +5,7 @@ module Lambda.Syntax where
 
 open import Data.Nat
 open import Data.Fin
+---
 
 -- Terms. Variables are represented using de Brujin indices. 
 data Tm (n : ℕ) : Set where
@@ -23,7 +24,7 @@ mutual
   -- not contain any free variables.
   data Value : Set where
     con : (i : ℕ) → Value
-    ƛ : ∀ {n} (t : Tm (suc n)) (ρ : Env n) → Value
+    ƛᵥ : ∀ {n} (t : Tm (suc n)) (ρ : Env n) → Value
 
 lookup : ∀ {n : ℕ } -> Env n -> Fin n -> Value 
 lookup (x , xs) zero    = x
