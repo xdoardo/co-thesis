@@ -9,10 +9,10 @@ open import Agda.Builtin.Size
 
 mutual
 
-  data Delay (i : Size) (A : Set) : Set where
-    now : A -> Delay i A
-    later : ∞Delay i A -> Delay i A
+  data Delay {i : Size} (A : Set) : Set where
+    now : A -> Delay {i} A
+    later : ∞Delay {i} A -> Delay {i} A
 
-  record ∞Delay (i : Size) (A : Set) : Set where
+  record ∞Delay {i : Size} (A : Set) : Set where
     coinductive
-    field force : {j : Size< i} -> Delay j A
+    field force : {j : Size< i} -> Delay {j} A

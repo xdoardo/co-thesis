@@ -22,17 +22,17 @@ open ∞Delay
 
 mutual
 
-  eval : ∀ { i n } -> Tm n -> Env n -> Delay i (Maybe Value)
+  eval : ∀ { i n } -> Tm n -> Env n -> Delay {i} (Maybe Value)
   eval (con i) ρ = now (just (con i))
   eval (var x) ρ = now (just (lookup ρ x))
   eval (ƛ t) ρ =  now (just (ƛᵥ t ρ))
   eval (t ○ u) ρ = eval t ρ >>= λ f -> eval u ρ >>= λ v -> apply f v
 
-  apply : ∀ {i} -> Value -> Value -> Delay i (Maybe Value)
+  apply : ∀ {i} -> Value -> Value -> Delay {i} (Maybe Value)
   apply (con i) v = now nothing
   apply (ƛᵥ t ρ) v = later (beta t ρ v)
   
-  beta : ∀ {i n} -> Tm (suc n) -> Env n -> Value -> ∞Delay i (Maybe Value)
+  beta : ∀ {i n} -> Tm (suc n) -> Env n -> Value -> ∞Delay {i} (Maybe Value)
   ∞Delay.force(beta t ρ v)  = eval t (v , ρ)
 
 
