@@ -2,7 +2,7 @@
 -- The Delay monad
 ---------------------------------------------------------------------------
 
-module Monad.DelayMonad where
+module Data.Delay where
  
 open import Agda.Builtin.Size 
 ---
