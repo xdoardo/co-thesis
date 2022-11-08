@@ -2,7 +2,7 @@
 -- Functional semantics for an untyped λ-calculus with constants
 ------------------------------------------------------------------------
 
-module Lambda.FunctionalSemantics where 
+module Lambda.Semantics where 
 
 open import Category.Monad
 open import Function 
