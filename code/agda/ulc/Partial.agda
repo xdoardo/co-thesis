@@ -4,11 +4,11 @@
 
 module Partial where 
 
-open import Category.Monad
+
 open import Agda.Builtin.Size
 open import Data.Maybe using (Maybe)
-open import Codata.Delay using (Delay)
-open import Codata.Thunk using (Thunk)
+open import Codata.Sized.Delay using (Delay)
+open import Codata.Sized.Thunk using (Thunk)
 open import Data.Nat
 ---
 
@@ -48,5 +48,5 @@ module Equality where
   _ : ∀ {A} -> (fail {A = A} ≈ fail {A = A})
   _ = ≈now
 
-  a : ∀ {i : Size} {j : Size< i} {A : Set0} -> (force (never {A} {j}) {i} ≈ force (never {A = A}))
+  -- a : ∀ {i : Size} {j : Size< i} {A : Set0} -> (force (never {A} {j}) {i} ≈ force (never {A = A}))
   -- a {i} {A} = ≈later {x = (never {i = i})}{y = never {i}} (force never ≈ force never)

@@ -6,8 +6,8 @@ module Lambda.Semantics where
 
 open import Lambda.Syntax
 open import Data.Maybe using (Maybe)
-open import Codata.Delay using (Delay)
-open import Codata.Thunk using (Thunk)
+open import Codata.Sized.Delay using (Delay)
+open import Codata.Sized.Thunk using (Thunk)
 open import Data.Nat using (suc)
 open import Partial
 --- 
