@@ -1,0 +1,4 @@
+name: sema
+include: .
+depend: standard-library
+flags: --copatterns --sized-types
