@@ -1,4 +1,0 @@
-name: bsop
-include: .
-depend: standard-library
-flags: --copatterns --sized-types
