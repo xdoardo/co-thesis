@@ -17,10 +17,14 @@ open Maybe
 ---
 
 mutual
-  _>>=_ : ∀ {i a b} {A : Set a} {B : Set b} -> Delay {a} (Maybe A) i -> (A -> Delay {b} (Maybe B) i) -> Delay {b} (Maybe B) i
+  infixl 10 _>>=_
+  _>>=_ : ∀ {i a b} {A : Set a} {B : Set b} -> 
+           Delay {a} (Maybe A) i -> (A -> Delay {b} (Maybe B) i) -> Delay {b} (Maybe B) i
   now nothing >>= f = now nothing
   now (just x) >>= f = f x  
   later x >>= f =  later (x ∞>>= f)
 
-  _∞>>=_ : ∀ {i a b} {A : Set a} {B : Set b} -> Thunk (Delay {a} (Maybe A)) i -> (A -> Delay {b} (Maybe B) i) -> Thunk (Delay {b} (Maybe B)) i
+  _∞>>=_ : ∀ {i a b} {A : Set a} {B : Set b} -> 
+            Thunk (Delay {a} (Maybe A)) i -> (A -> Delay {b} (Maybe B) i) -> 
+             Thunk (Delay {b} (Maybe B)) i
   force (a ∞>>= f) = (force a) >>= f
