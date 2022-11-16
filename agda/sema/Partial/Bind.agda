@@ -15,9 +15,9 @@ open Thunk
 open Maybe 
 ---
 
+infixl 11 _>>=_
 _>>=_ : ∀ {i a b} {A : Set a} {B : Set b} -> Delay {a} (Maybe A) i -> 
          (A -> Delay {b} (Maybe B) i) -> Delay {b} (Maybe B) i
 now nothing >>= f = now nothing
 now (just x) >>= f = f x  
 later d >>= f =  later λ where .force -> (d .force) >>= f
-
