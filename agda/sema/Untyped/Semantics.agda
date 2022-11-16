@@ -35,9 +35,8 @@ mutual
   force(beta t ρ v)  = eval t (v , ρ)
 
 
-
 ------------------------------------------------------------------------
 -- Example
 -- Ω is weakly bisimilar to never.
-Ω-loops : ∀ {i} -> bisim i (eval Ω ε) never
-Ω-loops = ~later (λ where .force -> Ω-loops) 
+Ω-loops : ∀ {i} -> i ⊢ (eval Ω ε) ≈ never
+Ω-loops = later (λ where .force -> Ω-loops) 
