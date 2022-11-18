@@ -1,24 +1,23 @@
 ------------------------------------------------------------------------
--- Functional semantics for an untyped λ-calculus with constants
+-- Functional semantics for the λ-calculus with constants
 ------------------------------------------------------------------------
 
-module Untyped.Semantics where 
+module Lambda.Semantics where 
 
 open import Size
-open import Untyped.Syntax
+open import Lambda.Syntax
+open import Data.Nat using (suc)
 open import Data.Maybe using (Maybe)
 open import Codata.Sized.Delay using (Delay)
 open import Codata.Sized.Thunk using (Thunk)
-open import Data.Nat using (suc)
-open import Partial.Base
-open import Partial.Bind
-open import Partial.Bisimilarity.Weak
+open import Codata.Sized.Partial using (fail)  renaming (bind to _>>=_)
 --- 
 
 open Delay
 open Thunk
 open Maybe 
 ---
+
 mutual
 
   eval : ∀ { i n } -> Tm n -> Env n -> Delay (Maybe Value) i
@@ -28,7 +27,7 @@ mutual
   eval (t ∙ u) ρ = eval t ρ >>= λ f -> eval u ρ >>= λ v -> apply f v
 
   apply : ∀ {i} -> Value -> Value -> Delay (Maybe Value) i
-  apply (con i) v = now nothing
+  apply (con i) v = fail 
   apply (ƛᵥ t ρ) v = later (beta t ρ v)
   
   beta : ∀ {i n} -> Tm (suc n) -> Env n -> Value -> Thunk (Delay (Maybe Value)) i
@@ -36,7 +35,11 @@ mutual
 
 
 ------------------------------------------------------------------------
--- Example
--- Ω is weakly bisimilar to never.
-Ω-loops : ∀ {i} -> i ⊢ (eval Ω ε) ≈ never
-Ω-loops = later (λ where .force -> Ω-loops) 
+-- Examples
+module _ where 
+ open import Codata.Sized.Partial using (never)
+ open import Codata.Sized.Partial.Bisimilarity.Weak
+
+ -- Ω is weakly bisimilar to never.
+ Ω-loops : ∀ {i} -> i ⊢ (eval Ω ε) ≈ never
+ Ω-loops = later (λ where .force -> Ω-loops) 

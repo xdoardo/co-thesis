@@ -2,7 +2,7 @@
 -- Strong bisimilarity for the partiality monad 
 ------------------------------------------------------------------------
 
-module Partial.Bisimilarity.Strong where 
+module Codata.Sized.Partial.Bisimilarity.Strong where 
 
 open import Size
 open import Data.Maybe
@@ -14,8 +14,8 @@ open import Relation.Binary.PropositionalEquality as Eq using (_≡_)
 
 
 data Bisim {a b r} {A : Set a} {B : Set b} (R : A → B → Set r) i :
-           (xs : Delay (Maybe A) ∞) (ys : Delay (Maybe B) ∞) → Set (a ⊔ b ⊔ r) where
-  nown   : Bisim R i (now nothing)  (now nothing)
+           (xs : Delay {a} (Maybe A) ∞) (ys : Delay {b} (Maybe B) ∞) → Set (a ⊔ b ⊔ r) where
+  nown   : Bisim R i (now nothing) (now nothing) 
   nowj   : ∀ {x y} → R x y → Bisim R i (now (just x)) (now (just y))
   later : ∀ {xs ys} → Thunk^R (Bisim R) i xs ys → Bisim R i (later xs) (later ys)
 
@@ -66,7 +66,7 @@ module _ {ℓ} {A : Set ℓ} where
 -- Examples 
 module _ {a b c} {A : Set a} {B : Set b} {C : Set c}
          {r} {P : A → B → Set r} {Q : B → C → Set r} {R : A → C → Set r} where
-  open import Partial.Base
+  open import Codata.Sized.Partial
 
   fail-refl : ∀ {i} -> i ⊢ (fail {A = A}) ≈ (fail {A = A})
   fail-refl = refl

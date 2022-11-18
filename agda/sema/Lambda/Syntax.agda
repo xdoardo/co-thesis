@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------
--- The syntax of the untyped λ-calculus with constants
+-- The syntax of a λ-calculus with constants
 -----------------------------------------------------------------------
-module Untyped.Syntax where
+module Lambda.Syntax where
 
 open import Data.Nat
 open import Data.Fin using (Fin ; #_ ; zero ; suc)
@@ -38,8 +38,6 @@ vr _ {m<n = m<n} = var (#_ _ {m<n = m<n})
 
 
 ------------------------------------------------------------------------
--- Example
-
 -- A non-terminating term.
 
 ω : Tm 0

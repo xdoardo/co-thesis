@@ -2,7 +2,7 @@
 -- Strong bisimilarity for the partiality monad 
 ------------------------------------------------------------------------
 
-module Partial.Bisimilarity.Weak where 
+module Codata.Sized.Partial.Bisimilarity.Weak where 
 
 open import Size
 open import Data.Maybe
@@ -84,7 +84,7 @@ module _ {ℓ} {A : Set ℓ} where
 -- Examples 
 module _ {a b c} {A : Set a} {B : Set b} {C : Set c}
          {r} {P : A → B → Set r} {Q : B → C → Set r} {R : A → C → Set r} where
-  open import Partial.Base
+  open import Codata.Sized.Partial
 
   fail-refl : ∀ {i} -> i ⊢ (fail {A = A}) ≈ (fail {A = A})
   fail-refl = refl
