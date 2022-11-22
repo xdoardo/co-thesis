@@ -28,8 +28,3 @@ module Convergence where
   
   _⇓ : {A : Set} (x : Delay (Maybe A) ∞) → Set
   x ⇓ = ∃ λ a -> x ⇓ a
-
-  map⇓ : ∀ {a b} {A : Set a} {B : Set b} {a? : Delay (Maybe A) ∞} {v : A} 
-          (f : A -> B) -> a? ⇓ v -> (map f a?) ⇓ f v
-  map⇓ f ⇓now = ⇓now 
-  map⇓ f (⇓later x) = ?
