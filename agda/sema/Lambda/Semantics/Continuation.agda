@@ -2,12 +2,13 @@
 -- Functional semantics in continuation passing style for the λ-calculus with constants
 ----------------------------------------------------------------------------------------------
 
-module Lambda.CPSSemantics where 
+module Lambda.Semantics.Continuation where 
 
 open import Size
 open import Lambda.Syntax
 open import Data.Nat using (suc)
 open import Data.Maybe using (Maybe)
+open import Data.Vec renaming (_∷_ to _::_)
 open import Codata.Sized.Delay using (Delay)
 open import Codata.Sized.Thunk using (Thunk)
 open import Codata.Sized.Partial using (fail ; never)
@@ -22,20 +23,20 @@ mutual
 
   evalₚ : ∀ { i n } -> Tm n -> Env n -> 
            (Value -> (Delay (Maybe Value) i)) -> Delay (Maybe Value) i
-  evalₚ (con i) ρ k = k (con i) 
-  evalₚ (var x) ρ k = k (lookup ρ x) 
-  evalₚ (ƛ t) ρ k = k (ƛᵥ t ρ) 
-  evalₚ (t₁ ∙ t₂) ρ k = evalₚ t₁ ρ (λ v₁ -> evalₚ t₂ ρ (λ v₂ -> apply v₁ v₂ k)) 
+  evalₚ (t-con i) ρ k = k (v-con i) 
+  evalₚ (t-var x) ρ k = k (lookup ρ x) 
+  evalₚ (t-lam t) ρ k = k (v-lam t ρ) 
+  evalₚ (t-app t₁ t₂) ρ k = evalₚ t₁ ρ (λ v₁ -> evalₚ t₂ ρ (λ v₂ -> applyₚ v₁ v₂ k)) 
   -- 			^^ Note, no bind here thanks to CPS
 
-  apply : ∀ {i} -> Value -> Value -> (Value -> (Delay (Maybe Value) i)) 
+  applyₚ : ∀ {i} -> Value -> Value -> (Value -> (Delay (Maybe Value) i)) 
            -> Delay (Maybe Value) i
-  apply (con i) _ _ = fail
-  apply (ƛᵥ t ρ) v k = later (beta t ρ v k)
+  applyₚ (v-con i) _ _ = fail
+  applyₚ (v-lam t ρ) v k = later (betaₚ t ρ v k)
   
-  beta : ∀ {i n} -> Tm (suc n) -> Env n -> Value -> (Value -> (Delay (Maybe Value) i)) 
+  betaₚ : ∀ {i n} -> Tm (suc n) -> Env n -> Value -> (Value -> (Delay (Maybe Value) i)) 
            ->  Thunk (Delay (Maybe Value)) i
-  force(beta t ρ v k)  = evalₚ t (v , ρ) k
+  force(betaₚ t ρ v k)  = evalₚ t (v :: ρ) k
 
 ------------------------------------------------------------------------
 -- Examples
@@ -48,5 +49,5 @@ module _ where
   open RawApplicative {Agda.Primitive.lzero} {Agda.Primitive.lzero} applicative 
 
   -- Ω is weakly bisimilar to never.
-  Ω-loops : ∀ {i} -> i ⊢ (evalₚ Ω ε (now ∘ just)) ≈ never
-  Ω-loops = later (λ where .force -> Ω-loops) 
+  Ω-loopsₚ : ∀ {i} -> i ⊢ (evalₚ Ω [] (now ∘ just)) ≈ never
+  Ω-loopsₚ = later (λ where .force -> Ω-loopsₚ) 
