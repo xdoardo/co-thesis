@@ -37,9 +37,8 @@ module WellFounded where
   open import Data.Maybe
   open import Relation.Nullary
   open import Codata.Sized.Partial
-  open import Data.Maybe.Relation.Unary.Any
-  open import Codata.Sized.Delay.Relation.Unary.All
   open import Codata.Sized.Partial.Bisimilarity.Weak
+  open import Codata.Sized.Partial.Relation.Unary.All
   ---
 
   --  WFᵥ σ v means that the value v is well-formed with respect to the type σ.
@@ -68,6 +67,6 @@ module WellFounded where
   lookup-wf (suc nf) (v :: ρ) = lookup-wf nf ρ
 
   -- If we can prove All (WF-MV σ) x, then x does not "go wrong".
-  does-not-go-wrong : ∀ {i σ v} -> All (Any (WFᵥ σ)) ∞ v -> ¬ (i ⊢ v ≈ fail)
-  does-not-go-wrong (now ()) nown
+  does-not-go-wrong : ∀ {i σ v} -> All (WFᵥ σ) ∞ v -> ¬ (i ⊢ v ≈ fail)
   does-not-go-wrong (later wf) (laterₗ bisim) = does-not-go-wrong (force wf) bisim
+  does-not-go-wrong (now p) ()

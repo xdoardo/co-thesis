@@ -44,3 +44,24 @@ module _ where
  -- Ω is weakly bisimilar to never.
  Ω-loops : ∀ {i} -> i ⊢ (eval Ω []) ≈ never
  Ω-loops = later (λ where .force -> Ω-loops) 
+
+
+------------------------------------------------------------------------
+-- Lemmas 
+module _ where 
+ open import Relation.Binary
+ open import Lambda.Syntax.Value
+ open import Relation.Binary.PropositionalEquality using (_≡_ ; refl)
+ import Codata.Sized.Partial.Bisimilarity.Weak as WeakBisim
+ open WeakBisim using (Bisim)
+ open WeakBisim.Equivalence
+  
+
+ infix 5 _⟦∙⟧_
+
+ _⟦∙⟧_ : Delay (Maybe Value) ∞ → Delay (Maybe Value) ∞ → Delay (Maybe Value) ∞
+ mv₁ ⟦∙⟧ mv₂ = mv₁ >>= (λ f -> mv₂ >>= λ v -> apply f v)
+
+ ∙-comp : ∀ {n} (t₁ t₂ : Tm n) {ρ} → (i : Size) ->
+          (eval (t-app t₁ t₂) ρ) ≡ ((eval t₁ ρ)  ⟦∙⟧  (eval t₂ ρ))
+ ∙-comp {n} t₁ t₂ {ρ} i = refl
