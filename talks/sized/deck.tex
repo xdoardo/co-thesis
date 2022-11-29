@@ -1,10 +1,9 @@
 % !TEX program = xelatex
-\documentclass[t,aspectratio=169,10pt]{beamer}
+\documentclass[t,aspectratio=169,9pt]{beamer}
 \usetheme{gumint}
 
 \usepackage{
   minted,
-  tcolorbox,
   fontspec,
   verbatim,
   hyperref
@@ -19,9 +18,9 @@
     urlbordercolor=GumintPrimary        % color of external links
 }
 
-\tcbuselibrary{listings, minted, skins}
-\tcbset{listing engine=minted}
 \setmonofont{PragmataPro Mono Liga}
+\setminted{fontsize=\footnotesize}
+\usemintedstyle{gumint}
 
 \title{MiniAgda}
 \subtitle{Terminazione e produttività con \textit{sized types}}
@@ -46,7 +45,7 @@
 	\textbf{consistenza} del sistema: se, infatti, ammettiamo definizioni ricorsive
 	non terminanti, si possono dimostrare teoremi falsi.
 	\vfill
-	\begin{minted}{coq}
+\begin{minted}{coq}
 Parameter bad : nat -> nat.
 Axiom bad_ax : forall x, bad x = 1 + (bad x).
 
