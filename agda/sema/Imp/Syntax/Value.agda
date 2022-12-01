@@ -14,15 +14,20 @@ mutual
  data State : Set where 
   [] : State 
   [_=>_::_] : String -> ℤ -> State -> State
-  _::_ : State -> State -> State
 
  data Value : Set where
   v-lit : ℤ -> State -> Value
+  v-empty : State -> Value
+
+
+_::_ : State -> State -> State
+[] :: x₁ = x₁ 
+[ x => x₂ :: x₃ ] :: x₁ = [ x => x₂ :: (x₃ :: x₁)] 
 
 lookup : State -> String -> Maybe ℤ
 lookup [] x₁ = nothing
 lookup [ x => val :: x₃ ] x₁ = if (x == x₁) then (just val) else (lookup x₃ x₁)
-lookup (x :: x₂) x₁ = let
-  mv₁ = lookup x x₁
-  mv₂ = lookup x₂ x₁
- in if (is-just mv₁) then mv₁ else mv₂
+
+get-state : Value -> State
+get-state (v-lit _ ρ) = ρ 
+get-state (v-empty ρ) = ρ 
