@@ -1,5 +1,5 @@
 ------------------------------------------------------------------------
--- Unary convergence relation for partial types 
+-- Unary convergence predicate for partial types 
 ------------------------------------------------------------------------
 
 module Codata.Sized.Partial.Relation.Unary.Convergence where
