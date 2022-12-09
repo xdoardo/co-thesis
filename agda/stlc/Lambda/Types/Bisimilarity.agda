@@ -7,7 +7,7 @@ open import Size
 open import Relation.Binary
 open import Lambda.Types.Core
 open import Codata.Sized.Thunk
---
+---
 
 data Bisim (i : Size) : Ty ∞ -> Ty ∞ -> Set where 
   ≈-⋆ : Bisim i (⋆) (⋆)

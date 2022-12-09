@@ -7,7 +7,7 @@ open import Data.Nat
 open import Data.Fin
 open import Data.Vec
 open import Lambda.Syntax.Term
--- 
+---
 
 mutual 
  -- Lambdas are represented using closures, so values do not contain any free

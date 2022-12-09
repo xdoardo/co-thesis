@@ -10,7 +10,6 @@ open import Codata.Sized.Thunk
 open import Codata.Sized.Delay  hiding (never)
 open import Codata.Sized.Partial.Bisimilarity.Core public 
 
-------------------------------------------------------------------------
 -- Examples 
 module _ {a b c} {A : Set a} {B : Set b} {C : Set c}
          {r} {P : A → B → Set r} {Q : B → C → Set r} {R : A → C → Set r} where

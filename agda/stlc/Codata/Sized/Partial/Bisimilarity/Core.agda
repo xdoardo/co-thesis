@@ -11,6 +11,7 @@ open import Relation.Binary
 open import Codata.Sized.Thunk
 open import Codata.Sized.Delay hiding (never ; _⇓)
 open import Relation.Binary.PropositionalEquality as Eq using (_≡_)
+---
 
 data Bisim {a b r} {A : Set a} {B : Set b} (R : A → B → Set r) i :
            (xs : Delay (Maybe A) ∞) (ys : Delay (Maybe B) ∞) → Set (a ⊔ b ⊔ r) where
@@ -42,9 +43,8 @@ module Equivalence where
  module _ {a b c} {A : Set a} {B : Set b} {C : Set c}
           {r} {P : A → B → Set r} {Q : B → C → Set r} {R : A → C → Set r} where
 
--- Pointwise Equality as a Bisimilarity
-------------------------------------------------------------------------
 
+-- Pointwise Equality as a Bisimilarity
 module _ {ℓ} {A : Set ℓ} where
  open Equivalence
  infix 1 _⊢_≈_

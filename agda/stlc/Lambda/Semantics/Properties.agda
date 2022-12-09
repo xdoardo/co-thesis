@@ -15,7 +15,7 @@ open import Codata.Sized.Partial using (never)
 open import Codata.Sized.Partial.Bisimilarity hiding (refl)
 open import Codata.Sized.Partial.Effectful renaming (bind to _>>=_)
 open import Relation.Binary.PropositionalEquality using (_≡_ ; refl)
--- 
+---
 
 -- Ω is weakly bisimilar to never.
 Ω-loops : ∀ {i} -> i ⊢ (eval Ω []) ≈ never

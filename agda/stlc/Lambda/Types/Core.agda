@@ -7,7 +7,7 @@ open import Size
 open import Data.Nat
 open import Data.Vec
 open import Codata.Sized.Thunk
--- 
+---
 
 data Ty : Size -> Set where 
   ⋆ : ∀ {i} -> Ty i

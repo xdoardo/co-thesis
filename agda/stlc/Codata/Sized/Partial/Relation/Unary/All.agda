@@ -13,7 +13,7 @@ open import Data.Maybe hiding (_>>=_)
 open import Codata.Sized.Delay hiding (bind)
 open import Relation.Binary.PropositionalEquality
 open import Codata.Sized.Partial.Effectful renaming (monad to partialityMonad)
--- 
+---
 
 -- All P x means that if x terminates with the value v, then P v
 -- holds.

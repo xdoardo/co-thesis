@@ -9,7 +9,7 @@ open import Lambda.Syntax
 open import Lambda.Types.Core
 open import Codata.Sized.Thunk
 open import Data.Vec renaming (_∷_ to _::_)
--- 
+---
 
 module HasType where
  data _⊢_∈_ {n} (Γ : Ctxt n {∞}) : Tm n → Ty ∞ → Set where

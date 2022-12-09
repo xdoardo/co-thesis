@@ -5,6 +5,7 @@ module Lambda.Syntax where
 
 open import Lambda.Syntax.Term public
 open import Lambda.Syntax.Value public
+---
 
 -- A non-terminating term.
 ω : Tm 0
