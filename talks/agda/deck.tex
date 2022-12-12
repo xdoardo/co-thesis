@@ -1,0 +1,312 @@
+% !TEX program = xelatex
+\documentclass[t,aspectratio=169,9pt]{beamer}
+\usetheme{gumint}
+
+\usepackage{
+  minted,
+  fontspec,
+  verbatim,
+  hyperref
+}
+
+\hypersetup{
+  colorlinks=false,% hyperlinks will be black
+    pdfborderstyle={/S/U/W 0.1}, % underline links instead of boxes
+    linkbordercolor=GumintPrimary,       % color of internal links
+    citebordercolor=GumintPrimary,     % color of links to bibliography
+    filebordercolor=GumintPrimary,   % color of file links
+    urlbordercolor=GumintPrimary        % color of external links
+}
+
+\setbeamertemplate{footline}[frame number]{}
+\setmonofont{PragmataPro Mono Liga}
+\setminted{fontsize=\footnotesize}
+\usemintedstyle{gumint}
+
+\title{A brief introduction to Agda}
+\subtitle{}%\it or, how I stopped worrying and love the typechecker }
+\date{\today}
+\author{Edoardo Marangoni}
+\email{ecmm@anche.no}
+
+\begin{document}
+
+\frame[plain]{\titlepage}
+
+\begin{frame}[t,plain]
+	\frametitle{Agenda}
+	\tableofcontents
+\end{frame}
+
+\section[intro]{Introduction}
+\subsection[hist]{History}
+\begin{frame}{History}
+  \vfill
+  \begin{itemize}
+    \item {V1.0 (approx. 1999) by C. Coquand}
+    \item {V2.0 (approx. 2007) is a complete rewrite by U. Norell}
+    \item {draws inspiration from previous works such as Alf, Alfa, Cayenne,
+      Coq, ... , Automath }
+  \end{itemize}
+  \vfill
+\end{frame}
+\subsection[what?]{What is it?}
+\begin{frame}[fragile]{What is it?}
+  \begin{itemize}
+    \item {a {\bf total} dependently typed programming language}
+    \item {an extension of intuitionistic Martin-Löf type-theory}
+    \item {a proof assistant (due to its dependent typing and Curry-Howard's
+      correspondence)}
+  \end{itemize}
+  \vfill
+The anatomy of a simple Agda definition:
+\begin{minted}{agda}
+
+open import Data.Bool
+open import Data.String
+
+-- Define a data type for greetings
+data Greeting : Set where           -- Set is somewhat close to Coq's Type
+ hello : Greeting   -- no name given
+ -- this underscore is for prefix, infix, postfix, mixfix arguments to
+ -- constructors
+ --    ▼
+ hello,_ : String → Greeting -- greet a person
+
+greet : String → Greeting --               see?
+--                                           ▼
+greet x = if x == "" then hello else (hello, x)
+\end{minted}
+  \vfill
+\end{frame}
+
+\section[basics]{Agda basics}
+\subsection[induction]{Induction}
+\begin{frame}[fragile]{Induction}
+  Let's start from the basics: red-black trees. Ok, no, natural numbers:
+\begin{minted}{agda}
+data Nat : Set where
+ zero : Nat
+ suc : Nat → Nat
+\end{minted}
+  In Agda, data structures need not be tagged with ``inductive'' or
+  ``coinductive'' (albeit records do).
+  Let's see a simple example of a function:
+\begin{minted}{agda}
+_+_ : Nat → Nat → Nat
+_+_ = ? -- <- This is a goal. It allows interactive development.
+\end{minted}
+\end{frame}
+\begin{frame}[noframenumbering, fragile]{Induction}
+  Let's start from the basics: red-black trees. Ok, no, natural numbers:
+\begin{minted}{agda}
+data Nat : Set where
+ zero : Nat
+ suc : Nat → Nat
+\end{minted}
+  In Agda, data structures need not be tagged with ``inductive'' or
+  ``coinductive'' (albeit records do).
+  Let's see a simple example of a function:
+\begin{minted}{agda}
+_+_ : Nat → Nat → Nat
+x + x₁ = ? --  <- Using holes, we can _split_ data types; in this case,
+           -- Agda gives us the two arguments x and x₁.
+\end{minted}
+\end{frame}
+\begin{frame}[noframenumbering, fragile]{Induction}
+  Let's start from the basics: red-black trees. Ok, no, natural numbers:
+\begin{minted}{agda}
+data Nat : Set where
+ zero : Nat
+ suc : Nat → Nat
+\end{minted}
+  In Agda, data structures need not be tagged with ``inductive'' or
+  ``coinductive'' (albeit records do).
+  Let's see a simple example of a function:
+\begin{minted}{agda}
+_+_ : Nat → Nat → Nat
+-- Let's split again on x:          (this is Agda's pattern-match)
+zero + x₁ = {! !}
+suc x + x₁ = {! !}
+\end{minted}
+\end{frame}
+\begin{frame}[noframenumbering, fragile]{Induction}
+  Let's start from the basics: red-black trees. Ok, no, natural numbers:
+\begin{minted}{agda}
+data Nat : Set where
+ zero : Nat
+ suc : Nat → Nat
+\end{minted}
+  In Agda, data structures need not be tagged with ``inductive'' or
+  ``coinductive'' (albeit records do).
+  Let's see a simple example of a function:
+\begin{minted}{agda}
+_+_ : Nat → Nat → Nat
+zero + x₁ = x₁
+suc x + x₁ = suc (x + x₁)
+\end{minted}
+  Sweet, but how do I prove things?
+\end{frame}
+
+\begin{frame}[fragile]{Induction}
+  Let's prove the (left) identity of \texttt{+}.
+\begin{minted}{agda}
++-id : ∀ (x : Nat) → ?0 -- <- Yes, we can use holes in type signatures as well!
++-id x = ?1
+\end{minted}
+What should the type be?
+
+This is the internal definition of (propositional, intensional, ``definitional'') equality.
+\begin{minted}{agda}
+--        ╭ implicit argument with implicit type
+--        │  ╭ implicit argument of type 'Set a' - notice the dependent typing
+--        │  │           ╭ read this as 'for all x of type A'
+--        ▼  ▼---------▼ ▼-----▼
+data _≡_ {a} {A : Set a} (x : A) : A → Set a where
+  refl : x ≡ x
+
+cong : ∀ {a b} {A : Set a}  {B : Set b} (f : A → B) {m  n}  → m ≡ n → f m ≡ f n
+cong f  refl  = refl
+\end{minted}
+Two terms in agda are said to be definitionally equal when they both have the
+same normal form up to αη-conversion.
+\end{frame}
+
+\begin{frame}[fragile]{Induction}
+  Let's prove the (left) identity of \texttt{+}.
+\begin{minted}{agda}
++-id : ∀ (x : Nat) → zero + x ≡ x
++-id zero = ? -- <- must be a term of type '(zero + zero) ≡ zero'
++-id (suc x) = ? -- <- must be a term of type  '(zero + suc x) ≡ suc x'
+\end{minted}
+\end{frame}
+\begin{frame}[noframenumbering, fragile]{Induction}
+  Let's prove the (left) identity of \texttt{+}.
+\begin{minted}{agda}
++-id : ∀ (x : Nat) → zero + x ≡ x
++-id zero = refl
++-id (suc x) = ? -- <- must be a term of type  '(zero + suc x) ≡ suc x'
+\end{minted}
+\end{frame}
+\begin{frame}[noframenumbering, fragile]{Induction}
+  Let's prove the (left) identity of \texttt{+}.
+\begin{minted}{agda}
++-id : ∀ (x : Nat) → zero + x ≡ x
++-id zero = refl
++-id (suc x) = cong suc (+-id x)
+\end{minted}
+\end{frame}
+\begin{frame}[noframenumbering, fragile]{Induction}
+  Let's prove the (left) identity of \texttt{+}.
+\begin{minted}{agda}
++-id : ∀ (x : Nat) → zero + x ≡ x
++-id zero = refl
++-id (suc x) = cong suc (+-id x)
+\end{minted}
+of course, Agda is powerful enough to let this proof be more concise:
+\begin{minted}{agda}
++-id : ∀ (x : Nat) → zero + x ≡ x
++-id x = refl
+\end{minted}
+\end{frame}
+\begin{frame}[fragile]{Induction}
+  Let's prove something slightly more complicated: the associativity of
+  \texttt{+}. We need to {\it reason} about equality. From Agda's
+  \texttt{stdlib}:
+\begin{minted}{agda}
+--                ╭ notice that `y` is implicit!
+--                ▼
+_≡⟨⟩_ : ∀ {A} (x {y} : A) → x ≡ y → x ≡ y
+_ ≡⟨⟩ x≡y = x≡y
+
+_≡⟨_⟩_ : ∀ (x {y z} : A)  → x ≡ y → y ≡ z → x ≡ z
+x ≡⟨ x≡y ⟩ y≡z = trans x≡y y≡z
+\end{minted}
+\begin{minted}{agda}
++-assoc : ∀ (x y z : Nat) -> (x + y) + z ≡ x + (y + z)
++-assoc zero y z = refl
++-assoc (suc x) y z = {! !} -- Goal: ((suc x + y) + z) ≡ (suc x + (y + z))
+\end{minted}
+\end{frame}
+\begin{frame}[fragile]{Induction}
+  Let's prove something slightly more complicated: the associativity of
+  \texttt{+}. We need to {\it reason} about equality. From Agda's
+  \texttt{stdlib}:
+\begin{minted}{agda}
+--                ╭ notice that `y` is implicit!
+--                ▼
+_≡⟨⟩_ : ∀ {A} (x {y} : A) → x ≡ y → x ≡ y
+_ ≡⟨⟩ x≡y = x≡y
+
+_≡⟨_⟩_ : ∀ (x {y z} : A)  → x ≡ y → y ≡ z → x ≡ z
+x ≡⟨ x≡y ⟩ y≡z = trans x≡y y≡z
+\end{minted}
+\begin{minted}{agda}
++-assoc : ∀ (x y z : Nat) -> (x + y) + z ≡ x + (y + z)
++-assoc zero y z = refl
++-assoc (suc x) y z =
+  ((suc x) + y) + z
+  ≡⟨⟩
+  (suc (x + y)) + z
+  ≡⟨⟩
+  suc ((x + y) + z)
+  ≡⟨ ? ⟩ -- Goal :  suc ((x + y) + z) ≡ y'
+   ? -- Goal : y' ≡ (suc x + (y + z))
+\end{minted}
+\end{frame}
+\begin{frame}[fragile]{Induction}
+  Let's prove something slightly more complicated: the associativity of
+  \texttt{+}. We need to {\it reason} about equality. From Agda's
+  \texttt{stdlib}:
+\begin{minted}{agda}
+--                ╭ notice that `y` is implicit!
+--                ▼
+_≡⟨⟩_ : ∀ {A} (x {y} : A) → x ≡ y → x ≡ y
+_ ≡⟨⟩ x≡y = x≡y
+
+_≡⟨_⟩_ : ∀ (x {y z} : A)  → x ≡ y → y ≡ z → x ≡ z
+x ≡⟨ x≡y ⟩ y≡z = trans x≡y y≡z
+\end{minted}
+\begin{minted}{agda}
++-assoc : ∀ (x y z : Nat) -> (x + y) + z ≡ x + (y + z)
++-assoc zero y z = refl
++-assoc (suc x) y z =
+  ((suc x) + y) + z
+  ≡⟨⟩
+  (suc (x + y)) + z
+  ≡⟨⟩
+  suc ((x + y) + z)
+  ≡⟨ cong suc (+-assoc x y z) ⟩
+   ? -- Goal : suc (x + (y + z)) ≡ (suc x + (y + z))
+\end{minted}
+\end{frame}
+\begin{frame}[fragile]{Induction}
+  Let's prove something slightly more complicated: the associativity of
+  \texttt{+}. We need to {\it reason} about equality. From Agda's
+  \texttt{stdlib}:
+\begin{minted}{agda}
+--                ╭ notice that `y` is implicit!
+--                ▼
+_≡⟨⟩_ : ∀ {A} (x {y} : A) → x ≡ y → x ≡ y
+_ ≡⟨⟩ x≡y = x≡y
+
+_≡⟨_⟩_ : ∀ (x {y z} : A)  → x ≡ y → y ≡ z → x ≡ z
+x ≡⟨ x≡y ⟩ y≡z = trans x≡y y≡z
+\end{minted}
+\begin{minted}{agda}
++-assoc : ∀ (x y z : Nat) -> (x + y) + z ≡ x + (y + z)
++-assoc zero y z = refl
++-assoc (suc x) y z =
+  ((suc x) + y) + z
+  ≡⟨⟩
+  (suc (x + y)) + z
+  ≡⟨⟩
+  suc ((x + y) + z)
+  ≡⟨ cong suc (+-assoc x y z) ⟩
+   suc (x + (y + z))
+  ≡⟨⟩
+    suc x + (y + z)
+  ∎ -- <- reflexivity on equality: _∎ : ∀ (x : A) → x ≡ x
+\end{minted}
+\end{frame}
+\end{document}
