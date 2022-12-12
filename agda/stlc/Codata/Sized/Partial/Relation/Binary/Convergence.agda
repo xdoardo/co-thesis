@@ -10,6 +10,6 @@ open import Codata.Sized.Delay
 open import Codata.Sized.Thunk
 ---
 
-data _⇓_ {A : Set} : (a? : Delay (Maybe A) ∞) (a : A) -> Set where
+data _⇓_ {a} {A : Set a} : (Delay (Maybe A) ∞) -> A -> Set a where
  now⇓ : ∀ {a} -> now (just a) ⇓ a
  later⇓ : ∀ {a} {a∞ : Thunk (Delay (Maybe A)) ∞} -> force a∞ ⇓ a -> later a∞ ⇓ a

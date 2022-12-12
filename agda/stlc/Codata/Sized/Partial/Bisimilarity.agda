@@ -7,7 +7,7 @@ module Codata.Sized.Partial.Bisimilarity where
 open import Size
 open import Data.Maybe
 open import Codata.Sized.Thunk
-open import Codata.Sized.Delay  hiding (never)
+open import Codata.Sized.Delay hiding (never)
 open import Codata.Sized.Partial.Bisimilarity.Core public 
 
 -- Examples 
