@@ -1,5 +1,7 @@
 ------------------------------------------------------------------------
--- Functional semantics for the λ-calculus with constants
+-- Functional semantics for IMP 
 ------------------------------------------------------------------------
+module Imp.Semantics where 
 
-open import Lambda.Semantics.Core public
+open import Imp.Semantics.Core public
+---
