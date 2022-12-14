@@ -1,0 +1,45 @@
+* TODO Partial/Bisimilarity
+ - [ ] Prove transitivity (in Codata.Sized.Partial.Bisimilarity.Relation.Binary.Equivalence)
+ - [ ] Define x ≈⟨ x≈y ⟩ y≈z, that is reasoning about transitivity of
+   bisimilarity instantiated on propositional equality (in
+   Codata.Sized.Partial.Bisimilarity.Reasoning)
+
+* TODO Imp
+  - [X] Syntax
+    + [X] Arithmetic expressions
+    + [X] Boolean expressions
+    + [X] Commands
+  - [-] Semantics 
+    + [X] aeval (AExp -> Store -> Maybe Z)
+    + [X] beval (BExp -> Store -> Maybe Bool)
+    + [x] ceval (Command -> Store -> Delay (Maybe Store))
+    + [ ] other forms (non functional) semantics?
+      * [ ] reduction?
+      * [ ] natural?
+      * [ ] transitional?
+
+* TODO Stack
+  - [X] Syntax
+  - [ ] Semantics 
+    + [ ] relational 
+      * [ ] operational (small-step)
+      * [ ] ?
+    + [ ] functional?
+
+* TODO ImpToStack
+  - [-] Compiler
+    + [X] comp-aexp
+    + [X] comp-bool
+    + [X] comp-com
+    + [ ] correctness
+      * [ ] prove comp-aexp-correct 
+      * [ ] prove comp-bexp-correct 
+      * [ ] prove comp-com-correct 
+  - [ ] Optimizations
+    + [ ] liveness
+    + [ ] dead-code elimination
+      * [ ] dce (Command -> Command)
+      * [ ] prove semantic preservation
+    + [ ] register allocation
+      * [ ] regalloc (Command -> Command)
+      * [ ] prove semantic preservation
