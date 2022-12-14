@@ -1,41 +1,44 @@
 * TODO Partial/Bisimilarity
- - [ ] Prove transitivity (in Codata.Sized.Partial.Bisimilarity.Relation.Binary.Equivalence)
- - [ ] Define x ≈⟨ x≈y ⟩ y≈z, that is reasoning about transitivity of
+  - [ ] prove transitivity (in Codata.Sized.Partial.Bisimilarity.Relation.Binary.Equivalence)
+  - [ ] define x ≈⟨ x≈y ⟩ y≈z, that is reasoning about transitivity of
    bisimilarity instantiated on propositional equality (in
    Codata.Sized.Partial.Bisimilarity.Reasoning)
+  - [ ] prove ≈-⇓⇓, that is for any two `x` and `y` (x≈y) <=> (x⇓ <=> y⇓) (in
+    Codata.Sized.Partial.Relation.Unary.Convergence )
 
 * TODO Imp
-  - [X] Syntax
-    + [X] Arithmetic expressions
-    + [X] Boolean expressions
-    + [X] Commands
-  - [-] Semantics 
-    + [X] aeval (AExp -> Store -> Maybe Z)
-    + [X] beval (BExp -> Store -> Maybe Bool)
-    + [x] ceval (Command -> Store -> Delay (Maybe Store))
+  - [X] syntax
+    + [X] arithmetic expressions
+    + [X] boolean expressions
+    + [X] commands
+  - [-] semantics 
+    + [X] functional
+      * [X] aeval (AExp -> Store -> Maybe Z)
+      * [X] beval (BExp -> Store -> Maybe Bool)
+      * [x] ceval (Command -> Store -> Delay (Maybe Store))
     + [ ] other forms (non functional) semantics?
       * [ ] reduction?
       * [ ] natural?
       * [ ] transitional?
 
 * TODO Stack
-  - [X] Syntax
-  - [ ] Semantics 
+  - [X] syntax
+  - [ ] semantics 
     + [ ] relational 
       * [ ] operational (small-step)
       * [ ] ?
     + [ ] functional?
 
 * TODO ImpToStack
-  - [-] Compiler
-    + [X] comp-aexp
-    + [X] comp-bool
-    + [X] comp-com
+  - [-] compiler
+    + [x] comp-aexp
+    + [x] comp-bool
+    + [x] comp-com
     + [ ] correctness
       * [ ] prove comp-aexp-correct 
       * [ ] prove comp-bexp-correct 
       * [ ] prove comp-com-correct 
-  - [ ] Optimizations
+  - [ ] optimizations
     + [ ] liveness
     + [ ] dead-code elimination
       * [ ] dce (Command -> Command)
