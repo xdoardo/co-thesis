@@ -4,19 +4,14 @@
 module Imp.Syntax.Term.Arith where 
 
 open import Data.Or
-open import Data.Bool
 open import Data.Maybe
+open import Imp.Syntax.Term.Ident
 open import Data.Integer using (ℤ)
-open import Data.String using (String ; _==_ )
 open import Relation.Binary.PropositionalEquality
 --- 
 
-Ident : Set 
-Ident = String
-
 Store : Set
 Store = Ident -> Maybe ℤ 
-
 
 data AExp : Set where 
  const : ℤ -> AExp
