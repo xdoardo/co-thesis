@@ -3,13 +3,13 @@
 ------------------------------------------------------------------------
 module Imp.Semantics.Arith where 
 
+open import Data.Unit
 open import Imp.Syntax
-open import Data.Nat using () renaming (suc to ℕ-suc)
+open import Data.Integer 
 open import Data.Bool hiding (_≟_)
 open import Data.Maybe renaming (_>>=_ to _>>=m_)
 open import Data.Integer.Properties as ℤ-Properties
-open import Data.Integer 
-open import Data.Unit
+open import Data.Nat using () renaming (suc to ℕ-suc)
 --
 
 private 
