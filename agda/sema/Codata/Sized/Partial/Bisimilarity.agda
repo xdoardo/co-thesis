@@ -9,6 +9,8 @@ open import Data.Maybe
 open import Codata.Sized.Thunk
 open import Codata.Sized.Delay hiding (never)
 open import Codata.Sized.Partial.Bisimilarity.Core public 
+open import Codata.Sized.Partial.Bisimilarity.Relation.Binary.Equivalence
+---
 
 -- Examples 
 module _ {a b c} {A : Set a} {B : Set b} {C : Set c}
