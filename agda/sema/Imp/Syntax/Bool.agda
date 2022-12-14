@@ -1,10 +1,10 @@
 ------------------------------------------------------------------------
 -- Boolean terms of IMP
 ------------------------------------------------------------------------
-module Imp.Syntax.Term.Bool where 
+module Imp.Syntax.Bool where 
 
+open import Imp.Syntax.Arith
 open import Data.Bool hiding (not)
-open import Imp.Syntax.Term.Arith
 ---
 
 data BExp : Set where 

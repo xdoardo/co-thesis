@@ -1,17 +1,14 @@
 ------------------------------------------------------------------------
 -- Arithmetic terms of IMP
 ------------------------------------------------------------------------
-module Imp.Syntax.Term.Arith where 
+module Imp.Syntax.Arith where 
 
 open import Data.Or
 open import Data.Maybe
-open import Imp.Syntax.Term.Ident
+open import Imp.Syntax.Ident
 open import Data.Integer using (ℤ)
 open import Relation.Binary.PropositionalEquality
 --- 
-
-Store : Set
-Store = Ident -> Maybe ℤ 
 
 data AExp : Set where 
  const : ℤ -> AExp
