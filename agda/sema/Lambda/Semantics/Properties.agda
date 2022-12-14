@@ -12,7 +12,7 @@ open import Lambda.Semantics.Core
 open import Codata.Sized.Delay hiding (never)
 import Codata.Sized.Partial.Bisimilarity.Core
 open import Codata.Sized.Partial using (never)
-open import Codata.Sized.Partial.Bisimilarity hiding (refl)
+open import Codata.Sized.Partial.Bisimilarity
 open import Codata.Sized.Partial.Effectful renaming (bind to _>>=_)
 open import Relation.Binary.PropositionalEquality using (_≡_ ; refl)
 ---
