@@ -31,9 +31,6 @@ data Inst : Set where
 Code : Set 
 Code = List Inst
 
-codelen : Code -> ℕ 
-codelen x = length x
-
 -- The program counter is just a natural
 PC : Set
 PC = ℕ
@@ -45,9 +42,3 @@ Stack = List ℤ
 -- A configuration of the stack machine is the following triple: 
 Config : Set 
 Config = (PC × Stack × Store)
-
--- Get the instruction at a certain PC
-instr-at : (c : Code) -> (pc : PC) -> Maybe (Inst)
-instr-at [] pc = nothing
-instr-at (x ∷ c) ℕ.zero = just x
-instr-at (x ∷ c) (ℕ.suc pc) = instr-at c pc

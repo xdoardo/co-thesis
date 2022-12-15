@@ -9,6 +9,7 @@ open import Data.Integer
 open import Stack.Syntax
 open import Stack.Imp.Compile.Bool
 open import Stack.Imp.Compile.Arith
+open import Stack.Syntax.Properties
 open import Data.List renaming (_∷_ to _::_)
 ---
 

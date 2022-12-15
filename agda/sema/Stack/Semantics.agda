@@ -9,6 +9,7 @@ open import Data.Product
 open import Stack.Syntax
 open import Data.Bool hiding (_≟_)
 open import Data.Nat hiding (_≤ᵇ_)
+open import Stack.Syntax.Properties
 open import Data.List renaming (_∷_ to _::_)
 open import Relation.Binary.PropositionalEquality
 open import Relation.Binary.Construct.Closure.ReflexiveTransitive

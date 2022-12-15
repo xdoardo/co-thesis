@@ -6,6 +6,7 @@ module Stack.Imp.Compile.Bool where
 open import Data.Bool
 open import Data.Integer
 open import Stack.Syntax
+open import Stack.Syntax.Properties
 open import Stack.Imp.Compile.Arith
 open import Data.List renaming (_∷_ to _::_)
 open import Imp.Syntax hiding (if_then_else_)
