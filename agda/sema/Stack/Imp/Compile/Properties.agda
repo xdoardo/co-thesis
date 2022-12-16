@@ -18,18 +18,24 @@ open import Relation.Binary.PropositionalEquality
 open import Relation.Binary.Construct.Closure.ReflexiveTransitive
 ---
 
--- compile-aexp-correct : ∀ a c c₂ pc s σ  -> 
---    (c₂≡comp-aexp : c₂ ≡ (comp-aexp a)) -> 
---    (code-at : code-at c pc (comp-aexp a)) -> (a≡v : aeval a s ≡ just v) -> 
---     Transitions c (pc , σ , s) (pc +n codelen (comp-aexp a) , v :: σ , s)
--- compile-aexp-correct (const x) c (iconst n :: c₂) pc s .x σ c₂≡comp-aexp code-at₁ refl = 
---  (=>const pc σ s x (code-at=>instr-at code-at₁)) ◅ ε
--- compile-aexp-correct (var x) c (ivar id :: c₂) pc s v σ c₂≡comp-aexp code-at₁ a≡v = 
---  (=>var pc σ s x v (code-at=>instr-at code-at₁) a≡v) ◅ ε
--- compile-aexp-correct (plus a a₁) c c₂ pc s v σ c₂≡comp-aexp code-at₁ a≡v = let 
---   a-comp = compile-aexp-correct a c (comp-aexp a) pc s v σ refl ? ? 
---   a₁-comp = compile-aexp-correct a₁ c (comp-aexp a) pc s ? σ ? ? ? 
---  in ?
--- compile-aexp-correct (minus a a₁) c c₂ pc s v σ c₂≡comp-aexp code-at₁ a≡v = {! !}
--- compile-aexp-correct (times a a₁) c c₂ pc s v σ c₂≡comp-aexp code-at₁ a≡v = {! !}
--- compile-aexp-correct (div a a₁) c c₂ pc s v σ c₂≡comp-aexp code-at₁ a≡v = {! !}
+
+comp-aexp-correct : ∀ (aexp : AExp) (code : Code) s (pc : PC) (σ : Stack) {v} -> 
+                     (c-at : code-at code pc (comp-aexp aexp)) -> (a-wf : aeval-wf s {v} aexp ) ->  
+                      (pc , σ , s) =< code > (pc +n codelen (comp-aexp aexp) , v :: σ , s)
+comp-aexp-correct (const x) code s pc σ c-at (wf-const .x) = 
+ (=>const pc σ s x (code-at=>instr-at c-at)) ◅ ε
+comp-aexp-correct (var x) code s pc σ c-at (wf-var .x) =
+ (=>var pc σ s x (s x) (code-at=>instr-at c-at) refl) ◅ ε
+comp-aexp-correct (plus aexp aexp₁) code s pc σ c-at (wf-plus .aexp .aexp₁ v₁ v₂ a-wf a-wf₁) = 
+  (comp-aexp-correct aexp code s pc σ ? a-wf) 
+ ◅◅ 
+  (comp-aexp-correct aexp₁ code s 
+   (pc +n codelen (comp-aexp aexp)) (v₁ :: σ) ? a-wf₁) 
+ ◅◅ 
+  (=>add 
+   (pc +n codelen (comp-aexp aexp) +n codelen (comp-aexp aexp₁)) 
+     σ s v₁ v₂ ?)
+ ◅ ?
+comp-aexp-correct (minus aexp aexp₁) code s pc σ c-at a-wf = {! !}
+comp-aexp-correct (times aexp aexp₁) code s pc σ c-at a-wf = {! !}
+comp-aexp-correct (div aexp aexp₁) code s pc σ c-at a-wf = {! !}
