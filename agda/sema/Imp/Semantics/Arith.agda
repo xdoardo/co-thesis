@@ -7,6 +7,7 @@ open import Data.Unit
 open import Imp.Syntax
 open import Data.Integer 
 open import Data.Bool hiding (_≟_)
+open import Relation.Nullary using (¬_)
 open import Data.Maybe renaming (_>>=_ to _>>=m_)
 open import Data.Integer.Properties as ℤ-Properties
 open import Data.Nat using () renaming (suc to ℕ-suc)
@@ -96,5 +97,14 @@ module _ where
     ≡⟨ cong (λ v -> (aeval a₁ s₂ >>=m (λ z → v >>=m (λ z₁ → just (f z z₁))))) a₂₁≡a₂₂ ⟩
      (aeval a₁ s₂ >>=m (λ z → aeval a₂ s₂ >>=m (λ z₁ → just (f z z₁)))) ∎
 
- data aeval-wf (a : AExp) (s : Store) {v} : Set where 
-  wf : aeval a s ≡ just v -> aeval-wf a s
+ data aeval-wf  (s : Store) : {ℤ} -> AExp -> Set where 
+  wf-const : ∀ c -> aeval-wf s {c} (const c) 
+  wf-var : ∀ id -> aeval-wf s {s id} (var id)
+  wf-plus : ∀ a₁ a₂ v₁ v₂ -> aeval-wf s {v₁} a₁ -> aeval-wf s {v₂} a₂ -> 
+             aeval-wf s {v₁ + v₂} (plus a₁ a₂)
+  wf-minus : ∀ a₁ a₂ v₁ v₂ -> aeval-wf s {v₁} a₁ -> aeval-wf s {v₂} a₂ -> 
+             aeval-wf s {v₁ - v₂} (minus a₁ a₂)
+  wf-times : ∀ a₁ a₂ v₁ v₂ -> aeval-wf s {v₁} a₁ -> aeval-wf s {v₂} a₂ -> 
+             aeval-wf s {v₁ * v₂} (times a₁ a₂)
+  wf-div : ∀ a₁ a₂ v₁ v₂ -> aeval-wf s {v₁} a₁ -> aeval-wf s {v₂} a₂ -> 
+            (nz : NonZero v₂) -> aeval-wf s {_/_ v₁ v₂ {{nz}}} (div a₁ a₂)
