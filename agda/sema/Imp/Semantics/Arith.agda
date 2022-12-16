@@ -20,7 +20,7 @@ private
 
 aeval : ∀ (a : AExp) (s : Store) -> Maybe ℤ
 aeval (const x) s = just x
-aeval (var x) s = s x
+aeval (var x) s = just (s x)
 aeval (plus a a₁) s = (aeval a s) >>=m (λ v₁ -> (aeval a₁ s) >>=m λ v₂ -> just (v₁ + v₂))
 aeval (minus a a₁) s = (aeval a s) >>=m (λ v₁ -> (aeval a₁ s) >>=m λ v₂ -> just (v₁ - v₂))
 aeval (times a a₁) s = (aeval a s) >>=m (λ v₁ -> (aeval a₁ s) >>=m λ v₂ -> just (v₁ * v₂))
@@ -43,7 +43,7 @@ module _ where
 
  mutual 
   aeval-free : ∀ s₁ s₂ a -> s₁ ≈ s₂ ⟨ a ⟩ -> (aeval a s₁) ≡ (aeval a s₂)
-  aeval-free s₁ s₂ .(var i) (≈-var i sameId) = sameId
+  aeval-free s₁ s₂ .(var i) (≈-var i sameId) = begin just (s₁ i) ≡⟨ cong just sameId ⟩ just (s₂ i) ∎
   aeval-free s₁ s₂ .(plus a₁ a₂) (≈-plus a₁ a₂ x₁ x₂) = aeval-free-comb s₁ s₂ a₁ a₂ x₁ x₂ _+_
   aeval-free s₁ s₂ .(minus a₁ a₂) (≈-minus a₁ a₂ x₁ x₂) = aeval-free-comb s₁ s₂ a₁ a₂ x₁ x₂ _-_
   aeval-free s₁ s₂ .(times a₁ a₂) (≈-times a₁ a₂ x₁ x₂) = aeval-free-comb s₁ s₂ a₁ a₂ x₁ x₂ _*_
@@ -95,3 +95,6 @@ module _ where
      (aeval a₁ s₂ >>=m (λ z → aeval a₂ s₁ >>=m (λ z₁ → just (f z z₁)))) 
     ≡⟨ cong (λ v -> (aeval a₁ s₂ >>=m (λ z → v >>=m (λ z₁ → just (f z z₁))))) a₂₁≡a₂₂ ⟩
      (aeval a₁ s₂ >>=m (λ z → aeval a₂ s₂ >>=m (λ z₁ → just (f z z₁)))) ∎
+
+ data aeval-wf (a : AExp) (s : Store) {v} : Set where 
+  wf : aeval a s ≡ just v -> aeval-wf a s
