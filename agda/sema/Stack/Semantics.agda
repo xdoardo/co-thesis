@@ -25,7 +25,7 @@ data Transition (c : Code) : Config -> Config -> Set where
  =>const : ∀ pc σ s n -> instr-at c pc ≡ just (iconst n) ->
             Transition c ( pc , σ , s ) (pc + 1 , n :: σ , s)
  =>var : ∀ pc σ s id v -> instr-at c pc ≡ just (ivar id) -> 
-          (s id) ≡ just v -> Transition c (pc , σ , s) (pc + 1 , v :: σ , s)
+          (s id) ≡ v -> Transition c (pc , σ , s) (pc + 1 , v :: σ , s)
  =>setvar : ∀ pc σ s id n -> instr-at c pc ≡ just (isetvar id) -> 
            Transition c (pc , n :: σ , s) (pc + 1 , σ , update id n s)
  =>mul : ∀ pc σ s n₁ n₂ -> instr-at c pc ≡ just imul -> 
@@ -46,5 +46,8 @@ data Transition (c : Code) : Config -> Config -> Set where
             Transition c (pc , n₂ :: n₁ :: σ , s) (pc₁ , σ , s)
 
 -- Sequences of machine transitions define the behavior of a code.
-Transitions : ∀ (c : Code) -> Config -> Config -> Set 
+Transitions : (c : Code) -> Config -> Config -> Set 
 Transitions c = Star (Transition c)
+
+_=<_>_ : (c₁ : Config) -> (c : Code) -> (c₂ : Config) -> Set 
+c₁ =< c > c₂ = Transitions c c₁ c₂ 
