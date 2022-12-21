@@ -8,15 +8,20 @@ open import Data.Integer
 open import Data.Product
 open import Stack.Syntax.Inst
 open import Stack.Syntax.Ident
-open import Data.Nat using (ℕ)
+open import Data.Nat using (ℕ) renaming (_+_ to _+n_ ; suc to nsuc)
 open import Data.List renaming (_∷_ to _::_)
 open import Relation.Binary.PropositionalEquality
 open ≡-Reasoning
+open import Data.List.Properties
 ---
 
 -- Compute the length of a code
 codelen : Code -> ℕ 
 codelen x = length x
+
+codelen-++ : ∀ c₁ {c₂} -> codelen c₁ +n codelen c₂ ≡ codelen (c₁ ++ c₂)
+codelen-++ [] = refl
+codelen-++ (x :: c₁) = cong nsuc (codelen-++ c₁)
 
 -- Get the instruction at a certain PC
 instr-at : (c : Code) -> (pc : PC) -> Maybe (Inst)
@@ -43,3 +48,34 @@ code-at=>instr-at (at c₁ (c :: c₂) c₃ pc pc≡len) =
  ≡⟨ refl ⟩ 
   just c
  ∎ 
+
+code-at-eq : ∀ c₁ c₂ c pc -> (c₁₂-eq : c₁ ≡ c₂) -> (c₁-at : code-at c₁ pc c) -> code-at c₂ pc c
+code-at-eq .(c₁ ++ c ++ c₃) .(c₁ ++ c ++ c₃) c pc refl (at c₁ .c c₃ .pc x) = at c₁ c c₃ pc x
+
+code-at-next : ∀ c c₂ c₃ pc -> code-at c pc (c₂ ++ c₃) ->
+                code-at c (pc +n codelen c₂) c₃
+code-at-next .(c₁ ++ (c₂ ++ c₃) ++ c₄) c₂ c₃ pc (at c₁ .(c₂ ++ c₃) c₄ .pc x) =
+ let 
+  pc+codelen = 
+   begin 
+    pc +n codelen c₂ 
+   ≡⟨ cong (_+n codelen c₂) x ⟩ 
+    codelen c₁ +n codelen c₂
+   ≡⟨ codelen-++ c₁ ⟩
+    codelen (c₁ ++ c₂) 
+   ∎
+ in code-at-assoc c₁ c₂ c₃ c₄ (pc +n codelen c₂) (at (c₁ ++ c₂) c₃ c₄ (pc +n codelen c₂) pc+codelen)
+ where 
+  ++-assoc' : ∀ c₁ c₂ c₃ c₄ -> (c₁ ++ c₂) ++ c₃ ++ c₄ ≡ c₁ ++ (c₂ ++ c₃) ++ c₄
+  ++-assoc' c₁ c₂ c₃ c₄ = 
+   begin 
+    (c₁ ++ c₂) ++ c₃ ++ c₄ 
+   ≡⟨ ++-assoc c₁ c₂ (c₃ ++ c₄) ⟩ 
+    c₁ ++ c₂ ++ c₃ ++ c₄ 
+   ≡⟨ sym (cong (c₁ ++_) (++-assoc c₂ c₃ c₄))⟩ 
+    c₁ ++ (c₂ ++ c₃) ++ c₄ 
+   ∎
+  code-at-assoc : ∀ c₁ c₂ c₃ c₄ pc -> code-at ((c₁ ++ c₂) ++ c₃ ++ c₄) pc c₃ ->
+    code-at (c₁ ++ (c₂ ++ c₃) ++ c₄) pc c₃
+  code-at-assoc c₁ c₂ c₃ c₄ pc x = code-at-eq ((c₁ ++ c₂) ++ c₃ ++ c₄) 
+   (c₁ ++ (c₂ ++ c₃) ++ c₄) c₃ pc (++-assoc' c₁ c₂ c₃ c₄) x
