@@ -11,7 +11,7 @@ data aeval-wf  (s : Store) : {ℤ} -> AExp -> Set where
  wf-const : ∀ c -> aeval-wf s {c} (const c) 
  wf-var : ∀ id -> aeval-wf s {s id} (var id)
  wf-plus : ∀ a₁ a₂ v₁ v₂ -> aeval-wf s {v₁} a₁ -> aeval-wf s {v₂} a₂ -> 
-            aeval-wf s {v₁ + v₂} (plus a₁ a₂)
+            aeval-wf s {v₂ + v₁} (plus a₁ a₂)
  wf-minus : ∀ a₁ a₂ v₁ v₂ -> aeval-wf s {v₁} a₁ -> aeval-wf s {v₂} a₂ -> 
             aeval-wf s {v₁ - v₂} (minus a₁ a₂)
  wf-times : ∀ a₁ a₂ v₁ v₂ -> aeval-wf s {v₁} a₁ -> aeval-wf s {v₂} a₂ -> 
