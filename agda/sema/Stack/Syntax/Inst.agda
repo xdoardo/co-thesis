@@ -39,6 +39,6 @@ PC = ℕ
 Stack : Set 
 Stack = List ℤ
 
--- A configuration of the stack machine is the following triple: 
-Config : Set 
-Config = (PC × Stack × Store)
+-- A state of the stack machine is the following quadruple: 
+State : Set 
+State = (Code × PC × Stack × Store)

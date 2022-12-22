@@ -52,6 +52,23 @@ code-at=>instr-at (at c₁ (c :: c₂) c₃ pc pc≡len) =
 code-at-eq : ∀ c₁ c₂ c pc -> (c₁₂-eq : c₁ ≡ c₂) -> (c₁-at : code-at c₁ pc c) -> code-at c₂ pc c
 code-at-eq .(c₁ ++ c ++ c₃) .(c₁ ++ c ++ c₃) c pc refl (at c₁ .c c₃ .pc x) = at c₁ c c₃ pc x
 
+
+code-at-append : ∀ c c₁ c₂ pc -> code-at c pc (c₁ ++ c₂) -> code-at c pc c₁
+code-at-append code c₁ c₂ pc (at c₃ .(c₁ ++ c₂) c₄ .pc x) = code-at-assoc {c₃} {c₁} {c₂} {c₄}
+ (at c₃ c₁ (c₂ ++ c₄) pc x)
+ where 
+  ++-assoc' : ∀ c₁ c₂ c₃ c₄ -> (c₁ ++ c₂ ++ c₃ ++ c₄) ≡ (c₁ ++ (c₂ ++ c₃) ++ c₄)
+  ++-assoc' c₁ c₂ c₃ c₄ = 
+   begin 
+    c₁ ++ c₂ ++ c₃ ++ c₄ 
+   ≡⟨ sym (cong (c₁ ++_) (++-assoc c₂ c₃ c₄))⟩ 
+    c₁ ++ (c₂ ++ c₃) ++ c₄ 
+   ∎
+  code-at-assoc : ∀ {c₁ c₂ c₃ c₄ pc} -> code-at (c₁ ++ c₂ ++ c₃ ++ c₄) pc c₂ -> 
+   code-at (c₁ ++ (c₂ ++ c₃) ++ c₄) pc c₂
+  code-at-assoc {c₁} {c₂} {c₃} {c₄} {pc} x = code-at-eq (c₁ ++ c₂ ++ c₃ ++ c₄) 
+   (c₁ ++ (c₂ ++ c₃) ++ c₄) c₂ pc (++-assoc' c₁ c₂ c₃ c₄) x 
+
 code-at-next : ∀ c c₂ c₃ pc -> code-at c pc (c₂ ++ c₃) ->
                 code-at c (pc +n codelen c₂) c₃
 code-at-next .(c₁ ++ (c₂ ++ c₃) ++ c₄) c₂ c₃ pc (at c₁ .(c₂ ++ c₃) c₄ .pc x) =
