@@ -80,8 +80,8 @@ greet x = if x == "" then hello else (hello, x)
   \vfill
 \end{frame}
 
-\section[basics]{Agda basics}
-\subsection[induction]{Induction}
+\section[induction]{Induction in Agda}
+\subsection[induction]{Basics}
 \begin{frame}[fragile]{Induction}
   Let's start from the basics: red-black trees. Ok, no, natural numbers:
 \begin{minted}{agda}
@@ -145,10 +145,11 @@ _+_ : Nat → Nat → Nat
 zero + x₁ = x₁
 suc x + x₁ = suc (x + x₁)
 \end{minted}
-  Sweet, but how do I prove things?
+  Sweet, but how do we prove things?
 \end{frame}
 
-\begin{frame}[fragile]{Induction}
+\subsection[induction]{Inductive proofs}
+\begin{frame}[fragile]{Inductive proofs}
   Let's prove the (left) identity of \texttt{+}.
 \begin{minted}{agda}
 +-id : ∀ (x : Nat) → ?0 -- <- Yes, we can use holes in type signatures as well!
@@ -172,7 +173,7 @@ Two terms in agda are said to be definitionally equal when they both have the
 same normal form up to αη-conversion.
 \end{frame}
 
-\begin{frame}[fragile]{Induction}
+\begin{frame}[fragile]{Inductive proofs}
   Let's prove the (left) identity of \texttt{+}.
 \begin{minted}{agda}
 +-id : ∀ (x : Nat) → zero + x ≡ x
@@ -180,7 +181,7 @@ same normal form up to αη-conversion.
 +-id (suc x) = ? -- <- must be a term of type  '(zero + suc x) ≡ suc x'
 \end{minted}
 \end{frame}
-\begin{frame}[noframenumbering, fragile]{Induction}
+\begin{frame}[noframenumbering, fragile]{Inductive proofs}
   Let's prove the (left) identity of \texttt{+}.
 \begin{minted}{agda}
 +-id : ∀ (x : Nat) → zero + x ≡ x
@@ -188,7 +189,7 @@ same normal form up to αη-conversion.
 +-id (suc x) = ? -- <- must be a term of type  '(zero + suc x) ≡ suc x'
 \end{minted}
 \end{frame}
-\begin{frame}[noframenumbering, fragile]{Induction}
+\begin{frame}[noframenumbering, fragile]{Inductive proofs}
   Let's prove the (left) identity of \texttt{+}.
 \begin{minted}{agda}
 +-id : ∀ (x : Nat) → zero + x ≡ x
@@ -196,7 +197,7 @@ same normal form up to αη-conversion.
 +-id (suc x) = cong suc (+-id x)
 \end{minted}
 \end{frame}
-\begin{frame}[noframenumbering, fragile]{Induction}
+\begin{frame}[noframenumbering, fragile]{Inductive proofs}
   Let's prove the (left) identity of \texttt{+}.
 \begin{minted}{agda}
 +-id : ∀ (x : Nat) → zero + x ≡ x
@@ -209,7 +210,7 @@ of course, Agda is powerful enough to let this proof be more concise:
 +-id x = refl
 \end{minted}
 \end{frame}
-\begin{frame}[fragile]{Induction}
+\begin{frame}[fragile]{Inductive proofs}
   Let's prove something slightly more complicated: the associativity of
   \texttt{+}. We need to {\it reason} about equality. From Agda's
   \texttt{stdlib}:
@@ -228,7 +229,7 @@ x ≡⟨ x≡y ⟩ y≡z = trans x≡y y≡z
 +-assoc (suc x) y z = {! !} -- Goal: ((suc x + y) + z) ≡ (suc x + (y + z))
 \end{minted}
 \end{frame}
-\begin{frame}[fragile]{Induction}
+\begin{frame}[fragile]{Inductive proofs}
   Let's prove something slightly more complicated: the associativity of
   \texttt{+}. We need to {\it reason} about equality. From Agda's
   \texttt{stdlib}:
@@ -254,7 +255,7 @@ x ≡⟨ x≡y ⟩ y≡z = trans x≡y y≡z
    ? -- Goal : y' ≡ (suc x + (y + z))
 \end{minted}
 \end{frame}
-\begin{frame}[fragile]{Induction}
+\begin{frame}[fragile]{Inductive proofs}
   Let's prove something slightly more complicated: the associativity of
   \texttt{+}. We need to {\it reason} about equality. From Agda's
   \texttt{stdlib}:
@@ -280,7 +281,7 @@ x ≡⟨ x≡y ⟩ y≡z = trans x≡y y≡z
    ? -- Goal : suc (x + (y + z)) ≡ (suc x + (y + z))
 \end{minted}
 \end{frame}
-\begin{frame}[fragile]{Induction}
+\begin{frame}[fragile]{Inductive proofs}
   Let's prove something slightly more complicated: the associativity of
   \texttt{+}. We need to {\it reason} about equality. From Agda's
   \texttt{stdlib}:

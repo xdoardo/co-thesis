@@ -1,0 +1,27 @@
+* An introduction to Agda 
+** TODO Introduction 
+  - [ ] History
+    + [ ] Timeline
+    + [ ] ?
+  - [ ] What is it? 
+    + [ ] Technical stuff
+    + [ ] ?
+
+** TODO Induction 
+  - [ ] Induction 
+    + [ ] Basic inductive data types 
+    + [ ] Relations and inductive relations
+    + [ ] Basic inductive proofs
+    + [ ] Inductive reasoning 
+
+** TODO Coinduction
+  - [ ] Coinduction 
+    + [ ] Basic coinductive data types 
+    + [ ] Coinductive relations
+
+** TODO Proofs 
+  - [ ] Proofs
+    + [ ] Connectives
+    + [ ] Negation
+    + [ ] Quantifiers
+    + [ ] Decidability
