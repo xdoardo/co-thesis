@@ -24,7 +24,7 @@
 \usemintedstyle{gumint}
 
 \title{A brief introduction to Agda}
-\subtitle{}%\it or, how I stopped worrying and love the typechecker }
+\subtitle{\it or, how I learned to stop worrying and love the typechecker }
 \date{\today}
 \author{Edoardo Marangoni}
 \email{ecmm@anche.no}
@@ -39,19 +39,20 @@
 \end{frame}
 
 \section[intro]{Introduction}
-\subsection[hist]{History}
-\begin{frame}{History}
+\subsection[about]{About Agda}
+\begin{frame}{About Agda}
+  \vfill
+  A bit of history..
   \vfill
   \begin{itemize}
     \item {V1.0 (approx. 1999) by C. Coquand}
     \item {V2.0 (approx. 2007) is a complete rewrite by U. Norell}
-    \item {draws inspiration from previous works such as Alf, Alfa, Cayenne,
-      Coq, ... , Automath }
+    \item {draws inspiration from previous works such as Alf, Alfa, Automath, Cayenne,
+      Coq, ... }
   \end{itemize}
   \vfill
-\end{frame}
-\subsection[what?]{What is it?}
-\begin{frame}[fragile]{What is it?}
+  ..and about Agda itself.
+  \vfill
   \begin{itemize}
     \item {a {\bf total} dependently typed programming language}
     \item {an extension of intuitionistic Martin-Löf type-theory}
@@ -59,146 +60,165 @@
       correspondence)}
   \end{itemize}
   \vfill
-The anatomy of a simple Agda definition:
-\begin{minted}{agda}
+\end{frame}
 
-open import Data.Bool
-open import Data.String
-
--- Define a data type for greetings
-data Greeting : Set where           -- Set is somewhat close to Coq's Type
- hello : Greeting   -- no name given
- -- this underscore is for prefix, infix, postfix, mixfix arguments to
- -- constructors
- --    ▼
- hello,_ : String → Greeting -- greet a person
-
-greet : String → Greeting --               see?
---                                           ▼
-greet x = if x == "" then hello else (hello, x)
-\end{minted}
+\subsection[syn]{Syntax}
+\begin{frame}[fragile]{Syntax}
+  \begin{itemize}
+    \vfill
+    \item {
+	note that almost any character (including unicode codepoints and ``,'')
+	except ``('' and ``)'' is valid in identifiers! For example,
+	\mintinline{agda}{3::2::1::[]} is lexed as an identifier, and we must
+	use spaces to make Agda parse it successfully. These are all valid
+	identifiers:
+	\begin{itemize}
+	  \item {\mintinline{agda}{this+is*a-valid[identifier] : ℕ -> ℕ}}
+	  \item {\mintinline{agda}{this,as->well : ℕ -> ℕ}}
+	\end{itemize}
+      }
+    \vfill
+    \item {
+	the character ``\_'' has a special meaning in definitions, as it allows
+	the definition of mixfix operators. For example:
+	\mintinline{agda}{if_then_else_} defines a function which can be
+	used in the following ways:
+	\begin{itemize}
+	  \item {\mintinline{agda}{(if_then_else_) x y z}}
+	  \item {\mintinline{agda}{if x then y else z}}
+	  \item {\mintinline{agda}{(if x then_else_) y z}}
+	  \item {\mintinline{agda}{(if_then y else z) x}}
+	  \item {\mintinline{agda}{(if x then _ else z) y}}
+	  \item {...}
+	\end{itemize}
+      }
+      \vfill
+\end{itemize}
   \vfill
 \end{frame}
-
-\section[induction]{Induction in Agda}
-\subsection[induction]{Basics}
-\begin{frame}[fragile]{Induction}
-  Let's start from the basics: red-black trees. Ok, no, natural numbers:
+\begin{frame}[fragile]{Syntax}
+  \vfill
+  Let's see a simple definition of a function:
 \begin{minted}{agda}
-data Nat : Set where
- zero : Nat
- suc : Nat → Nat
+not : Bool -> Bool
+not false = true
+not true = false
 \end{minted}
-  In Agda, data structures need not be tagged with ``inductive'' or
-  ``coinductive'' (albeit records do).
-  Let's see a simple example of a function:
+We can see that pattern matching, in Agda, is similar to that of Haskell.
+We also can use implicit arguments (notice the dependent typing):
 \begin{minted}{agda}
-_+_ : Nat → Nat → Nat
-_+_ = ? -- <- This is a goal. It allows interactive development.
+id : {A : Set} -> A -> A
+id a = a
 \end{minted}
+We can then use \mintinline{agda}{id} both as \mintinline{agda}{(id {Bool}
+true)} and \mintinline{agda}{(id true)}.
+  \vfill
 \end{frame}
-\begin{frame}[noframenumbering, fragile]{Induction}
-  Let's start from the basics: red-black trees. Ok, no, natural numbers:
+\subsection[inter-dev]{Interactive development}
+\begin{frame}[fragile]{Interactive development}
+{\small \it this would be better with live coding}
+\vfill
+Being a proof assistant, interaction between the developer and Agda itself is
+really important. The main points of interaction are, in a way similar to Coq,
+\textit{goals} and \textit{holes}. A hole is syntactically represented by a
+\mintinline{agda}{?} in the source, and it represents an unknown value:
 \begin{minted}{agda}
-data Nat : Set where
- zero : Nat
- suc : Nat → Nat
+f : ℕ -> ℕ
+f = ?
 \end{minted}
-  In Agda, data structures need not be tagged with ``inductive'' or
-  ``coinductive'' (albeit records do).
-  Let's see a simple example of a function:
+Agda will track the \mintinline{agda}{?} as representing an unknown value which must have type
+\mintinline{agda}{ℕ -> ℕ}, and graphically show it in the editor as an unsolved
+goal. We can then ask Agda to automatically solve the goal, refine it or split
+the definition of the function to match on the possible values of an argument.
 \begin{minted}{agda}
-_+_ : Nat → Nat → Nat
-x + x₁ = ? --  <- Using holes, we can _split_ data types; in this case,
-           -- Agda gives us the two arguments x and x₁.
+f : ℕ -> ℕ
+f = λ z → z
 \end{minted}
-\end{frame}
-\begin{frame}[noframenumbering, fragile]{Induction}
-  Let's start from the basics: red-black trees. Ok, no, natural numbers:
-\begin{minted}{agda}
-data Nat : Set where
- zero : Nat
- suc : Nat → Nat
-\end{minted}
-  In Agda, data structures need not be tagged with ``inductive'' or
-  ``coinductive'' (albeit records do).
-  Let's see a simple example of a function:
-\begin{minted}{agda}
-_+_ : Nat → Nat → Nat
--- Let's split again on x:          (this is Agda's pattern-match)
-zero + x₁ = {! !}
-suc x + x₁ = {! !}
-\end{minted}
-\end{frame}
-\begin{frame}[noframenumbering, fragile]{Induction}
-  Let's start from the basics: red-black trees. Ok, no, natural numbers:
-\begin{minted}{agda}
-data Nat : Set where
- zero : Nat
- suc : Nat → Nat
-\end{minted}
-  In Agda, data structures need not be tagged with ``inductive'' or
-  ``coinductive'' (albeit records do).
-  Let's see a simple example of a function:
-\begin{minted}{agda}
-_+_ : Nat → Nat → Nat
-zero + x₁ = x₁
-suc x + x₁ = suc (x + x₁)
-\end{minted}
-  Sweet, but how do we prove things?
+For example, when asked to solve the previous goal automatically, Agda may
+choose to fill it with the identity function \mintinline{agda}{f = λ z → z }.
+\vfill
 \end{frame}
 
-\subsection[induction]{Inductive proofs}
-\begin{frame}[fragile]{Inductive proofs}
-  Let's prove the (left) identity of \texttt{+}.
+\section[induction]{Induction}
+\subsection[induction]{Basic definitions}
+\begin{frame}[fragile]{Basic definitions}
+  Let's start from the basic data types: red-black trees. Ok, no, natural numbers:
 \begin{minted}{agda}
-+-id : ∀ (x : Nat) → ?0 -- <- Yes, we can use holes in type signatures as well!
-+-id x = ?1
+data Nat : Set where
+ zero : Nat
+ suc : Nat → Nat
 \end{minted}
-What should the type be?
-
-This is the internal definition of (propositional, intensional, ``definitional'') equality.
+  In Agda, data structures need not be tagged with ``inductive'' or
+  ``coinductive'' (albeit records do).
+  Data definitions can be indexed...
 \begin{minted}{agda}
---        ╭ implicit argument with implicit type
---        │  ╭ implicit argument of type 'Set a' - notice the dependent typing
---        │  │           ╭ read this as 'for all x of type A'
---        ▼  ▼---------▼ ▼-----▼
+data NatVec : ℕ -> Set where
+ ε    : Vec zero
+ _::_ : ∀ {n : ℕ} -> Nat -> Vec n -> Vec (suc n)
+\end{minted}
+...and parametrized
+\begin{minted}{agda}
+data Vec (A : Set) : ℕ -> Set where
+ ε    : Vec A zero
+ _::_ : ∀ {n : ℕ} -> A -> Vec A n -> Vec A (suc n)
+\end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Basic definitions}
+  We can also model relations as datatypes. The {\it mother} of all relations is
+  {\bf propositional equality}; what follows is the internal definition of
+  (propositional, intensional, ``definitional'') equality.
+\begin{minted}{agda}
+-- lib/Relation/Binary/PropositionalEquality/Core.agda
 data _≡_ {a} {A : Set a} (x : A) : A → Set a where
   refl : x ≡ x
 
 cong : ∀ {a b} {A : Set a}  {B : Set b} (f : A → B) {m  n}  → m ≡ n → f m ≡ f n
 cong f  refl  = refl
 \end{minted}
-Two terms in agda are said to be definitionally equal when they both have the
-same normal form up to αη-conversion.
+The use of relations and the power of Agda's dependent type system allows us to
+write proofs just like function definitions: 
+\begin{minted}{agda}
++-id : ∀ (x : Nat) → zero + x ≡ x 
++-id x = ?
+\end{minted}
 \end{frame}
 
-\begin{frame}[fragile]{Inductive proofs}
-  Let's prove the (left) identity of \texttt{+}.
+\begin{frame}[fragile]{Basic definitions}
+  We can also model relations as datatypes. The {\it mother} of all relations is
+  {\bf propositional equality}; what follows is the internal definition of
+  (propositional, intensional, ``definitional'') equality.
 \begin{minted}{agda}
-+-id : ∀ (x : Nat) → zero + x ≡ x
-+-id zero = ? -- <- must be a term of type '(zero + zero) ≡ zero'
-+-id (suc x) = ? -- <- must be a term of type  '(zero + suc x) ≡ suc x'
+-- lib/Relation/Binary/PropositionalEquality/Core.agda
+data _≡_ {a} {A : Set a} (x : A) : A → Set a where
+  refl : x ≡ x
+
+cong : ∀ {a b} {A : Set a}  {B : Set b} (f : A → B) {m  n}  → m ≡ n → f m ≡ f n
+cong f  refl  = refl
 \end{minted}
-\end{frame}
-\begin{frame}[noframenumbering, fragile]{Inductive proofs}
-  Let's prove the (left) identity of \texttt{+}.
-\begin{minted}{agda}
-+-id : ∀ (x : Nat) → zero + x ≡ x
-+-id zero = refl
-+-id (suc x) = ? -- <- must be a term of type  '(zero + suc x) ≡ suc x'
-\end{minted}
-\end{frame}
-\begin{frame}[noframenumbering, fragile]{Inductive proofs}
-  Let's prove the (left) identity of \texttt{+}.
+The use of relations and the power of Agda's dependent type system allows us to
+write proofs just like function definitions: 
 \begin{minted}{agda}
 +-id : ∀ (x : Nat) → zero + x ≡ x
 +-id zero = refl
-+-id (suc x) = cong suc (+-id x)
++-id (suc x) = ? -- must be a term of type  '(zero + suc x) ≡ suc x'
 \end{minted}
 \end{frame}
-\begin{frame}[noframenumbering, fragile]{Inductive proofs}
-  Let's prove the (left) identity of \texttt{+}.
+
+\begin{frame}[fragile]{Basic definitions}
+  We can also model relations as datatypes. The {\it mother} of all relations is
+  {\bf propositional equality}; what follows is the internal definition of
+  (propositional, intensional, ``definitional'') equality.
+\begin{minted}{agda}
+-- lib/Relation/Binary/PropositionalEquality/Core.agda
+data _≡_ {a} {A : Set a} (x : A) : A → Set a where
+  refl : x ≡ x
+
+cong : ∀ {a b} {A : Set a}  {B : Set b} (f : A → B) {m  n}  → m ≡ n → f m ≡ f n
+cong f  refl  = refl
+\end{minted}
+The use of relations and the power of Agda's dependent type system allows us to
+write proofs just like function definitions: 
 \begin{minted}{agda}
 +-id : ∀ (x : Nat) → zero + x ≡ x
 +-id zero = refl
@@ -210,104 +230,208 @@ of course, Agda is powerful enough to let this proof be more concise:
 +-id x = refl
 \end{minted}
 \end{frame}
-\begin{frame}[fragile]{Inductive proofs}
-  Let's prove something slightly more complicated: the associativity of
-  \texttt{+}. We need to {\it reason} about equality. From Agda's
-  \texttt{stdlib}:
+
+\subsection[proofs]{Proving theorems}
+\begin{frame}[fragile]{Equational reasoning}
+  Of course, proofs can be much more complicated than that for
+  \mintinline{agda}{+-id} and might need {\it chains of equations} to express
+  the various steps of a proof of a theorem. Ideally, every relation should have
+  means to allow reasoning about it. Regarding the equality relation
+  \mintinline{agda}{≡}, the standard library gives us the following: 
+\vfill
 \begin{minted}{agda}
---                ╭ notice that `y` is implicit!
---                ▼
-_≡⟨⟩_ : ∀ {A} (x {y} : A) → x ≡ y → x ≡ y
+-- lib/Relation/Binary/PropositionalEquality/Core.agda
+begin_ : ∀{x y : A} → x ≡ y → x ≡ y
+begin_ x≡y = x≡y
+
+_≡⟨⟩_ : ∀ (x {y} : A) → x ≡ y → x ≡ y
 _ ≡⟨⟩ x≡y = x≡y
 
-_≡⟨_⟩_ : ∀ (x {y z} : A)  → x ≡ y → y ≡ z → x ≡ z
-x ≡⟨ x≡y ⟩ y≡z = trans x≡y y≡z
+step-≡ : ∀ (x {y z} : A) → y ≡ z → x ≡ y → x ≡ z
+step-≡ _ y≡z x≡y = trans x≡y y≡z
+
+syntax step-≡  x y≡z x≡y = x ≡⟨ x≡y ⟩ y≡z
+
+_∎ : ∀ (x : A) → x ≡ x
+_∎ _ = refl
 \end{minted}
+\vfill
+  (this is generalized with \mintinline{agda}{Setoid} and
+  \mintinline{agda}{PartialSetoid})
+\end{frame}
+
+\begin{frame}[fragile]{Equational reasoning}
+  Chains of equations can often get difficult to read and follow, so let's take
+  it slow and prove the associativity of \mintinline{agda}{_+_}:
 \begin{minted}{agda}
-+-assoc : ∀ (x y z : Nat) -> (x + y) + z ≡ x + (y + z)
-+-assoc zero y z = refl
-+-assoc (suc x) y z = {! !} -- Goal: ((suc x + y) + z) ≡ (suc x + (y + z))
++-assoc : ∀ (m n p : ℕ ) -> (m + n) + p ≡ m + (n + p)
++-assoc m n p = ? 
 \end{minted}
 \end{frame}
-\begin{frame}[fragile]{Inductive proofs}
-  Let's prove something slightly more complicated: the associativity of
-  \texttt{+}. We need to {\it reason} about equality. From Agda's
-  \texttt{stdlib}:
-\begin{minted}{agda}
---                ╭ notice that `y` is implicit!
---                ▼
-_≡⟨⟩_ : ∀ {A} (x {y} : A) → x ≡ y → x ≡ y
-_ ≡⟨⟩ x≡y = x≡y
 
-_≡⟨_⟩_ : ∀ (x {y z} : A)  → x ≡ y → y ≡ z → x ≡ z
-x ≡⟨ x≡y ⟩ y≡z = trans x≡y y≡z
-\end{minted}
+\begin{frame}[fragile,noframenumbering]{Equational reasoning}
+  Chains of equations can often get difficult to read and follow, so let's take
+  it slow and prove the associativity of \mintinline{agda}{_+_}:
 \begin{minted}{agda}
-+-assoc : ∀ (x y z : Nat) -> (x + y) + z ≡ x + (y + z)
-+-assoc zero y z = refl
-+-assoc (suc x) y z =
-  ((suc x) + y) + z
-  ≡⟨⟩
-  (suc (x + y)) + z
-  ≡⟨⟩
-  suc ((x + y) + z)
-  ≡⟨ ? ⟩ -- Goal :  suc ((x + y) + z) ≡ y'
-   ? -- Goal : y' ≡ (suc x + (y + z))
++-assoc : ∀ (m n p : ℕ ) -> (m + n) + p ≡ m + (n + p)
++-assoc zero n p = ? -- split on m
++-assoc (suc m) n p = ?
 \end{minted}
 \end{frame}
-\begin{frame}[fragile]{Inductive proofs}
-  Let's prove something slightly more complicated: the associativity of
-  \texttt{+}. We need to {\it reason} about equality. From Agda's
-  \texttt{stdlib}:
-\begin{minted}{agda}
---                ╭ notice that `y` is implicit!
---                ▼
-_≡⟨⟩_ : ∀ {A} (x {y} : A) → x ≡ y → x ≡ y
-_ ≡⟨⟩ x≡y = x≡y
 
-_≡⟨_⟩_ : ∀ (x {y z} : A)  → x ≡ y → y ≡ z → x ≡ z
-x ≡⟨ x≡y ⟩ y≡z = trans x≡y y≡z
-\end{minted}
+\begin{frame}[fragile,noframenumbering]{Equational reasoning}
+  Chains of equations can often get difficult to read and follow, so let's take
+  it slow and prove the associativity of \mintinline{agda}{_+_}:
 \begin{minted}{agda}
-+-assoc : ∀ (x y z : Nat) -> (x + y) + z ≡ x + (y + z)
-+-assoc zero y z = refl
-+-assoc (suc x) y z =
-  ((suc x) + y) + z
-  ≡⟨⟩
-  (suc (x + y)) + z
-  ≡⟨⟩
-  suc ((x + y) + z)
-  ≡⟨ cong suc (+-assoc x y z) ⟩
-   ? -- Goal : suc (x + (y + z)) ≡ (suc x + (y + z))
++-assoc : ∀ (m n p : ℕ ) -> (m + n) + p ≡ m + (n + p)
++-assoc zero n p = refl 
++-assoc (suc m) n p = ? -- we must show ((suc m) + n) + p ≡ (suc m) + (n + p)
+\end{minted}
+On paper, we would prove this in a way similar to this: 
+suppose
+\begin{equation}
+  \label{eqn:ind_hyp_+-assoc}
+  (m + n) + p \equiv m + (n + p)
+\end{equation}
+then
+$$
+\begin{aligned}
+    & && ((\texttt{suc}~m) + n) + p \equiv (\texttt{suc}~m) + (n + p) \\
+    & \rightarrow ~~ && (\texttt{suc}~(m + n)) + p \equiv (\texttt{suc}~m) + (n + p) \\
+    & \rightarrow ~~ && \texttt{suc}~((m + n) + p) \equiv (\texttt{suc}~m) + (n + p) \\
+    & \rightarrow (by ~ \eqref{eqn:ind_hyp_+-assoc})~~ && \texttt{suc}~(m + (n + p)) \equiv (\texttt{suc}~m) + (n + p) \\
+    & \rightarrow ~~ && (\texttt{suc}~m) + (n + p) \equiv (\texttt{suc}~m) + (n + p)
+\end{aligned}
+$$
+We can directly map this chain of reasoning in Agda!
+\end{frame}
+
+\begin{frame}[fragile,noframenumbering]{Equational reasoning}
+  Chains of equations can often get difficult to read and follow, so let's take
+  it slow and prove the associativity of \mintinline{agda}{_+_}:
+\begin{minted}{agda}
++-assoc : ∀ (m n p : ℕ ) -> (m + n) + p ≡ m + (n + p)
++-assoc zero n p = refl 
++-assoc (suc m) n p = 
+ begin 
+   suc m + n + p 
+  ≡⟨⟩ 
+   suc (m + n) + p 
+  ≡⟨⟩ 
+   ? -- goal has type suc (m + n) + p ≡ suc m + (n + p)
 \end{minted}
 \end{frame}
-\begin{frame}[fragile]{Inductive proofs}
-  Let's prove something slightly more complicated: the associativity of
-  \texttt{+}. We need to {\it reason} about equality. From Agda's
-  \texttt{stdlib}:
-\begin{minted}{agda}
---                ╭ notice that `y` is implicit!
---                ▼
-_≡⟨⟩_ : ∀ {A} (x {y} : A) → x ≡ y → x ≡ y
-_ ≡⟨⟩ x≡y = x≡y
 
-_≡⟨_⟩_ : ∀ (x {y z} : A)  → x ≡ y → y ≡ z → x ≡ z
-x ≡⟨ x≡y ⟩ y≡z = trans x≡y y≡z
-\end{minted}
+\begin{frame}[fragile,noframenumbering]{Equational reasoning}
+  Chains of equations can often get difficult to read and follow, so let's take
+  it slow and prove the associativity of \mintinline{agda}{_+_}:
 \begin{minted}{agda}
-+-assoc : ∀ (x y z : Nat) -> (x + y) + z ≡ x + (y + z)
-+-assoc zero y z = refl
-+-assoc (suc x) y z =
-  ((suc x) + y) + z
-  ≡⟨⟩
-  (suc (x + y)) + z
-  ≡⟨⟩
-  suc ((x + y) + z)
-  ≡⟨ cong suc (+-assoc x y z) ⟩
-   suc (x + (y + z))
-  ≡⟨⟩
-    suc x + (y + z)
-  ∎ -- <- reflexivity on equality: _∎ : ∀ (x : A) → x ≡ x
++-assoc : ∀ (m n p : ℕ ) -> (m + n) + p ≡ m + (n + p)
++-assoc zero n p = refl 
++-assoc (suc m) n p = 
+ begin 
+   suc m + n + p 
+  ≡⟨⟩ 
+   suc (m + n) + p 
+  ≡⟨⟩ 
+   suc (m + n + p)
+  ≡⟨⟩ 
+   ? -- we now want to use the inductive hypothesis!
+\end{minted}
+\end{frame}
+
+\begin{frame}[fragile,noframenumbering]{Equational reasoning}
+  Chains of equations can often get difficult to read and follow, so let's take
+  it slow and prove the associativity of \mintinline{agda}{_+_}:
+\begin{minted}{agda}
++-assoc : ∀ (m n p : ℕ ) -> (m + n) + p ≡ m + (n + p)
++-assoc zero n p = refl 
++-assoc (suc m) n p = 
+ begin 
+   suc m + n + p 
+  ≡⟨⟩ 
+   suc (m + n) + p 
+  ≡⟨⟩ 
+   suc (m + n + p)
+  ≡⟨ cong suc (+-assoc m n p) ⟩ 
+   suc (m + (n + p))
+ ∎
+\end{minted}
+\end{frame}
+
+\begin{frame}[fragile,noframenumbering]{Equational reasoning}
+  Chains of equations can often get difficult to read and follow, so let's take
+  it slow and prove the associativity of \mintinline{agda}{_+_}:
+\begin{minted}{agda}
++-assoc : ∀ (m n p : ℕ ) -> (m + n) + p ≡ m + (n + p)
++-assoc zero n p = refl 
++-assoc (suc m) n p = 
+ begin 
+   suc m + n + p 
+  ≡⟨⟩ 
+   suc (m + n) + p 
+  ≡⟨⟩ 
+   suc (m + n + p)
+  ≡⟨ cong suc (+-assoc m n p) ⟩ 
+   suc (m + (n + p))
+ ∎
+\end{minted}
+
+Of course, this kind of proof technique can end up in something very difficult
+to follow...
+\begin{minted}{agda}
+-- lib/Relation/Binary/HeterogeneousEquality/Quotients/Examples.agda
++²-cong {a₁ , b₁} {c₁ , d₁} {a₂ , b₂} {c₂ , d₂} ab∼cd₁ ab∼cd₂ = begin
+    (a₁ + c₁) + (b₂ + d₂) ≡⟨ ≡.cong (_+ (b₂ + d₂)) (+-comm a₁ c₁) ⟩
+    (c₁ + a₁) + (b₂ + d₂) ≡⟨ +-assoc c₁ a₁ (b₂ + d₂) ⟩
+    c₁ + (a₁ + (b₂ + d₂)) ≡⟨ ≡.cong (c₁ +_) (≡.sym (+-assoc a₁ b₂ d₂)) ⟩
+  ...
+\end{minted}
+\end{frame}
+
+\section[coinduction]{Co-induction}
+\subsection[coinduction]{Basic definitions}
+\begin{frame}[fragile]{Basics of (sized) co-induction}
+  Most of the infrastructure for sized co-induction in Agda is based on the
+  following record:
+\begin{minted}{agda}
+-- lib/Size.agda
+SizedSet : (ℓ : Level) → Set (suc ℓ)
+SizedSet ℓ = Size → Set ℓ
+
+-- lib/Codata/Sized/Thunk.agda
+record Thunk {ℓ} (F : SizedSet ℓ) (i : Size) : Set ℓ where
+  coinductive
+  field force : {j : Size< i} → F j
+\end{minted}
+\end{frame}
+\begin{frame}[fragile,noframenumbering]{Basics of (sized) co-induction}
+  Most of the infrastructure for sized co-induction in Agda is based on the
+  following record:
+\begin{minted}{agda}
+-- lib/Size.agda
+SizedSet : (ℓ : Level) → Set (suc ℓ)
+SizedSet ℓ = Size → Set ℓ
+
+-- lib/Codata/Sized/Thunk.agda
+record Thunk {ℓ} (F : SizedSet ℓ) (i : Size) : Set ℓ where
+  coinductive
+  field force : {j : Size< i} → F j
+\end{minted}
+Other co-inductive (or inductive-co-inductive) data types are defined in terms
+of \mintinline{agda}{Thunk}:
+\begin{minted}{agda}
+data Stream (A : Set a) (i : Size) : Set a where
+  _∷_ : A → Thunk (Stream A) i → Stream A i
+
+head : Stream A i → A
+head (x ∷ xs) = x
+
+tail : {j : Size< i} → Stream A i → Stream A j
+tail (x ∷ xs) = xs .force
+
+map : (A → B) → Stream A i → Stream B i
+map f (x ∷ xs) = f x ∷ λ where .force → map f (xs .force)
 \end{minted}
 \end{frame}
 \end{document}
