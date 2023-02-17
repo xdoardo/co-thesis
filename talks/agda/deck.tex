@@ -54,9 +54,9 @@
   ..and about Agda itself.
   \vfill
   \begin{itemize}
-    \item {a {\bf total} dependently typed programming language}
-    \item {an extension of intuitionistic Martin-Löf type-theory}
-    \item {a proof assistant (due to its dependent typing and Curry-Howard's
+    \item {it's a {\bf total} dependently typed programming language}
+    \item {it's an extension of intuitionistic Martin-Löf type-theory}
+    \item {it's a proof assistant (due to its dependent typing and Curry-Howard's
       correspondence)}
   \end{itemize}
   \vfill
@@ -138,6 +138,32 @@ For example, when asked to solve the previous goal automatically, Agda may
 choose to fill it with the identity function \mintinline{agda}{f = λ z → z }.
 \vfill
 \end{frame}
+\subsection[types]{Agda's type system}
+\begin{frame}[fragile]{Agda's type system}
+  \vfill
+  \begin{itemize}
+  \item {
+      Agda is built upon a dependently typed system. This allows us to model
+      among other things (e.g. being the backbone of its proof-assistant functions)
+      safety conditions such as not accessing the index $n+1$ of a vector of length
+      $n$ directly in the type system and check this condition at {\it compile time}.
+    }
+  \item {
+      The fundamental (read: simple, small) type is \mintinline{agda}{Set}. Not every
+      type in Agda is a \mintinline{agda}{Set}, however; to avoid paradoxes
+      similar to Russel's, Agda uses {\it universe levels} and provides an
+      infinite number of them, and we have that \mintinline{agda}{Set} is not of
+      type \mintinline{agda}{Set}, instead it is \mintinline{agda}{Set : Set₁}!
+
+      In turn, it is \mintinline{agda}{Set₁ : Set₂}, \mintinline{agda}{... : Setₙ}, 
+      where the subscript $n$ is its {\bf level}. This allows us to define, for
+      example, \mintinline{agda}{List} to be universe-polymorphic and, instead
+      of being parametrized on types \mintinline{agda}{A : Set}, on
+      \mintinline{agda}{A : Set n}, that is, we can have lists {\it of types}.
+    }
+  \end{itemize}
+  \vfill
+\end{frame}
 
 \section[induction]{Induction}
 \subsection[induction]{Basic definitions}
@@ -147,6 +173,10 @@ choose to fill it with the identity function \mintinline{agda}{f = λ z → z }.
 data Nat : Set where
  zero : Nat
  suc : Nat → Nat
+
+_+_ : ℕ -> ℕ -> ℕ
+zero + x₁ = x₁
+suc x + x₁ = suc (x + x₁)
 \end{minted}
   In Agda, data structures need not be tagged with ``inductive'' or
   ``coinductive'' (albeit records do).
@@ -177,9 +207,9 @@ cong : ∀ {a b} {A : Set a}  {B : Set b} (f : A → B) {m  n}  → m ≡ n → 
 cong f  refl  = refl
 \end{minted}
 The use of relations and the power of Agda's dependent type system allows us to
-write proofs just like function definitions: 
+write proofs just like function definitions:
 \begin{minted}{agda}
-+-id : ∀ (x : Nat) → zero + x ≡ x 
++-id : ∀ (x : Nat) → zero + x ≡ x
 +-id x = ?
 \end{minted}
 \end{frame}
@@ -197,7 +227,7 @@ cong : ∀ {a b} {A : Set a}  {B : Set b} (f : A → B) {m  n}  → m ≡ n → 
 cong f  refl  = refl
 \end{minted}
 The use of relations and the power of Agda's dependent type system allows us to
-write proofs just like function definitions: 
+write proofs just like function definitions:
 \begin{minted}{agda}
 +-id : ∀ (x : Nat) → zero + x ≡ x
 +-id zero = refl
@@ -218,13 +248,14 @@ cong : ∀ {a b} {A : Set a}  {B : Set b} (f : A → B) {m  n}  → m ≡ n → 
 cong f  refl  = refl
 \end{minted}
 The use of relations and the power of Agda's dependent type system allows us to
-write proofs just like function definitions: 
+write proofs just like function definitions:
 \begin{minted}{agda}
 +-id : ∀ (x : Nat) → zero + x ≡ x
 +-id zero = refl
 +-id (suc x) = cong suc (+-id x)
 \end{minted}
-of course, Agda is powerful enough to let this proof be more concise:
+of course, Agda is powerful enough to let this proof be more concise, as
+\mintinline{agda}{_+_} is defined recursively on the first element:
 \begin{minted}{agda}
 +-id : ∀ (x : Nat) → zero + x ≡ x
 +-id x = refl
@@ -237,7 +268,7 @@ of course, Agda is powerful enough to let this proof be more concise:
   \mintinline{agda}{+-id} and might need {\it chains of equations} to express
   the various steps of a proof of a theorem. Ideally, every relation should have
   means to allow reasoning about it. Regarding the equality relation
-  \mintinline{agda}{≡}, the standard library gives us the following: 
+  \mintinline{agda}{≡}, the standard library gives us the following:
 \vfill
 \begin{minted}{agda}
 -- lib/Relation/Binary/PropositionalEquality/Core.agda
@@ -265,7 +296,7 @@ _∎ _ = refl
   it slow and prove the associativity of \mintinline{agda}{_+_}:
 \begin{minted}{agda}
 +-assoc : ∀ (m n p : ℕ ) -> (m + n) + p ≡ m + (n + p)
-+-assoc m n p = ? 
++-assoc m n p = ?
 \end{minted}
 \end{frame}
 
@@ -284,10 +315,10 @@ _∎ _ = refl
   it slow and prove the associativity of \mintinline{agda}{_+_}:
 \begin{minted}{agda}
 +-assoc : ∀ (m n p : ℕ ) -> (m + n) + p ≡ m + (n + p)
-+-assoc zero n p = refl 
++-assoc zero n p = refl
 +-assoc (suc m) n p = ? -- we must show ((suc m) + n) + p ≡ (suc m) + (n + p)
 \end{minted}
-On paper, we would prove this in a way similar to this: 
+On paper, we could prove this in a way similar to this:
 suppose
 \begin{equation}
   \label{eqn:ind_hyp_+-assoc}
@@ -296,11 +327,11 @@ suppose
 then
 $$
 \begin{aligned}
-    & && ((\texttt{suc}~m) + n) + p \equiv (\texttt{suc}~m) + (n + p) \\
-    & \rightarrow ~~ && (\texttt{suc}~(m + n)) + p \equiv (\texttt{suc}~m) + (n + p) \\
-    & \rightarrow ~~ && \texttt{suc}~((m + n) + p) \equiv (\texttt{suc}~m) + (n + p) \\
-    & \rightarrow (by ~ \eqref{eqn:ind_hyp_+-assoc})~~ && \texttt{suc}~(m + (n + p)) \equiv (\texttt{suc}~m) + (n + p) \\
-    & \rightarrow ~~ && (\texttt{suc}~m) + (n + p) \equiv (\texttt{suc}~m) + (n + p)
+    & ((\texttt{suc}~m) + n) + p  \\
+    & \equiv ~~ (\texttt{suc}~(m + n)) + p  \\
+    & \equiv ~~ \texttt{suc}~((m + n) + p) \\
+ by ~ \eqref{eqn:ind_hyp_+-assoc}   &  \equiv ~~ \texttt{suc}~(m + (n + p)) \\
+    & \equiv ~~ (\texttt{suc}~m) + (n + p)
 \end{aligned}
 $$
 We can directly map this chain of reasoning in Agda!
@@ -311,13 +342,13 @@ We can directly map this chain of reasoning in Agda!
   it slow and prove the associativity of \mintinline{agda}{_+_}:
 \begin{minted}{agda}
 +-assoc : ∀ (m n p : ℕ ) -> (m + n) + p ≡ m + (n + p)
-+-assoc zero n p = refl 
-+-assoc (suc m) n p = 
- begin 
-   suc m + n + p 
-  ≡⟨⟩ 
-   suc (m + n) + p 
-  ≡⟨⟩ 
++-assoc zero n p = refl
++-assoc (suc m) n p =
+ begin
+   suc m + n + p
+  ≡⟨⟩
+   suc (m + n) + p
+  ≡⟨⟩
    ? -- goal has type suc (m + n) + p ≡ suc m + (n + p)
 \end{minted}
 \end{frame}
@@ -327,15 +358,15 @@ We can directly map this chain of reasoning in Agda!
   it slow and prove the associativity of \mintinline{agda}{_+_}:
 \begin{minted}{agda}
 +-assoc : ∀ (m n p : ℕ ) -> (m + n) + p ≡ m + (n + p)
-+-assoc zero n p = refl 
-+-assoc (suc m) n p = 
- begin 
-   suc m + n + p 
-  ≡⟨⟩ 
-   suc (m + n) + p 
-  ≡⟨⟩ 
++-assoc zero n p = refl
++-assoc (suc m) n p =
+ begin
+   suc m + n + p
+  ≡⟨⟩
+   suc (m + n) + p
+  ≡⟨⟩
    suc (m + n + p)
-  ≡⟨⟩ 
+  ≡⟨⟩
    ? -- we now want to use the inductive hypothesis!
 \end{minted}
 \end{frame}
@@ -345,15 +376,15 @@ We can directly map this chain of reasoning in Agda!
   it slow and prove the associativity of \mintinline{agda}{_+_}:
 \begin{minted}{agda}
 +-assoc : ∀ (m n p : ℕ ) -> (m + n) + p ≡ m + (n + p)
-+-assoc zero n p = refl 
-+-assoc (suc m) n p = 
- begin 
-   suc m + n + p 
-  ≡⟨⟩ 
-   suc (m + n) + p 
-  ≡⟨⟩ 
++-assoc zero n p = refl
++-assoc (suc m) n p =
+ begin
+   suc m + n + p
+  ≡⟨⟩
+   suc (m + n) + p
+  ≡⟨⟩
    suc (m + n + p)
-  ≡⟨ cong suc (+-assoc m n p) ⟩ 
+  ≡⟨ cong suc (+-assoc m n p) ⟩
    suc (m + (n + p))
  ∎
 \end{minted}
@@ -364,15 +395,15 @@ We can directly map this chain of reasoning in Agda!
   it slow and prove the associativity of \mintinline{agda}{_+_}:
 \begin{minted}{agda}
 +-assoc : ∀ (m n p : ℕ ) -> (m + n) + p ≡ m + (n + p)
-+-assoc zero n p = refl 
-+-assoc (suc m) n p = 
- begin 
-   suc m + n + p 
-  ≡⟨⟩ 
-   suc (m + n) + p 
-  ≡⟨⟩ 
++-assoc zero n p = refl
++-assoc (suc m) n p =
+ begin
+   suc m + n + p
+  ≡⟨⟩
+   suc (m + n) + p
+  ≡⟨⟩
    suc (m + n + p)
-  ≡⟨ cong suc (+-assoc m n p) ⟩ 
+  ≡⟨ cong suc (+-assoc m n p) ⟩
    suc (m + (n + p))
  ∎
 \end{minted}
@@ -390,6 +421,27 @@ to follow...
 \end{frame}
 
 \section[coinduction]{Co-induction}
+\subsection[coinduction]{A brief recap of sized-types}
+\begin{frame}[fragile]{A brief recap of sized-types}
+  \vfill
+  \begin{itemize}
+    \item {
+	Agda is a total language, therefore all function definitions (and proofs
+	as well) must be demonstrably terminating
+    }
+    \item {
+	Most termination checks are purely syntactical; this hinders the
+	expressivity and ergonomics of the proof assistant
+      }
+    \item {
+	Sizes are a semantic help for termination checkers: inductive and
+	co-inductive types are indexed by a size; to check productivity 
+	and termination of recursive and co-recursive functions, one can check
+	the behaviour of the sizes of the parameters 
+      }
+  \end{itemize}
+  \vfill
+\end{frame}
 \subsection[coinduction]{Basic definitions}
 \begin{frame}[fragile]{Basics of (sized) co-induction}
   Most of the infrastructure for sized co-induction in Agda is based on the
@@ -418,20 +470,42 @@ record Thunk {ℓ} (F : SizedSet ℓ) (i : Size) : Set ℓ where
   coinductive
   field force : {j : Size< i} → F j
 \end{minted}
-Other co-inductive (or inductive-co-inductive) data types are defined in terms
-of \mintinline{agda}{Thunk}:
+\mintinline{agda}{Thunk}s embody the observational aspect of co-inductive
+definitions. In practice, this means that other co-inductive (or
+inductive-co-inductive) data types are defined in terms of
+\mintinline{agda}{Thunk}:
 \begin{minted}{agda}
 data Stream (A : Set a) (i : Size) : Set a where
   _∷_ : A → Thunk (Stream A) i → Stream A i
 
-head : Stream A i → A
-head (x ∷ xs) = x
+head : {A : Set} {i : Size} -> Stream A i -> A
+head (x :: x₁) = x
 
-tail : {j : Size< i} → Stream A i → Stream A j
-tail (x ∷ xs) = xs .force
-
-map : (A → B) → Stream A i → Stream B i
-map f (x ∷ xs) = f x ∷ λ where .force → map f (xs .force)
+tail : {A : Set} {i : Size} {j : Size< i} → Stream A i → Stream A j
+tail (x :: xs) = xs .force
 \end{minted}
+\end{frame}
+\begin{frame}[fragile,noframenumbering]{Basics of (sized) co-induction}
+\vfill
+
+\begin{minted}{agda}
+data Stream (A : Set a) (i : Size) : Set a where
+  _∷_ : A → Thunk (Stream A) i → Stream A i
+
+repeat : {A : Set} {i : Size} -> A -> Stream A i
+repeat a = a :: λ where .force -> repeat a
+\end{minted}
+\vfill
+Notice that \mintinline{agda}{Stream} has a constructor! Therefore, stream
+definitions don't use (explicitly) co-patterns; We can see, in the definition of
+\mintinline{agda}{repeat}, that the tail of the stream -- which must be of type
+\mintinline{agda}{Thunk (Stream {A}) i} -- is a special form of
+lambda-abstraction which defines operations {\it on the abstraction itself}.
+\vfill
+\begin{minted}{agda}
+obs-repeat : {A : Set} -> A -> A
+obs-repeat a = head (tail (repeat a))
+\end{minted}
+\vfill
 \end{frame}
 \end{document}
