@@ -11,6 +11,3 @@ data AExp : Set where
  const : (n : ℤ) -> AExp
  var   : (id : Ident) -> AExp 
  plus  : (a₁ : AExp) -> (a₂ : AExp) -> AExp
- minus : (a₁ : AExp) -> (a₂ : AExp) -> AExp
- times : (a₁ : AExp) -> (a₂ : AExp) -> AExp
- div   : (a₁ : AExp) -> (a₂ : AExp) -> AExp
