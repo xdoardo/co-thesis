@@ -23,25 +23,25 @@
       * [X] reasoning
 
 * TODO Imp
-  - [ ] Syntax 
-    + [ ] _aexp_ 
-    + [ ] _bexp_ 
-    + [ ] _com_ 
-    + [ ] _ident_ 
-  - [ ] Semantics
-    + [ ] Functional 
-      - [ ] _aeval_
-      - [ ] _beval_
-      - [ ] _ceval_
+  - [X] Syntax 
+    + [X] _aexp_ 
+    + [X] _bexp_ 
+    + [X] _com_ 
+    + [X] _ident_ 
+  - [-] Semantics
+    + [X] Functional 
+      - [X] _aeval_
+      - [X] _beval_
+      - [X] _ceval_
     + [ ] Relational
     + [ ] Prove semantics equivalence
   - [ ] Optimizations 
-    + [ ] Definite initialization
-      * [ ] _dia_
+    + [-] Definite initialization
+      * [X] _dia_
       * [ ] Properties
-	- [ ] ?
-    + [ ] Constant folding and propagation
-      * [ ] _fold_
-      * [ ] Properties 
-	- [ ] Soundness
- 
+	-- [ ] ?
+    + [-] Constant folding and propagation
+      * [X] _fold_
+      * [-] Properties 
+        - [X] Idempotence
+	- [ ] Soundness 
