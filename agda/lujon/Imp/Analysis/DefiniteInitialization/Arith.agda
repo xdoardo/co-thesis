@@ -22,9 +22,9 @@ dia-aexp (plus x x₁) t = dia-aexp x t >>= λ _ -> dia-aexp x₁ t >>= λ _ -> 
 ------------------------------------------------------------------------
 module _ where 
  open import Data.Product 
+ open import Data.Integer
  open import Imp.Semantics.Functional.Arith
  open import Relation.Binary.PropositionalEquality
- open import Data.Integer
  --- 
  
 
