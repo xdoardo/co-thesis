@@ -46,12 +46,43 @@ leq a₁ a₂ = or (eq a₁ a₂) (le a₁ a₂)
 ------------------------------------------------------------------------
 -- Properties of boolean expressions 
 ------------------------------------------------------------------------
+module _ where
+ open import Data.Maybe
+ open import Data.Product
+ open import Relation.Binary.PropositionalEquality
+ --- 
+ 
+ -- Subexpression relation
+ data _⊆ᵇ_ : BExp ->  BExp -> Set where
+  refl : ∀ (b : BExp)  -> b ⊆ᵇ b
+  and-l : ∀ (b b₁ : BExp) -> b ⊆ᵇ (and b b₁) 
+  and-r : ∀ (b b₁ : BExp) -> b₁ ⊆ᵇ (and b b₁)
+  not : ∀ (b : BExp) -> b ⊆ᵇ (not b)
+ 
+ data _⊆ᵃᵇ_ : AExp ->  BExp -> Set where
+  le-l : ∀ (a a₁ : AExp) -> a ⊆ᵃᵇ (le a a₁)
+  le-r : ∀ (a a₁ : AExp) -> a₁ ⊆ᵃᵇ (le a a₁)
+ 
+ ⊆ᵇ-⊆ᵤ : ∀ (b₁ b₂ : BExp) -> (b₁⊆b₂ : b₁ ⊆ᵇ b₂) -> (vars-bexp b₁) ⊆ᵤ (vars-bexp b₂)
+ ⊆ᵇ-⊆ᵤ b₁ .b₁ (refl .b₁) id x = x
+ ⊆ᵇ-⊆ᵤ b₁ .(and b₁ b₂) (and-l .b₁ b₂) id x with (vars-bexp b₁) | (vars-bexp b₂)
+ ... | s | s' with (s id) | (s' id)
+ ... | just x₁ | just x₂ = x₁ , refl
+ ... | just x₁ | nothing = x₁ , refl
+ ⊆ᵇ-⊆ᵤ b₁ .(and b b₁) (and-r b .b₁) id x 
+  with (vars-bexp (and b b₁)) | (vars-bexp b₁) | (vars-bexp b)
+ ... | s | s' | s₁' with (s id) | (s' id) in eq-s-id | (s₁' id) 
+ ... | just x₁ | just x₂ | just x₃ = x₃ , refl
+ ... | just x₁ | just x₂ | nothing = x₂ , eq-s-id
+ ... | nothing | just x₁ | just x₂ = x₂ , refl
+ ... | nothing | just x₁ | nothing = x₁ , eq-s-id
+ ⊆ᵇ-⊆ᵤ b₁ .(not b₁) (not .b₁) id x = x
 
--- Subexpression relation
-data _⊆ᵇ_ : {A : Set} -> A -> BExp -> Set where
- refl : ∀ (b : BExp)  -> b ⊆ᵇ b
- le-l : ∀ (a a₁ : AExp) -> a ⊆ᵇ (le a a₁)
- le-r : ∀ (a a₁ : AExp) -> a₁ ⊆ᵇ (le a a₁)
- and-l : ∀ (b b₁ : BExp) -> b ⊆ᵇ (and b b₁) 
- and-r : ∀ (b b₁ : BExp) -> b₁ ⊆ᵇ (and b b₁)
- not : ∀ (b : BExp) -> b ⊆ᵇ (not b)
+ ⊆ᵃᵇ-⊆ᵤ : ∀ (a : AExp) (b : BExp) -> (a⊆b : a ⊆ᵃᵇ b) -> (vars-aexp a) ⊆ᵤ (vars-bexp b)
+ ⊆ᵃᵇ-⊆ᵤ a .(le a a₁) (le-l .a a₁) id x with (vars-aexp a) 
+ ... | s with (s id)
+ ... | just x₁ = x₁ , refl
+ ⊆ᵃᵇ-⊆ᵤ a .(le a₁ a) (le-r a₁ .a) id x with (vars-aexp a₁) | (vars-aexp a)
+ ... | s₁ | s with (s₁ id) | (s id) in eq-sid
+ ... | just x₁ | just x₂ = x₁ , refl
+ ... | nothing | just x₁ = x₁ , eq-sid
