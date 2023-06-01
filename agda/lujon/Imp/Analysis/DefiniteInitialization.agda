@@ -73,7 +73,7 @@ module _ where
  dia-rel s (while b c) x = {! !}
 
  cdia-safe : ∀ (t : Store) (s s' : VarsSet) (c : Command) -> 
-  (c⊆s : s ⊆ (dom t)) -> (relc : DiaRel s c s') -> ∃ λ t' -> ceval c (just t) ≡ just t' -> s' ⊆ (dom t')
+  (c⊆s : s ⊆ (dom t)) -> (relc : DiaRel s c s') -> ∃ λ t' -> And (ceval c (just t) ≡ just t') (s' ⊆ (dom t'))
  cdia-safe t s s' skip c⊆s relc = {! !}
  cdia-safe t s s' (assign id a) c⊆s relc = {! !}
  cdia-safe t s s' (seq c c₁) c⊆s relc = {! !}
