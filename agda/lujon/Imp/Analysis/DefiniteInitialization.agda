@@ -6,7 +6,7 @@ module Imp.Analysis.DefiniteInitialization where
 open import Data.Bool
 open import Imp.Syntax 
 open import Data.Maybe 
-open import Data.String
+open import Data.String hiding (_≈_)
 open import Imp.Semantics.BigStep.Functional
 ---
 
@@ -54,28 +54,28 @@ data DiaRel : VarsSet -> Command -> VarsSet -> Set where
 --------------------------------------------------
 module _ where
  
- open import Data.Product
  open import Data.And
+ open import Data.Empty
+ open import Data.Product
+ open import Codata.Sized.Partial
+ open import Codata.Sized.Partial.Bisimilarity
  open import Relation.Binary.PropositionalEquality
  
- rel-dia : ∀ s c -> (relc : DiaRel s c (s ∪ (cvars c))) -> (cdia c s ≡ true)
- rel-dia s skip relc = refl
- rel-dia s (assign id a) relc = {! !}
- rel-dia s (seq c c₁) relc = {! !}
- rel-dia s (ifelse b c c₁) relc = {! !}
- rel-dia s (while b c) relc = {! !}
+ rel-dia : ∀ s s' c -> (relc : DiaRel s c s') -> 
+  And (s' ≡ (s ∪ (cvars c))) (cdia c s ≡ true)
+ rel-dia s .s skip (skip .s) = ? 
+ rel-dia s s' (assign id a) relc = {! !}
+ rel-dia s s' (seq c c₁) relc = {! !}
+ rel-dia s s' (ifelse b c c₁) relc = {! !}
+ rel-dia s s' (while b c) relc = {! !}
+
+
+
+
 
  dia-rel : ∀ s c -> (cdia c s ≡ true) -> DiaRel s c (s ∪ (cvars c))
- dia-rel s skip x = {! !}
- dia-rel s (assign id a) x = {! !}
- dia-rel s (seq c c₁) x = {! !}
- dia-rel s (ifelse b c c₁) x = {! !}
- dia-rel s (while b c) x = {! !}
+ dia-rel = ?
 
- cdia-safe : ∀ (t : Store) (s s' : VarsSet) (c : Command) -> 
-  (c⊆s : s ⊆ (dom t)) -> (relc : DiaRel s c s') -> ∃ λ t' -> And (ceval c (just t) ≡ just t') (s' ⊆ (dom t'))
- cdia-safe t s s' skip c⊆s relc = {! !}
- cdia-safe t s s' (assign id a) c⊆s relc = {! !}
- cdia-safe t s s' (seq c c₁) c⊆s relc = {! !}
- cdia-safe t s s' (ifelse b c c₁) c⊆s relc = {! !}
- cdia-safe t s s' (while b c) c⊆s relc = {! !}
+ cdia-safe : ∀ {i} (s : Store) (A A' : VarsSet) (c : Command) -> 
+  (c⊆s : A ⊆ (dom s)) -> (relc : DiaRel A c A') -> ((i ⊢ ceval c s ≈ fail) -> ⊥)
+ cdia-safe = ?
