@@ -34,7 +34,7 @@ module _ {ℓ} {A : Set ℓ} where
  infix 1 _⊢_≈_
  _⊢_≈_ : ∀ i → Delay (Maybe A) ∞ → Delay (Maybe A) ∞ → Set ℓ
  _⊢_≈_ = Bisim _≡_
- 
+
 module _ {a r b} {A : Set a} {B : Set b} {R : A -> B -> Set r} where
  
  laterʳ⁻¹ : ∀  {i} {j : Size< i} {x y} -> Bisim R i x (later y) -> 
