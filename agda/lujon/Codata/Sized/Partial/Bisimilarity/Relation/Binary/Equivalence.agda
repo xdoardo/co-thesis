@@ -42,3 +42,6 @@ module _ {a} {A : Set a} where
  
  sym : ∀ {i} -> Symmetric {a} {Delay (Maybe A) ∞}(i ⊢_≈_)
  sym = symmetric Eq.sym
+
+ ≡=>≈ : ∀ {a₁ a₂ : Delay (Maybe A) ∞} -> (h : a₁ ≡ a₂) -> (∀ {i} -> i ⊢ a₁ ≈ a₂)
+ ≡=>≈ {a₁} {.a₁} Eq.refl {i} = refl
