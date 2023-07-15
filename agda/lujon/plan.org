@@ -24,24 +24,35 @@
 
 * TODO Imp
   - [X] Syntax 
-    + [X] _aexp_ 
-    + [X] _bexp_ 
-    + [X] _com_ 
-    + [X] _ident_ 
+    + [X] Terms 
+      * [X] _AExp_
+      * [X] _BExp_ 
+      * [X] _Command_ 
+      * [X] _Ident_ 
+      * [X] _VarsSet_
+    + [X] Properties
+      * [X] Subterm relation (on every term)
+      * [X] Identifiers equivalence
+      * [X] Extensional equality for _VarsSet_
+      * [X] Subterm relation implies /vars/ inclusion (postulated)
   - [-] Semantics
     + [X] Functional 
       - [X] _aeval_
       - [X] _beval_
       - [X] _ceval_
-    + [ ] Relational
-    + [ ] Prove semantics equivalence
+    + [ ] Relational (?)
+    + [ ] Prove semantics equivalence (?)
   - [ ] Optimizations 
     + [-] Definite initialization
-      * [X] _dia_
+      * [ ] _ok_, _ivars_ (check Nipkow's Concrete semantics p. 154, ex. 10.1)
+      * [X] _DiaRel_
       * [ ] Properties
-	-- [ ] ?
-    + [-] Constant folding and propagation
-      * [X] _fold_
-      * [-] Properties 
-        - [X] Idempotence
-	- [ ] Soundness 
+	- [ ] _DiaRel_ implies _ok_
+	- [ ] _ok_ implies _DiaRel_
+	- [ ] _dia-safe_ *[DiaRel A c A' → A ⊆ dom s → (ceval c s ⇑) ∨ (ceval c s ⇓)]*
+    + [ ] Constant folding and propagation
+      * [ ] _fold-table_
+	* [ ] Properties
+	  * [ ] _afold-correct_ *[t ≈ s -> aval (afold a t) ≡ aval a s]*
+	  * [ ] _bfold-correct_ *[t ≈ s -> bval (bfold b t) ≡ bval b s]*
+	  + [ ] _cfold-correct_ *[???]* (Nikpow's: fold c empty ∼ c (C.s. p. 159))
