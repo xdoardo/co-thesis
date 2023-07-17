@@ -35,13 +35,11 @@ module _ where
 
 -- Subterm relation on arithmetic expressions
 data _⊑ᵃ_ : AExp -> AExp -> Set where 
--- self : (a : AExp) -> a ⊑ᵃ a 
  plus-l : (a a₁ : AExp) -> a ⊑ᵃ (plus a a₁)
  plus-r : (a a₁ : AExp) -> a₁ ⊑ᵃ (plus a a₁)
 
 -- Subterm relation on boolean expressions for other boolean expressions
 data _⊑ᵇ_  : {A : Set} -> A -> BExp -> Set where 
- -- self : (b : BExp) -> b ⊑ᵇ b
  not : (b : BExp) -> b ⊑ᵇ (not b)
  and-l : (b₁ b₂ : BExp) -> b₁ ⊑ᵇ (and b₁ b₂)
  and-r : (b₁ b₂ : BExp) -> b₂ ⊑ᵇ (and b₁ b₂)
@@ -49,7 +47,6 @@ data _⊑ᵇ_  : {A : Set} -> A -> BExp -> Set where
  le-r : (a₁ a₂ : AExp) -> a₂ ⊑ᵇ (le a₁ a₂)
 
 data _⊑ᶜ_ : {A : Set} -> A -> Command -> Set where 
--- self : (c : Command) -> c ⊑ᶜ c
  assign : (id : Ident) (a : AExp) -> a ⊑ᶜ (assign id a)
  seq-l : (c₁ c₂ : Command) -> c₁ ⊑ᶜ (seq c₁ c₂)
  seq-r : (c₁ c₂ : Command) -> c₂ ⊑ᶜ (seq c₁ c₂)
