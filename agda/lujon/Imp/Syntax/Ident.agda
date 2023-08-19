@@ -54,12 +54,3 @@ module _ where
  -- Stores equivalence 
  _≅_ : Store -> Store -> Set
  x ≅ x₁ = ∀ {id : Ident} {z : ℤ} -> x id ≡ just z -> x₁ id ≡ just z
---
--- 
--- -- A predicate for unvalued inclusion between stores
--- _⊆ᵤ_ : ∀ (s₁ s₂ : Store) -> Set 
--- s₁ ⊆ᵤ s₂ =  ∀ id -> (∃ λ v -> s₁ id ≡ just v)  -> ∃ λ v' -> s₂ id ≡ just v'
---
--- -- Transitivity of stores  inclusion 
--- trans-⊆ᵤ : ∀ (s₁ s₂ s₃ : Store) -> (s₁⊆s₂ : s₁ ⊆ᵤ s₂) -> (s₂⊆s₃ : s₂ ⊆ᵤ s₃ ) ->  s₁ ⊆ᵤ s₃ 
--- trans-⊆ᵤ s₁ s₂ s₃ s₁⊆s₂ s₂⊆s₃ id x = s₂⊆s₃ id (s₁⊆s₂ id x)
