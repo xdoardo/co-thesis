@@ -65,9 +65,9 @@ module _ where
  -- Subterm relation on arithmetic terms implies vars inclusion.
  -- @TODO
  postulate
-  ⊑ᵃ=>⊆ : ∀ (a₁ a : AExp) -> (sub : a₁ ⊑ᵃ a) -> (avars a₁ ⊆ avars a)
-  ⊑ᵇᵇ=>⊆ : ∀ (b₁ b : BExp) -> (sub : b₁ ⊑ᵇ b) -> (bvars b₁ ⊆ bvars b)
-  ⊑ᵇᵃ=>⊆ : ∀ (a : AExp) (b : BExp) -> (sub : a ⊑ᵇ b) -> (avars a ⊆ bvars b)
-  ⊑ᶜᵃ=>⊆ : ∀ (a : AExp) (c : Command) -> (sub : a ⊑ᶜ c) -> (avars a ⊆ cvars c)
-  ⊑ᶜᵇ=>⊆ : ∀ (b : BExp) (c : Command) -> (sub : b ⊑ᶜ c) -> (bvars b ⊆ cvars c)
-  ⊑ᶜᶜ=>⊆ : ∀ (c₁ c : Command) -> (sub : c₁ ⊑ᶜ c) -> (cvars c₁ ⊆ cvars c)
+  ⊏ᵃ=>⊆ : ∀ (a₁ a : AExp) -> (sub : a₁ ⊏ᵃ a) -> (avars a₁ ⊆ avars a)
+  ⊏ᵇᵇ=>⊆ : ∀ (b₁ b : BExp) -> (sub : b₁ ⊏ᵇ b) -> (bvars b₁ ⊆ bvars b)
+  ⊏ᵇᵃ=>⊆ : ∀ (a : AExp) (b : BExp) -> (sub : a ⊏ᵇ b) -> (avars a ⊆ bvars b)
+  ⊏ᶜᵃ=>⊆ : ∀ (a : AExp) (c : Command) -> (sub : a ⊏ᶜ c) -> (avars a ⊆ cvars c)
+  ⊏ᶜᵇ=>⊆ : ∀ (b : BExp) (c : Command) -> (sub : b ⊏ᶜ c) -> (bvars b ⊆ cvars c)
+  ⊏ᶜᶜ=>⊆ : ∀ (c₁ c : Command) -> (sub : c₁ ⊏ᶜ c) -> (cvars c₁ ⊆ cvars c)

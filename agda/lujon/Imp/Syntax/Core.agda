@@ -33,25 +33,25 @@ data Command : Set where
 ------------------------------------------------------------------------
 module _ where 
 
--- Subterm relation on arithmetic expressions
-data _⊑ᵃ_ : AExp -> AExp -> Set where 
- plus-l : (a a₁ : AExp) -> a ⊑ᵃ (plus a a₁)
- plus-r : (a a₁ : AExp) -> a₁ ⊑ᵃ (plus a a₁)
-
--- Subterm relation on boolean expressions for other boolean expressions
-data _⊑ᵇ_  : {A : Set} -> A -> BExp -> Set where 
- not : (b : BExp) -> b ⊑ᵇ (not b)
- and-l : (b₁ b₂ : BExp) -> b₁ ⊑ᵇ (and b₁ b₂)
- and-r : (b₁ b₂ : BExp) -> b₂ ⊑ᵇ (and b₁ b₂)
- le-l : (a₁ a₂ : AExp) -> a₁ ⊑ᵇ (le a₁ a₂)
- le-r : (a₁ a₂ : AExp) -> a₂ ⊑ᵇ (le a₁ a₂)
-
-data _⊑ᶜ_ : {A : Set} -> A -> Command -> Set where 
- assign : (id : Ident) (a : AExp) -> a ⊑ᶜ (assign id a)
- seq-l : (c₁ c₂ : Command) -> c₁ ⊑ᶜ (seq c₁ c₂)
- seq-r : (c₁ c₂ : Command) -> c₂ ⊑ᶜ (seq c₁ c₂)
- ifelse-b : (b : BExp) -> (c₁ c₂ : Command) -> b ⊑ᶜ (ifelse b c₁ c₂)
- ifelse-l : (b : BExp) -> (c₁ c₂ : Command) -> c₁ ⊑ᶜ (ifelse b c₁ c₂)
- ifelse-r : (b : BExp) -> (c₁ c₂ : Command) -> c₂ ⊑ᶜ (ifelse b c₁ c₂)
- while-b : (b : BExp) -> (c : Command) -> b ⊑ᶜ (while b c)
- while-c : (b : BExp) -> (c : Command) -> b ⊑ᶜ (while b c)
+ -- Subterm relation on arithmetic expressions
+ data _⊏ᵃ_ : AExp -> AExp -> Set where 
+  plus-l : (a a₁ : AExp) -> a ⊏ᵃ (plus a a₁)
+  plus-r : (a a₁ : AExp) -> a₁ ⊏ᵃ (plus a a₁)
+ 
+ -- Subterm relation on boolean expressions for other boolean expressions
+ data _⊏ᵇ_  : {A : Set} -> A -> BExp -> Set where 
+  not : (b : BExp) -> b ⊏ᵇ (not b)
+  and-l : (b₁ b₂ : BExp) -> b₁ ⊏ᵇ (and b₁ b₂)
+  and-r : (b₁ b₂ : BExp) -> b₂ ⊏ᵇ (and b₁ b₂)
+  le-l : (a₁ a₂ : AExp) -> a₁ ⊏ᵇ (le a₁ a₂)
+  le-r : (a₁ a₂ : AExp) -> a₂ ⊏ᵇ (le a₁ a₂)
+ 
+ data _⊏ᶜ_ : {A : Set} -> A -> Command -> Set where 
+  assign : (id : Ident) (a : AExp) -> a ⊏ᶜ (assign id a)
+  seq-l : (c₁ c₂ : Command) -> c₁ ⊏ᶜ (seq c₁ c₂)
+  seq-r : (c₁ c₂ : Command) -> c₂ ⊏ᶜ (seq c₁ c₂)
+  ifelse-b : (b : BExp) -> (c₁ c₂ : Command) -> b ⊏ᶜ (ifelse b c₁ c₂)
+  ifelse-l : (b : BExp) -> (c₁ c₂ : Command) -> c₁ ⊏ᶜ (ifelse b c₁ c₂)
+  ifelse-r : (b : BExp) -> (c₁ c₂ : Command) -> c₂ ⊏ᶜ (ifelse b c₁ c₂)
+  while-b : (b : BExp) -> (c : Command) -> b ⊏ᶜ (while b c)
+  while-c : (b : BExp) -> (c : Command) -> c ⊏ᶜ (while b c)
