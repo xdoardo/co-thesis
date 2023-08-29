@@ -17,7 +17,7 @@ open Thunk
 open Maybe 
 ---
 
-module _ {a} {A : Set a}where
+module _ {a} {A : Set a} where
 
  length : ∀ {i} -> Delay (Maybe A) i -> Conat i
  length (now _)   = zero

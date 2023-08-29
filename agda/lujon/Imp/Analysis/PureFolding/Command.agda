@@ -19,12 +19,12 @@ cpfold : Command -> Command
 cpfold skip = skip
 cpfold (assign id a) with (apfold a)
 ... | const n = assign id (const n) 
-... | a = assign id a 
+... | _ = assign id a 
 cpfold (seq c₁ c₂) = seq (cpfold c₁) (cpfold c₂)
 cpfold (ifelse b c₁ c₂) with (bpfold b) 
 ... | const false = cpfold c₂ 
 ... | const true = cpfold c₁ 
-... | b'  = ifelse b' (cpfold c₁) (cpfold c₂)
+... | _  = ifelse b (cpfold c₁) (cpfold c₂)
 cpfold (while b c) = while (bpfold b) (cpfold c)
 
 ------------------------------------------------------------------------
@@ -43,9 +43,7 @@ module _ where
  -- Folding preserves semantics.
  cpfold-sound : ∀ c s {i} -> (i ⊢ ceval c s ≈ ceval (cpfold c) s)
  cpfold-sound skip s = nowj refl
- cpfold-sound (assign id a) s with (aeval a s) in eq-aeval
- ... | just v rewrite (apfold-sound a s) rewrite eq-aeval = {! !}
- ... | nothing = ?
+ cpfold-sound (assign id a) s = ?
  cpfold-sound (seq c c₁) s = ? 
  cpfold-sound (ifelse b c c₁) s = ?
  cpfold-sound (while b c) s = ?

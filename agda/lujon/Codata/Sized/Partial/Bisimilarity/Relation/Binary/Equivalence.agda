@@ -34,6 +34,13 @@ module _ {a b} {A : Set a} {B : Set b}
 
 -- @TODO here: prove transitivity of weak bisimilarity...
 
+module _ {a b c} {A : Set a} {B : Set b} {C : Set c}
+         {r} {P : A → B → Set r} {Q : B → C → Set r} {R : A → C → Set r} where
+
+ postulate
+  transitive : Trans P Q R → ∀ {i} → Trans (Bisim P i) (Bisim Q i) (Bisim R i)
+
+
 module _ {a} {A : Set a} where
 
  -- Pointwise Equality as a Bisimilarity
