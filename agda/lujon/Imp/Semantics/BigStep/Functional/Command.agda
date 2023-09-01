@@ -30,9 +30,9 @@ mutual
  ceval : ∀ {i} -> (c : Command) -> (s : Store) -> Delay (Maybe Store) i
  ceval skip s = now (just s)
  ceval (assign id a) s = now (aeval a s >>=m λ v -> just (update id v s))
- ceval {i} (seq c c₁) s = ceval {i} c s >>=p λ s' -> ceval {i} c₁ s'
+ ceval (seq c c₁) s = ceval c s >>=p λ s' -> ceval c₁ s'
  ceval (ifelse b c c₁) s = now (beval b s) >>=p (λ bᵥ -> (if bᵥ then ceval c s else ceval c₁ s))
- ceval {i} (while b c) s = now (beval b s) >>=p (λ bᵥ -> 
+ ceval (while b c) s = now (beval b s) >>=p (λ bᵥ -> 
    if bᵥ 
    then (ceval c s >>=p  λ s -> later (ceval-while c b s))
    else now (just s)
