@@ -3,15 +3,18 @@
 ------------------------------------------------------------------------
 module Imp.Analysis.PureFolding.Command where
 
-open import Data.Bool renaming (not to lnot)
+open import Size
 open import Data.Unit
 open import Data.Maybe
 open import Imp.Syntax
 open import Data.Integer
-open import Imp.Analysis.PureFolding.Arith
 open import Imp.Analysis.PureFolding.Bool
+open import Imp.Analysis.PureFolding.Arith
+open import Data.Bool renaming (not to lnot)
 open import Data.Integer.Properties as ℤ-Properties
 open import Data.Nat using () renaming (suc to ℕ-suc)
+open import Codata.Sized.Partial.Relation.Binary.Convergence
+open import Codata.Sized.Partial.Bisimilarity.Relation.Binary.Equivalence renaming (refl to prefl ; sym to psym)
 ---
 
 -- Pure constant folding of boolean expressions
@@ -24,7 +27,7 @@ cpfold (seq c₁ c₂) = seq (cpfold c₁) (cpfold c₂)
 cpfold (ifelse b c₁ c₂) with (bpfold b) 
 ... | const false = cpfold c₂ 
 ... | const true = cpfold c₁ 
-... | _  = ifelse b (cpfold c₁) (cpfold c₂)
+... | _ = ifelse b (cpfold c₁) (cpfold c₂)
 cpfold (while b c) = while (bpfold b) (cpfold c)
 
 ------------------------------------------------------------------------
@@ -40,10 +43,64 @@ module _ where
  open ≡-Reasoning 
 
  
- -- Folding preserves semantics.
- cpfold-sound : ∀ c s {i} -> (i ⊢ ceval c s ≈ ceval (cpfold c) s)
- cpfold-sound skip s = nowj refl
- cpfold-sound (assign id a) s = ?
- cpfold-sound (seq c c₁) s = ? 
- cpfold-sound (ifelse b c c₁) s = ?
- cpfold-sound (while b c) s = ?
+ mutual 
+  private 
+   seq-force : ∀ {i} {j : Size< i} {x : Thunk (Delay (Maybe Store)) ∞} {c : Command} {s : Store} (h : (force x) ⇓ s) ->  
+    ∞ ⊢ (ceval c s) ≈ (bindᵖ (x .force) (ceval (cpfold c)))
+   seq-force {i} {j} {x} {c} {s} h with ((force x) {∞}) in eq-force-x
+   ... | now (just x₁) with h
+   ... | nowj x₁≡s rewrite x₁≡s = cpfold-sound c s 
+   seq-force {i} {j} {x} {c} {s} h | now nothing with h
+   ... | ()
+   seq-force {i} {j} {x} {c} {s} h | later x₁ = {! !}
+
+
+   
+  -- Folding preserves semantics.
+  cpfold-sound : ∀ c s -> (∞ ⊢ ceval c s ≈ ceval (cpfold c) s)
+  cpfold-sound skip s = nowj refl
+  cpfold-sound (assign id a) s with (apfold-sound a s) | (apfold a) in eq-apfold 
+  ... | eq-ev-ap | const n rewrite eq-apfold rewrite eq-ev-ap = (≡=>≈ refl)
+  ... | eq-ev-ap | var id₁ rewrite eq-apfold rewrite eq-ev-ap = (≡=>≈ refl)
+  ... | eq-ev-ap | plus v v₁ rewrite eq-apfold rewrite eq-ev-ap = (≡=>≈ refl)
+  cpfold-sound (ifelse b cᵗ cᶠ) s with (bpfold-sound b s)
+  ... | eq-bev-bp with (beval b s) in eq-beval-b 
+  ... | nothing with (bpfold b) in eq-bpfold
+  ... | le a₁ a₂ rewrite eq-bpfold rewrite eq-beval-b = nown
+  ... | not n rewrite eq-bpfold rewrite eq-beval-b = nown
+  ... | and n n₁ rewrite eq-bpfold rewrite eq-beval-b = nown
+  cpfold-sound (ifelse b cᵗ cᶠ) s | eq-bev-bp | just false 
+   rewrite eq-beval-b 
+   with (bpfold b) in eq-bpfold
+  ... | const b₁ with (eq-bev-bp) 
+  ... | refl with (cpfold (ifelse b cᵗ cᶠ))
+  ... | _ = cpfold-sound cᶠ s
+  cpfold-sound (ifelse b cᵗ cᶠ) s | eq-bev-bp | just false | le a₁ a₂ with (cpfold (ifelse b cᵗ cᶠ)) 
+  ... | n rewrite eq-beval-b rewrite eq-beval-b = cpfold-sound cᶠ s
+  cpfold-sound (ifelse b cᵗ cᶠ) s | eq-bev-bp | just false | not a with (cpfold (ifelse b cᵗ cᶠ)) 
+  ... | n rewrite eq-beval-b rewrite eq-beval-b = cpfold-sound cᶠ s
+  cpfold-sound (ifelse b cᵗ cᶠ) s | eq-bev-bp | just false | and a a₁ with (cpfold (ifelse b cᵗ cᶠ)) 
+  ... | n rewrite eq-beval-b rewrite eq-beval-b = cpfold-sound cᶠ s
+  cpfold-sound (ifelse b cᵗ cᶠ) s | eq-bev-bp | just true rewrite eq-beval-b
+    with (bpfold b) in eq-bpfold
+  ... | const b₁ with (eq-bev-bp) 
+  ... | refl with (cpfold (ifelse b cᵗ cᶠ))
+  ... | _ = cpfold-sound cᵗ s
+  cpfold-sound (ifelse b cᵗ cᶠ) s | eq-bev-bp | just true | le a₁ a₂ with (cpfold (ifelse b cᵗ cᶠ)) 
+  ... | n rewrite eq-beval-b rewrite eq-beval-b = cpfold-sound cᵗ s
+  cpfold-sound (ifelse b cᵗ cᶠ) s | eq-bev-bp | just true | not a with (cpfold (ifelse b cᵗ cᶠ)) 
+  ... | n rewrite eq-beval-b rewrite eq-beval-b = cpfold-sound cᵗ s
+  cpfold-sound (ifelse b cᵗ cᶠ) s | eq-bev-bp | just true | and a a₁ with (cpfold (ifelse b cᵗ cᶠ)) 
+  ... | n rewrite eq-beval-b rewrite eq-beval-b = cpfold-sound cᵗ s 
+
+  cpfold-sound (seq c₁ c₂) s with (cpfold-sound c₁ s) 
+  ... | c₁≈cpc₁ with (ceval c₁ s) in eq-ceval-c
+  ... | now nothing rewrite eq-ceval-c = psym (↯-bind (psym c₁≈cpc₁)) 
+  ... | now (just x) rewrite eq-ceval-c with (ceval (cpfold c₁) s) 
+  ... | now x₁ with (c₁≈cpc₁) 
+  ... | nowj {i} {lhs} x₁ rewrite x₁ = cpfold-sound c₂ lhs 
+  cpfold-sound (seq c₁ c₂) s | c₁≈cpc₁ | now (just s₁) | later x₁ with (c₁≈cpc₁)
+  ... | laterᵣ fx₁⇓s₁ = laterᵣ (seq-force {x = x₁} {c = c₂} (psym fx₁⇓s₁))
+  cpfold-sound (seq c₁ c₂) s | c₁≈cpc₁ | later x = {! !}
+
+  cpfold-sound (while b c) s = {! !}

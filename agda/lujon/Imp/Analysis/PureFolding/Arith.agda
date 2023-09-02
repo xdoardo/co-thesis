@@ -38,5 +38,3 @@ module _ where
  ... | const n | plus v₂ v₃ = refl
  ... | var id     | v₂ = refl
  ... | plus v₁ v₃ | v₂ = refl
-
-

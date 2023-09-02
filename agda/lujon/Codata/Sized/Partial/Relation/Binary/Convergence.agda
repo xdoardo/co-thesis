@@ -54,7 +54,6 @@ module _ {ℓ} {A : Set ℓ} where
  ≡=>↯ : ∀ {v : A} {c x : Delay (Maybe A) ∞} -> (h : c ≡ x) -> (h↯ : x ↯) -> c ↯
  ≡=>↯ h h↯ rewrite h = h↯  
 
-
  bind-↯ : ∀ {x} {f} {v : A} (h⇓ : x ⇓ v) (h↯ : (bind x f) ↯) -> (f v) ↯
  bind-↯ {x} {f} {v} (nowj x≡v) h↯ rewrite x≡v = h↯
  bind-↯ {x} {f} {v} (laterₗ {xs} h⇓) h↯ 
@@ -62,3 +61,9 @@ module _ {ℓ} {A : Set ℓ} where
  ... | n 
   with h↯
  ... | laterₗ h↯' = bind-↯ {force xs} {f = f} {v = v} (≡=>⇓ eq-force-x h⇓) h↯' 
+ 
+ ↯-bind : ∀ {x} {f} (x↯ : x ↯) -> (bind x f) ↯
+ ↯-bind {.(now nothing)} {f} nown = nown
+ ↯-bind {.(later xs)} {f} (laterₗ {xs} x↯) 
+  with (force xs) in eq-force-x
+ ... | n rewrite (sym eq-force-x) = laterₗ (↯-bind x↯)
