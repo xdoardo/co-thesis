@@ -71,10 +71,17 @@ module _ where
    | (bdia-sound b₂ s (⊆-trans (⊏ᵇᵇ=>⊆ b₂ (and b₁ b₂) (and-r b₁ b₂)) dia))
  ... | v₁ , eq-b₁ | v₂ , eq-b₂ rewrite eq-b₁ rewrite eq-b₂ = (v₁ ∧ v₂) , refl
 
- -- @TODO
- postulate 
-  dia-ceval=>⊆ : ∀ {v₁ v₂ : VarsSet} {s₁ s₂ : Store} {c : Command} (h-dia : Dia v₁ c v₂) 
+ dia-⊆ : ∀ {v₁ v₂ : VarsSet} {c : Command} (h-dia : Dia v₁ c v₂) -> v₁ ⊆ v₂
+ dia-⊆ (skip _) = λ x x-in-s₁ → x-in-s₁
+ dia-⊆ (assign a _ id a⊆v) = {! !}
+ dia-⊆ (seq _ v₂ _ c₁ c₂ h-dia h-dia₁) = {! !}
+ dia-⊆ (if b _ vᵗ vᶠ cᵗ cᶠ b⊆v h-dia h-dia₁) = ? 
+ dia-⊆ (while b _ v₁ c b⊆s h-dia) = λ x x-in-s₁ → x-in-s₁
+
+ dia-ceval=>⊆ : ∀ {v₁ v₂ : VarsSet} {s₁ s₂ : Store} {c : Command} (h-dia : Dia v₁ c v₂) 
    -> (h-⊆ : v₁ ⊆ dom s₁) -> (h-ceval⇓ : (ceval c s₁) ⇓ s₂) -> v₂ ⊆ dom s₂
+ dia-ceval=>⊆ h-dia h-⊆ h-ceval⇓ = {! !}
+
  
  mutual 
   dia-sound : ∀ (c : Command) (s : Store) (v v' : VarsSet) (dia : Dia v c v') (v⊆s : v ⊆ dom s)

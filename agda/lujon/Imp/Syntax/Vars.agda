@@ -26,10 +26,10 @@ bvars (and b b₁) = (bvars b) ∪ (bvars b₁)
 
 cvars : (c : Command) -> VarsSet
 cvars skip = ∅
-cvars (assign id a) = avars a
+cvars (assign id a) = id ↦ ∅
 cvars (seq c c₁) = (cvars c) ∪ (cvars c₁)
-cvars (ifelse b c c₁) = ((bvars b) ∪ (cvars c)) ∪ (cvars c₁)
-cvars (while b c) = (bvars b) ∪ (cvars c)
+cvars (ifelse b c c₁) = (cvars c) ∪ (cvars c₁)
+cvars (while b c) = cvars c
 
 -- A function to build a VarsSet from a Store. 
 dom : Store -> VarsSet
@@ -43,20 +43,7 @@ dom s x with (s x)
 module _ where
  open import Data.Empty
  open import Data.Product
-
- private
-  postulate
-   -- We must postulate extensionality.
-   ext : ∀ a b -> Extensionality a b
-   true-or-false : (true ∨ false) ≡ false -> ⊥
- 
- -- Extensional equality for VarsSet.
- vars-ext : ∀ {s₁ s₂ : VarsSet} -> (a-ex : ∀ x -> s₁ x ≡ s₂ x) -> s₁ ≡ s₂
- vars-ext a-ex = ext Agda.Primitive.lzero Agda.Primitive.lzero a-ex
- 
- vars-id-has-id : ∀ id -> (h : (avars (var id)) id ≡ false) -> ⊥
- vars-id-has-id id h with (==-refl {id})
- ... | r rewrite r = true-or-false h
+ open Properties public 
 
  in-dom-has-value : ∀ {s id} -> (h-dom : dom s id ≡ true) -> (∃ λ v -> s id ≡ just v)
  in-dom-has-value {s} {id} h-dom with (s id) 
