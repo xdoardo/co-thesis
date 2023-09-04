@@ -4,9 +4,11 @@
 module Imp.Analysis.PureFolding.Command where
 
 open import Size
+open import Data.Or
 open import Data.Unit
 open import Data.Maybe
 open import Imp.Syntax
+open import Data.Product
 open import Data.Integer
 open import Imp.Analysis.PureFolding.Bool
 open import Imp.Analysis.PureFolding.Arith
@@ -39,23 +41,12 @@ module _ where
  open import Imp.Semantics.BigStep.Functional 
  open import Codata.Sized.Partial.Bisimilarity
  open import Relation.Binary.PropositionalEquality
+ open import Imp.Semantics.BigStep.Functional.Properties
  open import Codata.Sized.Partial.Effectful renaming (bind to bindᵖ)
  open ≡-Reasoning 
 
  
  mutual 
-  private 
-   seq-force : ∀ {i} {j : Size< i} {x : Thunk (Delay (Maybe Store)) ∞} {c : Command} {s : Store} (h : (force x) ⇓ s) ->  
-    ∞ ⊢ (ceval c s) ≈ (bindᵖ (x .force) (ceval (cpfold c)))
-   seq-force {i} {j} {x} {c} {s} h with ((force x) {∞}) in eq-force-x
-   ... | now (just x₁) with h
-   ... | nowj x₁≡s rewrite x₁≡s = cpfold-sound c s 
-   seq-force {i} {j} {x} {c} {s} h | now nothing with h
-   ... | ()
-   seq-force {i} {j} {x} {c} {s} h | later x₁ = {! !}
-
-
-   
   -- Folding preserves semantics.
   cpfold-sound : ∀ c s -> (∞ ⊢ ceval c s ≈ ceval (cpfold c) s)
   cpfold-sound skip s = nowj refl
@@ -92,15 +83,31 @@ module _ where
   ... | n rewrite eq-beval-b rewrite eq-beval-b = cpfold-sound cᵗ s
   cpfold-sound (ifelse b cᵗ cᶠ) s | eq-bev-bp | just true | and a a₁ with (cpfold (ifelse b cᵗ cᶠ)) 
   ... | n rewrite eq-beval-b rewrite eq-beval-b = cpfold-sound cᵗ s 
+  cpfold-sound (seq c₁ c₂) s with  (cpfold-sound c₁ s)
+  ... | c₁≈ with (ceval c₁ s) in eq-ceval-c₁ | (ceval (cpfold c₁) s) in eq-ceval-cp
+  ... | now xᶜ | now xᵖ = seq-now-now {c₁} {c₂} {s} {xᶜ} {xᵖ} eq-ceval-c₁ eq-ceval-cp ? 
+  ... | now xᶜ | later xᵖ = seq-now-later {c₁} {c₂} {s} {xᶜ} {xᵖ} eq-ceval-c₁ eq-ceval-cp ? 
+  ... | later xᶜ | now xᵖ = seq-later-now {c₁} {c₂} {s} {xᶜ} {xᵖ} eq-ceval-c₁ eq-ceval-cp ?
+  ... | later xᶜ | later xᵖ = seq-later-later {c₁} {c₂} {s} {xᶜ} {xᵖ} eq-ceval-c₁ eq-ceval-cp ?
+  cpfold-sound (while b c) s = {! !} 
 
-  cpfold-sound (seq c₁ c₂) s with (cpfold-sound c₁ s) 
-  ... | c₁≈cpc₁ with (ceval c₁ s) in eq-ceval-c
-  ... | now nothing rewrite eq-ceval-c = psym (↯-bind (psym c₁≈cpc₁)) 
-  ... | now (just x) rewrite eq-ceval-c with (ceval (cpfold c₁) s) 
-  ... | now x₁ with (c₁≈cpc₁) 
-  ... | nowj {i} {lhs} x₁ rewrite x₁ = cpfold-sound c₂ lhs 
-  cpfold-sound (seq c₁ c₂) s | c₁≈cpc₁ | now (just s₁) | later x₁ with (c₁≈cpc₁)
-  ... | laterᵣ fx₁⇓s₁ = laterᵣ (seq-force {x = x₁} {c = c₂} (psym fx₁⇓s₁))
-  cpfold-sound (seq c₁ c₂) s | c₁≈cpc₁ | later x = {! !}
+  private
+   seq-now-now : ∀ {c₁ c₂ s xᶜ xᵖ} (h-c : (ceval c₁ s) ≡ now xᶜ) (h-p : (ceval (cpfold c₁) s) ≡ now xᵖ)
+    (h-≈ : (∞ ⊢ (now xᶜ) ≈ ceval (cpfold c₁) s)) 
+     -> ∞ ⊢ (bindᵖ (now xᶜ) (ceval c₂)) ≈ (bindᵖ (now xᵖ) (ceval (cpfold c₂))) 
+   seq-now-now {c₁} {c₂} {s} {xᶜ} {xᵖ} h-c h-p h-≈ = {! !}
 
-  cpfold-sound (while b c) s = {! !}
+   seq-now-later : ∀ {c₁ c₂ s xᶜ xᵖ} (h-c : (ceval c₁ s) ≡ now xᶜ) (h-p : (ceval (cpfold c₁) s) ≡ later xᵖ)
+    (h-≈ : (∞ ⊢ ceval c₁ s ≈ ceval (cpfold c₁) s))
+     -> ∞ ⊢ (bindᵖ (now xᶜ) (ceval c₂)) ≈ (bindᵖ (later xᵖ) (ceval (cpfold c₂))) 
+   seq-now-later {c₁} {c₂} {s} {xᶜ} {xᵖ} h-c h-p h-≈ = {! !}
+
+   seq-later-later : ∀ {c₁ c₂ s xᶜ xᵖ} (h-c : (ceval c₁ s) ≡ later xᶜ) (h-p : (ceval (cpfold c₁) s) ≡ later xᵖ)
+    (h-≈ : (∞ ⊢ ceval c₁ s ≈ ceval (cpfold c₁) s))
+     -> ∞ ⊢ (bindᵖ (later xᶜ) (ceval c₂)) ≈ (bindᵖ (later xᵖ) (ceval (cpfold c₂))) 
+   seq-later-later {c₁} {c₂} {s} {xᶜ} {xᵖ} h-c h-p h-≈ = {! !}
+
+   seq-later-now : ∀ {c₁ c₂ s xᶜ xᵖ} (h-c : (ceval c₁ s) ≡ later xᶜ) (h-p : (ceval (cpfold c₁) s) ≡ now xᵖ)
+    (h-≈ : (∞ ⊢ ceval c₁ s ≈ ceval (cpfold c₁) s)) 
+     -> ∞ ⊢ (bindᵖ (later xᶜ) (ceval c₂)) ≈ (bindᵖ (now xᵖ) (ceval (cpfold c₂))) 
+   seq-later-now {c₁} {c₂} {s} {xᶜ} {xᵖ} h-c h-p h-≈ = {! !}

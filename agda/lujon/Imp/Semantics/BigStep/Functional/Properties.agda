@@ -1,3 +1,4 @@
+{-# OPTIONS --allow-unsolved-metas #-}
 ------------------------------------------------------------------------
 -- Properties of functional semantics for Imp
 ------------------------------------------------------------------------
@@ -10,18 +11,20 @@ open import Imp.Syntax
 open import Data.Maybe
 open import Data.Product
 open import Data.Irrelevant
-open import Codata.Sized.Delay hiding (_⇓)
+open import Codata.Sized.Thunk
 open import Codata.Sized.Partial
+open import Codata.Sized.Delay hiding (_⇓)
 open import Imp.Semantics.BigStep.Functional
 open import Codata.Sized.Partial.Bisimilarity
 open import Relation.Binary.PropositionalEquality
 open import Codata.Sized.Partial.Bisimilarity.Properties
 open import Codata.Sized.Partial.Relation.Binary.Convergence 
+open import Codata.Sized.Partial.Bisimilarity.Relation.Binary.Equivalence 
+ renaming (sym to psym ; refl to prefl ; trans to ptrans)
 --
 
 -- @TODO
 postulate
- ceval-result : ∀ (c : Command) (s : Store) -> XOr ((ceval c s) ⇑) (XOr ((ceval c s) ⇓) ((ceval c s) ↯))
  ceval-⇓=>⊆ : ∀ (c : Command) (s s' : Store) -> (h : (ceval c s) ⇓ s') -> dom s ⊆ dom s'
  ceval=>⊆ : ∀ (c : Command) (s s' : Store) -> (h : (ceval c s) ≡  now (just s')) -> dom s ⊆ dom s'
  ⊏ᶜ=>⇑ : ∀ {s s' : Store} {cₛ c : Command} (h-⊆ : dom s ⊆ dom s') -> (h-⊏ : cₛ ⊏ᶜ c) -> 

@@ -38,8 +38,27 @@ module _ {a b c} {A : Set a} {B : Set b} {C : Set c}
          {r} {P : A → B → Set r} {Q : B → C → Set r} {R : A → C → Set r} where
 
  postulate
-  transitive : Trans P Q R → ∀ {i} → Trans (Bisim P i) (Bisim Q i) (Bisim R i)
-
+  transitive : (trel : Trans P Q R) → ∀ {i} → Trans (Bisim P i) (Bisim Q i) (Bisim R i)
+-- transitive trel {i} {.(now nothing)} {.(now nothing)} {.(now nothing)} nown nown = nown
+-- transitive trel {i} {.(now nothing)} {.(now nothing)} {.(later _)} nown (laterᵣ .{now nothing} {ys} y≈z) 
+--  = laterᵣ (transitive trel nown y≈z) 
+-- transitive trel {i} {.(now (just _))} {.(now (just _))} {.(now (just _))} (nowj x) (nowj x₁) 
+--  = nowj (trel x x₁)
+-- transitive trel {i} {.(now (just _))} {.(now (just _))} {.(later _)} (nowj x) (laterᵣ .{now (just _)} {ys} y≈z) 
+--  = laterᵣ (transitive trel (nowj x) y≈z) 
+-- transitive trel {i} {.(later _)} {.(now nothing)} {.(now nothing)} (laterₗ {xs} x≈y) nown 
+--  = laterₗ (transitive trel x≈y nown) 
+-- transitive trel {i} {.(later _)} {.(later _)} {.(later _)} (later {xs} x) (later x₁) = ?
+-- transitive trel {i} {.(later _)} {.(now (just _))} {.(now (just _))} (laterₗ x≈y) (nowj x) 
+--  = laterₗ (transitive trel x≈y (nowj x))
+-- transitive trel {i} {.(later _)} {.(later _)} {z} (later x) (laterₗ y≈z) = {! !}
+-- transitive trel {i} {.(later _)} {.(later _)} {.(later _)} (later x) (laterᵣ y≈z) = {! !}
+-- transitive trel {i} {.(later _)} {.(later _)} {.(later _)} (laterₗ x≈y) (later x) = {! !}
+-- transitive trel {i} {.(later _)} {.(later _)} {z} (laterₗ x≈y) (laterₗ y≈z) = {! !}
+-- transitive trel {i} {.(later _)} {y} {.(later _)} (laterₗ x≈y) (laterᵣ y≈z) = {! !}
+-- transitive trel {i} {x} {.(later _)} {.(later _)} (laterᵣ x≈y) (later x₁) = {! !}
+-- transitive trel {i} {x} {.(later _)} {z} (laterᵣ x≈y) (laterₗ y≈z) = {! !}
+-- transitive trel {i} {x} {.(later _)} {.(later _)} (laterᵣ x≈y) (laterᵣ y≈z) = {! !}
 
 module _ {a} {A : Set a} where
 
@@ -49,6 +68,9 @@ module _ {a} {A : Set a} where
  
  sym : ∀ {i} -> Symmetric {a} {Delay (Maybe A) ∞}(i ⊢_≈_)
  sym = symmetric Eq.sym
+ 
+ trans : ∀ {i} -> Transitive {a} {Delay (Maybe A) ∞}(i ⊢_≈_)
+ trans = transitive Eq.trans
 
  ≡=>≈ : ∀ {a₁ a₂ : Delay (Maybe A) ∞} -> (h : a₁ ≡ a₂) -> (∀ {i} -> i ⊢ a₁ ≈ a₂)
  ≡=>≈ {a₁} {.a₁} Eq.refl {i} = refl
