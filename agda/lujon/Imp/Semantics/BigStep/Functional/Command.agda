@@ -20,12 +20,9 @@ open import Codata.Sized.Partial.Effectful renaming (bind to _>>=p_)
 -- Monad.
 ------------------------------------------------------------------------
 
-
-
 mutual
  ceval-while : ∀ {i} (c : Command) (b : BExp) (s : Store) -> Thunk (Delay (Maybe Store)) i
  ceval-while c b s = λ where .force -> (ceval (while b c) s)
- 
  
  ceval : ∀ {i} -> (c : Command) -> (s : Store) -> Delay (Maybe Store) i
  ceval skip s = now (just s)
