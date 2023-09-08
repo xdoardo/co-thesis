@@ -10,6 +10,7 @@ open import Data.Maybe
 open import Imp.Syntax
 open import Data.Product
 open import Data.Integer
+open import Function using (case_of_)
 open import Imp.Analysis.PureFolding.Bool
 open import Imp.Analysis.PureFolding.Arith
 open import Data.Bool renaming (not to lnot)
@@ -84,30 +85,6 @@ module _ where
   cpfold-sound (ifelse b cᵗ cᶠ) s | eq-bev-bp | just true | and a a₁ with (cpfold (ifelse b cᵗ cᶠ)) 
   ... | n rewrite eq-beval-b rewrite eq-beval-b = cpfold-sound cᵗ s 
   cpfold-sound (seq c₁ c₂) s with  (cpfold-sound c₁ s)
-  ... | c₁≈ with (ceval c₁ s) in eq-ceval-c₁ | (ceval (cpfold c₁) s) in eq-ceval-cp
-  ... | now xᶜ | now xᵖ = seq-now-now {c₁} {c₂} {s} {xᶜ} {xᵖ} eq-ceval-c₁ eq-ceval-cp ? 
-  ... | now xᶜ | later xᵖ = seq-now-later {c₁} {c₂} {s} {xᶜ} {xᵖ} eq-ceval-c₁ eq-ceval-cp ? 
-  ... | later xᶜ | now xᵖ = seq-later-now {c₁} {c₂} {s} {xᶜ} {xᵖ} eq-ceval-c₁ eq-ceval-cp ?
-  ... | later xᶜ | later xᵖ = seq-later-later {c₁} {c₂} {s} {xᶜ} {xᵖ} eq-ceval-c₁ eq-ceval-cp ?
-  cpfold-sound (while b c) s = {! !} 
-
-  private
-   seq-now-now : ∀ {c₁ c₂ s xᶜ xᵖ} (h-c : (ceval c₁ s) ≡ now xᶜ) (h-p : (ceval (cpfold c₁) s) ≡ now xᵖ)
-    (h-≈ : (∞ ⊢ (now xᶜ) ≈ ceval (cpfold c₁) s)) 
-     -> ∞ ⊢ (bindᵖ (now xᶜ) (ceval c₂)) ≈ (bindᵖ (now xᵖ) (ceval (cpfold c₂))) 
-   seq-now-now {c₁} {c₂} {s} {xᶜ} {xᵖ} h-c h-p h-≈ = {! !}
-
-   seq-now-later : ∀ {c₁ c₂ s xᶜ xᵖ} (h-c : (ceval c₁ s) ≡ now xᶜ) (h-p : (ceval (cpfold c₁) s) ≡ later xᵖ)
-    (h-≈ : (∞ ⊢ ceval c₁ s ≈ ceval (cpfold c₁) s))
-     -> ∞ ⊢ (bindᵖ (now xᶜ) (ceval c₂)) ≈ (bindᵖ (later xᵖ) (ceval (cpfold c₂))) 
-   seq-now-later {c₁} {c₂} {s} {xᶜ} {xᵖ} h-c h-p h-≈ = {! !}
-
-   seq-later-later : ∀ {c₁ c₂ s xᶜ xᵖ} (h-c : (ceval c₁ s) ≡ later xᶜ) (h-p : (ceval (cpfold c₁) s) ≡ later xᵖ)
-    (h-≈ : (∞ ⊢ ceval c₁ s ≈ ceval (cpfold c₁) s))
-     -> ∞ ⊢ (bindᵖ (later xᶜ) (ceval c₂)) ≈ (bindᵖ (later xᵖ) (ceval (cpfold c₂))) 
-   seq-later-later {c₁} {c₂} {s} {xᶜ} {xᵖ} h-c h-p h-≈ = {! !}
-
-   seq-later-now : ∀ {c₁ c₂ s xᶜ xᵖ} (h-c : (ceval c₁ s) ≡ later xᶜ) (h-p : (ceval (cpfold c₁) s) ≡ now xᵖ)
-    (h-≈ : (∞ ⊢ ceval c₁ s ≈ ceval (cpfold c₁) s)) 
-     -> ∞ ⊢ (bindᵖ (later xᶜ) (ceval c₂)) ≈ (bindᵖ (now xᵖ) (ceval (cpfold c₂))) 
-   seq-later-now {c₁} {c₂} {s} {xᶜ} {xᵖ} h-c h-p h-≈ = {! !}
+  ... | c₁≈ = ? 
+  cpfold-sound (while b c) s with  (cpfold-sound c s)
+  ... | c≈ = ?

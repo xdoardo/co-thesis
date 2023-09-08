@@ -10,6 +10,7 @@ open import Imp.Syntax
 open import Data.Maybe 
 open import Data.Product
 open import Codata.Sized.Thunk 
+open import Data.Bool.Properties
 open import Codata.Sized.Partial
 open import Data.String hiding (_≈_)
 open import Function using (case_of_)
@@ -71,17 +72,47 @@ module _ where
    | (bdia-sound b₂ s (⊆-trans (⊏ᵇᵇ=>⊆ b₂ (and b₁ b₂) (and-r b₁ b₂)) dia))
  ... | v₁ , eq-b₁ | v₂ , eq-b₂ rewrite eq-b₁ rewrite eq-b₂ = (v₁ ∧ v₂) , refl
 
+ 
+ dia=>cvars : ∀ {v₁ v₂ : VarsSet} {c : Command} (h-dia : Dia v₁ c v₂) -> v₂ ≡ (v₁ ∪ (cvars c))
+ dia=>cvars {v₁} {.v₁} {skip} (skip .v₁) rewrite (cvars-skip) = if-ext λ { x → sym (∨-identityʳ (v₁ x)) } 
+ dia=>cvars {v₁} {.(id ↦ v₁)} {assign id a} (assign .a .v₁ .id a⊆v) = ↦-is-∪ {id} {v₁}  
+ dia=>cvars {v₁} {v₃} {seq c₁ c₂} (seq .v₁ v₂ .v₃ .c₁ .c₂ h-dia₁ h-dia₂) 
+  rewrite (cvars-seq {c₁} {c₂})
+  rewrite (dia=>cvars h-dia₁)
+  rewrite (dia=>cvars h-dia₂)
+  = if-ext λ { x → ∨-assoc (v₁ x) (cvars c₁ x) (cvars c₂ x) } 
+ dia=>cvars {v₁} {.(vᵗ ∩ vᶠ)} {ifelse b c c₁} (if .b .v₁ vᵗ vᶠ .c .c₁ b⊆v h-dia h-dia₁) 
+  rewrite (cvars-if {b} {c} {c₁})
+  rewrite (dia=>cvars h-dia₁)
+  rewrite (dia=>cvars h-dia)
+  = if-ext λ { x -> h {v₁ x} {cvars c x} {cvars c₁ x}} 
+  where 
+   h : {b₁ b₂ b₃ : Bool} -> (b₁ ∨ b₂) ∧ (b₁ ∨ b₃) ≡ b₁ ∨ (b₂ ∧ b₃)
+   h {false} {b₂} {b₃} = refl
+   h {true} {false} {false} = refl
+   h {true} {false} {true} = refl
+   h {true} {true} {false} = refl
+   h {true} {true} {true} = refl
+ dia=>cvars {v₁} {.v₁} {while b c} (while .b .v₁ v₂ .c b⊆s h-dia) 
+  rewrite (cvars-while {b} {c})
+  = if-ext λ { x → sym (∨-identityʳ (v₁ x)) } 
+
  dia-⊆ : ∀ {v₁ v₂ : VarsSet} {c : Command} (h-dia : Dia v₁ c v₂) -> v₁ ⊆ v₂
- dia-⊆ (skip _) = λ x x-in-s₁ → x-in-s₁
- dia-⊆ (assign a _ id a⊆v) = {! !}
- dia-⊆ (seq _ v₂ _ c₁ c₂ h-dia h-dia₁) = {! !}
- dia-⊆ (if b _ vᵗ vᶠ cᵗ cᶠ b⊆v h-dia h-dia₁) = ? 
- dia-⊆ (while b _ v₁ c b⊆s h-dia) = λ x x-in-s₁ → x-in-s₁
+ dia-⊆ {v₁} {.v₁} {skip} (skip .v₁) x x-in-s₁ = x-in-s₁
+ dia-⊆ {v₁} {.(id ↦ v₁)} {assign id a} (assign .a .v₁ .id a⊆v) x x-in-s₁ = ↦=>⊆ {id} {v₁} x x-in-s₁ 
+ dia-⊆ {v₁} {v₃} {seq c₁ c₂} (seq .v₁ v₂ .v₃ .c₁ .c₂ h-dia₁ h-dia₂)  
+  = (⊆-trans (dia-⊆ {v₁} {v₂} {c₁} h-dia₁) (dia-⊆ {v₂} {v₃} {c₂} h-dia₂)) 
+ dia-⊆ {v₁} {.(vᵗ ∩ vᶠ)} {ifelse b c c₁} (if .b .v₁ vᵗ vᶠ .c .c₁ b⊆v h-dia h-dia₁) 
+  = ⊆=>∩ {v₁} {vᵗ} {vᶠ} (dia-⊆ h-dia₁) (dia-⊆ h-dia)
+ dia-⊆ {v₁} {.v₁} {while b c} (while .b .v₁ v₂ .c b⊆s h-dia) x x-in-s₁ = x-in-s₁ 
 
- dia-ceval=>⊆ : ∀ {v₁ v₂ : VarsSet} {s₁ s₂ : Store} {c : Command} (h-dia : Dia v₁ c v₂) 
-   -> (h-⊆ : v₁ ⊆ dom s₁) -> (h-ceval⇓ : (ceval c s₁) ⇓ s₂) -> v₂ ⊆ dom s₂
- dia-ceval=>⊆ h-dia h-⊆ h-ceval⇓ = {! !}
-
+ dia-ceval=>⊆ : ∀ {v₁ v₂ : VarsSet} {s₁ s₂ : Store} {c : Command} (dia : Dia v₁ c v₂) 
+   -> (v₁⊆s₁ : v₁ ⊆ dom s₁) -> (h⇓ : (ceval c s₁) ⇓ s₂) -> v₂ ⊆ dom s₂
+ dia-ceval=>⊆ {v₁} {v₂} {s₁} {s₂} {c} dia v₁⊆s₁ h⇓ x x-in-v₁ rewrite (dia=>cvars dia) = 
+  let 
+   v₂⊆s₁c = ⊆-∪=>⊆ {v₁} {dom s₁} {cvars c} v₁⊆s₁ x 
+   s₁c⊆s₂ = ceval⇓=>sc⊆s' c s₁ s₂ h⇓ x
+  in s₁c⊆s₂ (v₂⊆s₁c x-in-v₁)
  
  mutual 
   dia-sound : ∀ (c : Command) (s : Store) (v v' : VarsSet) (dia : Dia v c v') (v⊆s : v ⊆ dom s)
@@ -116,13 +147,13 @@ module _ where
    | true , eq-beval | now (just s') rewrite eq-beval rewrite eq-ceval-c 
    with h-err
   ... | laterₗ w↯ = 
-   dia-sound (while b c) s' v v dia (⊆-trans v⊆s (ceval=>⊆ c s s' eq-ceval-c)) w↯
+   dia-sound (while b c) s' v v dia (⊆-trans v⊆s (ceval⇓=>⊆ c s s' (≡=>≈ eq-ceval-c))) w↯
   dia-sound (while b c) s v v' dia v⊆s h-err | while .b .v v₁ .c b⊆s dia-c 
    | true , eq-beval | later x with (dia-sound c s v v₁ dia-c v⊆s)
   ... | c↯⊥ rewrite eq-beval rewrite eq-ceval-c = dia-sound-while-later c↯⊥ dia h h-err 
    where 
     h : ∀ {s'} (h : (later x) ⇓ s') -> v ⊆ dom s'
-    h {s'} h₁ rewrite (sym eq-ceval-c) = (⊆-trans v⊆s (ceval-⇓=>⊆ c s s' h₁))
+    h {s'} h₁ rewrite (sym eq-ceval-c) = (⊆-trans v⊆s (ceval⇓=>⊆ c s s' h₁))
  
   private 
    dia-sound-while-later : ∀ {x : Thunk (Delay (Maybe Store)) ∞} {b c} {v} (l↯⊥ : (later x)↯ -> ⊥)

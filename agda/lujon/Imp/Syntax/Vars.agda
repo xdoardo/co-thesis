@@ -28,8 +28,8 @@ cvars : (c : Command) -> VarsSet
 cvars skip = ∅
 cvars (assign id a) = id ↦ ∅
 cvars (seq c c₁) = (cvars c) ∪ (cvars c₁)
-cvars (ifelse b c c₁) = (cvars c) ∪ (cvars c₁)
-cvars (while b c) = cvars c
+cvars (ifelse b c c₁) = (cvars c) ∩ (cvars c₁)
+cvars (while b c) =  ∅
 
 -- A function to build a VarsSet from a Store. 
 dom : Store -> VarsSet
@@ -45,10 +45,6 @@ module _ where
  open import Data.Product
  open Properties public 
 
- in-dom-has-value : ∀ {s id} -> (h-dom : dom s id ≡ true) -> (∃ λ v -> s id ≡ just v)
- in-dom-has-value {s} {id} h-dom with (s id) 
- ... | just x = x , _≡_.refl
-
  -- Subterm relation on arithmetic terms implies vars inclusion.
  -- @TODO
  postulate
@@ -58,3 +54,55 @@ module _ where
   ⊏ᶜᵃ=>⊆ : ∀ (a : AExp) (c : Command) -> (sub : a ⊏ᶜ c) -> (avars a ⊆ cvars c)
   ⊏ᶜᵇ=>⊆ : ∀ (b : BExp) (c : Command) -> (sub : b ⊏ᶜ c) -> (bvars b ⊆ cvars c)
   ⊏ᶜᶜ=>⊆ : ∀ (c₁ c : Command) -> (sub : c₁ ⊏ᶜ c) -> (cvars c₁ ⊆ cvars c)
+
+ cvars-skip : (cvars skip) ≡ ∅ 
+ cvars-skip = refl
+
+ cvars-assign : ∀ {id a} -> (cvars (assign id a)) ≡ id ↦ ∅
+ cvars-assign = refl
+
+ cvars-seq : ∀ {c₁ c₂} -> (cvars (seq c₁ c₂)) ≡ (cvars c₁) ∪ (cvars c₂)
+ cvars-seq = refl
+
+ cvars-if : ∀ {b c₁ c₂} -> (cvars (ifelse b c₁ c₂)) ≡ (cvars c₁) ∩ (cvars c₂)
+ cvars-if = refl
+ 
+ cvars-while : ∀ {b c} -> (cvars (while b c)) ≡ ∅ 
+ cvars-while = refl
+
+ -------------------------------------------------
+ -- Properties relating the Store type and VarsSet
+ -------------------------------------------------
+
+ in-dom-has-value : ∀ {s id} -> (h-dom : dom s id ≡ true) -> (∃ λ v -> s id ≡ just v)
+ in-dom-has-value {s} {id} h-dom with (s id) 
+ ... | just x = x , _≡_.refl
+
+ dom-store≡ : ∀ {s s' : Store} -> (h≡ : s ≡ s') -> dom s ≡ dom s'
+ dom-store≡ h≡ rewrite h≡ = refl
+
+ empty-is-∅ : dom empty ≡ ∅
+ empty-is-∅ = refl
+ 
+ private
+  update-is-↦-ext : ∀ {x s id v} -> dom (update id v s) x ≡ (id ↦ dom s) x
+  update-is-↦-ext {x} {s} {id} {v} with id == x in eq-id
+  ... | true = refl
+  ... | false with (s x) in eq-sid
+  ... | just x₁ = refl
+  ... | nothing = refl
+
+ update-is-↦ : ∀ {s id v} -> dom (update id v s) ≡ id ↦ dom s
+ update-is-↦ {s} {id} {v} = if-ext λ { x → update-is-↦-ext {x} {s} {id} {v} } 
+
+
+ private
+  ↦-is-∪-ext : ∀ {x id s} -> (id ↦ s) x ≡ (s ∪ (id ↦ ∅)) x
+  ↦-is-∪-ext {x} {id} {s} with (id == x) in eq-id | (s x)
+  ... | false | false = refl
+  ... | false | true = refl
+  ... | true | false = refl
+  ... | true | true = refl
+
+ ↦-is-∪ : ∀ {id s} -> (id ↦ s) ≡ (s ∪ (id ↦ ∅))
+ ↦-is-∪ {id} {s} = if-ext λ { x → ↦-is-∪-ext {x} {id} {s} } 

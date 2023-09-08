@@ -21,11 +21,15 @@ Store = Ident -> Maybe ℤ
 empty : Store 
 empty = λ _ -> nothing
 
-update : (i : Ident) -> (v : ℤ) -> (s : Store) -> Store 
-update i v s = λ x -> if x == i then (just v) else (s x)
+update : (id₁ : Ident) -> (v : ℤ) -> (s : Store) -> Store 
+update id₁ v s id₂ with id₁ == id₂
+... | true = (just v) 
+... | false = (s id₂)
 
 join : (s₁ s₂ : Store) -> Store
-join s₁ s₂ = λ id -> case (s₁ id) of λ { (just v) -> (just v) ; nothing -> (s₂ id)}
+join s₁ s₂ id with (s₁ id) 
+... | just v = just v
+... | nothing = s₂ id
 
 merge : (s₁ s₂ : Store) -> Store
 merge s₁ s₂ = λ id -> (s₁ id) >>= λ v₁ -> (s₂ id) >>= λ v₂ -> if (⌊ v₁ ≟ v₂ ⌋) then just v₁ else nothing
@@ -37,12 +41,32 @@ remove i s = λ id -> if id == i then nothing else (s id)
 -- Properties of identifiers and stores of Imp
 ------------------------------------------------------------------------
 module _ where
+
  open import Data.List
  open import Data.Maybe 
  open import Data.Product 
  open import Data.List.Membership.Propositional
+ open import Axiom.Extensionality.Propositional
  open import Relation.Binary.PropositionalEquality
  --- 
+
+ private
+  postulate
+   -- We must postulate extensionality.
+   ext : ∀ a b -> Extensionality a b
+
+  -- Extensional equality for VarsSet.
+ store-ext : ∀ {s₁ s₂ : Store} -> (a-ex : ∀ x -> s₁ x ≡ s₂ x) -> s₁ ≡ s₂
+ store-ext a-ex = ext Agda.Primitive.lzero Agda.Primitive.lzero a-ex
+ 
+ private
+  update-is-join-ext : ∀ {x s id v} -> (update id v s) x ≡ (join (update id v empty) s) x
+  update-is-join-ext {x} {s} {id} {v} with (id == x)
+  ... | true = refl
+  ... | false = refl
+
+ update-is-join : ∀ {s id v} -> (update id v s) ≡ (join (update id v empty) s)
+ update-is-join {s} {id} {v} = store-ext λ { x → update-is-join-ext {x} {s} {id} {v} } 
 
  -- identifiers equivalence 
  ≟ₛ-refl : ∀ {S : Ident} → (S ≟ₛ S) ≡ yes refl

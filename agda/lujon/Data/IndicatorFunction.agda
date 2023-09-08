@@ -2,6 +2,7 @@
 -- The indicator function datatype 
 ------------------------------------------------------------------------
 open import Data.Bool
+open import Data.Bool.Properties
 ---
 
 module Data.IndicatorFunction {a} (A : Set a) (_==_ : A -> A -> Bool) where
@@ -16,7 +17,7 @@ IndicatorFunction = A -> Bool
 ∅ = λ _ -> false
 
 _↦_ : (v : A) -> (s : IndicatorFunction) -> IndicatorFunction
-(v ↦  s) x = (v == x) ∨ (s v) 
+(v ↦  s) x = (v == x) ∨ (s x) 
 
 _⊝_ : (v : A) -> (s : IndicatorFunction) -> IndicatorFunction
 (v ⊝ s) x = not (v == x) ∧ (s x)
@@ -57,9 +58,29 @@ module Properties where
  ∪-∅ : ∀ {s : IndicatorFunction} -> (s ∪ ∅) ≡ s
  ∪-∅ {s} = if-ext ∪-∅-ext
 
+ ↦=>⊆ : ∀ {id} {s : IndicatorFunction} -> s ⊆ (id ↦ s)
+ ↦=>⊆ {id} {s} id₁ id-in-s  with (id == id₁) 
+ ... | false = id-in-s
+ ... | true = refl
+
+ ⊆=>∩ : ∀ {s s₁ s₂ : IndicatorFunction} (h-1 : s ⊆ s₁) (h-2 : s ⊆ s₂) -> s ⊆ (s₁ ∩ s₂)
+ ⊆=>∩ h-1 h-2 x x-in-s₁ rewrite (h-1 x x-in-s₁) rewrite (h-2 x x-in-s₁) = refl 
+
  ∪=>⊆ : ∀ {s s' : IndicatorFunction} -> s ⊆ (s ∪ s')
  ∪=>⊆ {s} {s'} x x-in-s₁ rewrite x-in-s₁ = refl 
- 
+
+ ∪-⊆=>⊆ : ∀ {s s' s''} (h-⊆ : (s ∪ s') ⊆ s'') -> s ⊆ s''
+ ∪-⊆=>⊆ {s} {s'} {s''} h-⊆ x x-in-s₁  with (h-⊆ x)
+ ... | n with (s' x) 
+ ... | false rewrite x-in-s₁ rewrite (∨-zeroʳ false) = n refl
+ ... | true rewrite x-in-s₁ = n refl
+
+ ⊆-∪=>⊆ : ∀ {s s' s''} (h-⊆ : s ⊆ s') -> (s ∪ s'') ⊆ (s' ∪ s'')
+ ⊆-∪=>⊆ {s} {s'} {s''} h-⊆ x x-in-s₁ with (s x) in eq-sx
+ ... | false with (s'' x) 
+ ... | true = ∨-zeroʳ (s' x)
+ ⊆-∪=>⊆ {s} {s'} {s''} h-⊆ x x-in-s₁ | true rewrite (h-⊆ x eq-sx) = refl 
+
  in-⊆ : ∀ {s s' s''} {i} -> (h : s i ≡ true) (h≡ : s'' ≡ (s ∪ s')) -> s'' i ≡ true
  in-⊆ {s} {s'} {s''} {i} h h≡ rewrite h≡ = (∪=>⊆ {s} {s'}) i h
 

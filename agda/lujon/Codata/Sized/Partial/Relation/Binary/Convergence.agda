@@ -8,32 +8,13 @@ open import Size
 open import Data.Maybe
 open import Data.Product
 open import Codata.Sized.Thunk
-open import Codata.Sized.Delay hiding (_⇓ ; bind)
-open import Codata.Sized.Partial.Bisimilarity
 open import Codata.Sized.Partial.Effectful
+open import Codata.Sized.Partial.Bisimilarity
+open import Codata.Sized.Delay hiding (_⇓ ; bind)
 open import Relation.Binary.PropositionalEquality
+open import Codata.Sized.Partial.Bisimilarity.Relation.Binary.Equivalence 
+ renaming (sym to psym ; refl to prefl ; trans to ptrans)
 ---
-
---data _⇓_ {a} {A : Set a} : {i : Size} -> (Delay (Maybe A) i) -> A -> Set a where 
--- now⇓ : ∀ {i} {x : A} -> _⇓_ {i = i} (now (just x)) x
--- later⇓ : ∀ {i} {j : Size< i} {x} {d : Thunk (Delay (Maybe A)) i} -> _⇓_ {i = j} (force d) x -> _⇓_ {i = i} (later d) x
---
---_⇓ : ∀ {a} {A : Set a} {i : Size} (x : Delay (Maybe A) i) -> Set a 
---_⇓ {a} {A} {i} x = ∃ λ v -> x ⇓ v 
---
---data _⇑ {a} {A : Set a} : {i : Size} -> (Delay (Maybe A) i) -> Set a where 
--- later⇑ : ∀ {i} {j : Size< i} {d : Thunk (Delay (Maybe A)) i} -> _⇑ {i = j} (force d) -> _⇑ {i = i} (later d)
---
---data _↯ {a} {A : Set a} : {i : Size} -> (Delay (Maybe A) i)  -> Set a where
--- now↯ :  ∀ {i} -> _↯ {i = i} (now nothing)
--- later↯ : ∀ {i} {j : Size< i} {d : Thunk (Delay (Maybe A)) i} -> _↯  (force d) ->  _↯ {i = i} (later d)
---
---≡=>⇓ : ∀ {a} {A : Set a} {i} {v : A} {c x : Delay (Maybe A) i} -> (h : c ≡ x) -> (h⇓ : _⇓_ {i = i} x v) -> _⇓_ {i = i} c v
---≡=>⇓ h h⇓ rewrite h = h⇓  
---
---≡=>↯ : ∀ {a} {A : Set a} {i} {v : A} {c x : Delay (Maybe A) i} -> (h : c ≡ x) -> (h↯ : _↯ {i = i} x) -> _↯ {i = i} c
---≡=>↯ h h↯ rewrite h = h↯  
-
 
 module _ {ℓ} {A : Set ℓ} where
  _⇓_ : ∀ (x : Delay (Maybe A) ∞) (v : A) -> Set ℓ
@@ -53,6 +34,38 @@ module _ {ℓ} {A : Set ℓ} where
 
  ≡=>↯ : ∀ {v : A} {c x : Delay (Maybe A) ∞} -> (h : c ≡ x) -> (h↯ : x ↯) -> c ↯
  ≡=>↯ h h↯ rewrite h = h↯  
+
+ private
+  ∞bindxf⇓=>x⇓ : ∀ {x : Thunk (Delay (Maybe A)) ∞} {f} {v} (h⇓ : (bind (x .force) f) ⇓ v) -> (x .force) ⇓ 
+  ∞bindxf⇓=>x⇓ {x} {f} h⇓ with (force x) in eq-force-x
+  ... | now (just x₁) = x₁ , nowj refl
+  ... | later x₁ with (h⇓) 
+  ... | laterₗ h⇓'
+   with (∞bindxf⇓=>x⇓ {x₁} {f} h⇓')
+  ... | s' , eq-x₁ = s' , laterₗ eq-x₁
+
+ bindxf⇓=>x⇓ : ∀ {x} {f} {v} (h⇓ : (bind x f) ⇓ v) -> x ⇓
+ bindxf⇓=>x⇓ {now (just x)} {f} h⇓ = x , nowj refl 
+ bindxf⇓=>x⇓ {later x} {f} h⇓ with h⇓
+ ... | laterₗ h⇓' with (force x) in eq-force-x
+ ... | now (just x₁) = x₁ , laterₗ (≡=>≈ eq-force-x)
+ bindxf⇓=>x⇓ {later x} {f} h⇓ | laterₗ (laterₗ h⇓') | later x₁ 
+  with (∞bindxf⇓=>x⇓ {x₁} {f} h⇓') 
+ ... | s' , eq-x₁ = s' , laterₗ h 
+  where 
+   h : (force x) ⇓ s'
+   h rewrite eq-force-x = laterₗ eq-x₁
+
+ bindxf⇓-x⇓=>f⇓ : ∀ {x} {f} {v v'} (h⇓ : (bind x f) ⇓ v) (hx⇓ : x ⇓ v') -> f v' ⇓ v
+ bindxf⇓-x⇓=>f⇓ {.(now (just _))} {f} {v} {v'} h⇓ (nowj x) rewrite x = h⇓
+ bindxf⇓-x⇓=>f⇓ {.(later _)} {f} {v} {v'} h⇓ (laterₗ {xs} hx⇓)  
+  with (force xs) in eq-force-xs
+ ... | now (just x) with hx⇓
+ ... | nowj refl with h⇓
+ ... | laterₗ n rewrite eq-force-xs = n
+ bindxf⇓-x⇓=>f⇓ {.(later _)} {f} {v} {v'} (laterₗ h⇓) (laterₗ hx⇓) | later x 
+  rewrite eq-force-xs
+  =  bindxf⇓-x⇓=>f⇓ {later x} h⇓ hx⇓
 
  bind-↯ : ∀ {x} {f} {v : A} (h⇓ : x ⇓ v) (h↯ : (bind x f) ↯) -> (f v) ↯
  bind-↯ {x} {f} {v} (nowj x≡v) h↯ rewrite x≡v = h↯
