@@ -115,4 +115,45 @@ ceval⇓=>⊆ c s s' h⇓ x x-in-s₁
 ... | fst , snd rewrite snd = refl
 
 ceval⇓=>sc⊆s' :  ∀ (c : Command) (s s' : Store) (h⇓ : (ceval c s) ⇓ s') -> (dom s ∪ (cvars c)) ⊆ (dom s')
-ceval⇓=>sc⊆s' c s s' h⇓ x x-in-s₁ = ?
+ceval⇓=>sc⊆s' skip s .s (nowj refl) x x-in-s₁ rewrite (cvars-skip) rewrite (∨-identityʳ (dom s x)) = x-in-s₁
+ceval⇓=>sc⊆s' (assign id a) s s' h⇓ x x-in-s₁ 
+ with (aeval a s)
+... | just v 
+ with h⇓
+... | nowj refl
+ with (id == x) in eq-id
+... | true = refl
+... | false rewrite eq-id rewrite (∨-identityʳ (dom s x)) 
+ with s x in eq-sx
+... | just x₁ rewrite eq-sx = refl
+ceval⇓=>sc⊆s' (ifelse b cᵗ cᶠ) s s' h⇓ x x-in-s₁ 
+ with (beval b s) in eq-b 
+... | just false rewrite eq-b = ceval⇓=>sc⊆s' cᶠ s s' h⇓ x (h {dom s x} {cvars cᵗ x} {cvars cᶠ x} x-in-s₁)
+ where
+  h : {b1 b2 b3 : Bool} (h : b1 ∨ (b2 ∧ b3) ≡ true) -> b1 ∨ b3 ≡ true
+  h {false} {b2} {true} h₁ = refl
+  h {false} {false} {false} h₁ = case h₁ of λ () 
+  h {false} {true} {false} h₁ = case h₁ of λ () 
+  h {true} {b2} {b3} h₁ = refl
+ceval⇓=>sc⊆s' (ifelse b cᵗ cᶠ) s s' h⇓ x x-in-s₁ 
+ | just true rewrite eq-b = ceval⇓=>sc⊆s' cᵗ s s' h⇓ x (h {dom s x} {cvars cᵗ x} {cvars cᶠ x}  x-in-s₁)
+ where 
+  h : {b1 b2 b3 : Bool} (h : b1 ∨ (b2 ∧ b3) ≡ true) -> b1 ∨ b2 ≡ true
+  h {false} {true} {b3} h₁ = refl
+  h {true} {b2} {b3} h₁ = refl
+ceval⇓=>sc⊆s' (seq c₁ c₂) s s' h⇓ x x-in-s₁
+ with (bindxf⇓=>x⇓ {x = ceval c₁ s} {f = ceval c₂} h⇓)
+... | sⁱ , c₁⇓sⁱ 
+ with (bindxf⇓-x⇓=>f⇓ {x = ceval c₁ s} {f = ceval c₂} h⇓ c₁⇓sⁱ)
+... | c₂⇓s' 
+ with (ceval⇓=>sc⊆s' c₁ s sⁱ c₁⇓sⁱ x)
+... | n 
+ with (ceval⇓=>sc⊆s' c₂ sⁱ s' c₂⇓s' x)
+... | n'
+ with (dom s x) | (cvars c₁ x) | (cvars c₂ x)
+... | false | false | true rewrite (∨-zeroʳ (dom sⁱ x)) = n' refl 
+... | false | true | false rewrite (∨-zeroˡ (false)) = n' ? 
+... | false | true | true = {! !}
+... | true | n2 | n3 = {! !}
+ceval⇓=>sc⊆s' (while b c) s s' h⇓ x x-in-s₁ rewrite (cvars-while {b} {c}) 
+ rewrite (∨-identityʳ (dom s x)) = ceval⇓=>⊆ (while b c) s s' h⇓ x x-in-s₁ 
