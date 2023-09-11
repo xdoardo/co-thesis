@@ -5,6 +5,7 @@
 module Codata.Sized.Partial.Relation.Binary.Convergence where
 
 open import Size
+open import Data.Nat
 open import Data.Maybe
 open import Data.Product
 open import Codata.Sized.Thunk
@@ -80,3 +81,7 @@ module _ {ℓ} {A : Set ℓ} where
  ↯-bind {.(later xs)} {f} (laterₗ {xs} x↯) 
   with (force xs) in eq-force-x
  ... | n rewrite (sym eq-force-x) = laterₗ (↯-bind x↯)
+
+ ⇓length : ∀ {x} {v} (h⇓ : x ⇓ v) -> ℕ 
+ ⇓length (nowj x) = zero
+ ⇓length (laterₗ h⇓) = suc (⇓length h⇓)
