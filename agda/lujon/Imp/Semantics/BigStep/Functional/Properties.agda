@@ -152,8 +152,8 @@ ceval⇓=>sc⊆s' (seq c₁ c₂) s s' h⇓ x x-in-s₁
 ... | n'
  with (dom s x) | (cvars c₁ x) | (cvars c₂ x)
 ... | false | false | true rewrite (∨-zeroʳ (dom sⁱ x)) = n' refl 
-... | false | true | false rewrite (∨-zeroˡ (false)) = n' ? 
-... | false | true | true = {! !}
-... | true | n2 | n3 = {! !}
+... | false | true | false rewrite (∨-zeroˡ (false)) rewrite (∨-identityʳ (dom sⁱ x)) = n' (n refl)
+... | false | true | true rewrite (∨-zeroˡ (false)) rewrite (∨-zeroʳ (dom sⁱ x)) = n' refl
+... | true | n2 | n3 rewrite (∨-zeroˡ (true)) rewrite (n refl) rewrite (∨-identityʳ (dom sⁱ x)) = n' refl
 ceval⇓=>sc⊆s' (while b c) s s' h⇓ x x-in-s₁ rewrite (cvars-while {b} {c}) 
  rewrite (∨-identityʳ (dom s x)) = ceval⇓=>⊆ (while b c) s s' h⇓ x x-in-s₁ 
