@@ -1,3 +1,4 @@
+{-# OPTIONS --allow-unsolved-metas #-}
 ------------------------------------------------------------------------
 -- Convergence relations for partial types 
 ------------------------------------------------------------------------
@@ -44,6 +45,10 @@ module _ {ℓ} {A : Set ℓ} where
   ... | laterₗ h⇓'
    with (∞bindxf⇓=>x⇓ {x₁} {f} h⇓')
   ... | s' , eq-x₁ = s' , laterₗ eq-x₁
+
+ -- TODO
+ x⇓-f⇓=>bindxf⇓ : ∀ {x} {f} {v v'} (x⇓ : x ⇓ v) (fv⇓ : f v ⇓ v') -> (bind x f) ⇓ v'
+ x⇓-f⇓=>bindxf⇓ = ?
 
  bindxf⇓=>x⇓ : ∀ {x} {f} {v} (h⇓ : (bind x f) ⇓ v) -> x ⇓
  bindxf⇓=>x⇓ {now (just x)} {f} h⇓ = x , nowj refl 

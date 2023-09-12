@@ -46,8 +46,80 @@ module _ where
  open import Codata.Sized.Partial.Effectful renaming (bind to bindᵖ)
  open ≡-Reasoning 
 
+
+
+ mutual
+  cpfold-sound : ∀ (c : Command) (s : Store) -> ∞ ⊢ (ceval c s) ≈ (ceval (cpfold c) s)
+  cpfold-sound skip s rewrite (cpfold-skip) = nowj refl 
+  cpfold-sound (assign id a) s = ≡=>≈ (cpfold-assign a id s)
+  cpfold-sound (ifelse b cᵗ cᶠ) s = cpfold-if b cᵗ cᶠ s
+  cpfold-sound (seq c₁ c₂) s = cpfold-seq c₁ c₂ s
+  cpfold-sound (while b c) s = cpfold-while b c s 
+
+  private 
+   cpfold-skip : (cpfold skip) ≡ skip
+   cpfold-skip = refl
  
- mutual 
-  -- Folding preserves semantics.
-  cpfold-sound : ∀ c s -> (∞ ⊢ ceval c s ≈ ceval (cpfold c) s)
-  cpfold-sound = ? 
+   cpfold-assign : ∀ (a : AExp) (id : Ident) (s : Store) 
+    -> (ceval (assign id a) s) ≡ (ceval (cpfold (assign id a)) s)
+   cpfold-assign a id s 
+    with (apfold-sound a s)
+   ... | asound 
+    with (aeval a s) in eq-av
+   ... | nothing
+    rewrite eq-av
+    rewrite (sym asound)
+    with (apfold a) in eq-ap
+   ... | var id₁ rewrite eq-ap rewrite eq-av rewrite eq-av = refl
+   ... | plus n n₁ rewrite eq-ap rewrite eq-av rewrite eq-av = refl
+   cpfold-assign a id s | asound | just x 
+    rewrite eq-av 
+    rewrite (sym asound)
+    with (apfold a) in eq-ap
+   ... | var id₁ rewrite eq-ap rewrite eq-av rewrite eq-av = refl
+   cpfold-assign a id s | asound | just x | plus n n₁ 
+    rewrite eq-ap rewrite eq-av rewrite eq-av = refl
+   cpfold-assign a id s | asound | just x | const n
+    rewrite eq-ap rewrite eq-av rewrite eq-av 
+    with asound 
+   ... | refl = refl 
+
+   cpfold-if : ∀ (b : BExp) (cᵗ cᶠ : Command) (s : Store) 
+    -> ∞ ⊢ (ceval (ifelse b cᵗ cᶠ) s) ≈ (ceval (cpfold (ifelse b cᵗ cᶠ)) s)
+   cpfold-if b cᵗ cᶠ s
+    with (bpfold-sound b s)
+   ... | bsound   
+    with (beval b s) in eq-b
+   ... | nothing 
+    rewrite eq-b 
+    rewrite (sym bsound) 
+    with (bpfold b) in eq-bp
+   ... | le a₁ a₂ rewrite eq-bp rewrite eq-b rewrite eq-b = nown
+   ... | not n rewrite eq-bp rewrite eq-b rewrite eq-b = nown
+   ... | and n n₁ rewrite eq-bp rewrite eq-b rewrite eq-b = nown
+   cpfold-if b cᵗ cᶠ s | bsound | just false rewrite eq-b 
+    rewrite eq-b 
+    rewrite (sym bsound) 
+    with (bpfold b) in eq-bp
+   ... | const false rewrite eq-bp rewrite eq-b rewrite eq-b = cpfold-sound cᶠ s 
+   ... | le a₁ a₂ rewrite eq-bp rewrite eq-b rewrite eq-b = cpfold-sound cᶠ s 
+   ... | not n  rewrite eq-bp rewrite eq-b rewrite eq-b = cpfold-sound cᶠ s 
+   ... | and n n₁ rewrite eq-bp rewrite eq-b rewrite eq-b = cpfold-sound cᶠ s 
+   cpfold-if b cᵗ cᶠ s | bsound | just true rewrite eq-b
+    rewrite eq-b 
+    rewrite (sym bsound) 
+    with (bpfold b) in eq-bp
+   ... | const true rewrite eq-bp rewrite eq-b rewrite eq-b = cpfold-sound cᵗ s 
+   ... | le a₁ a₂ rewrite eq-bp rewrite eq-b rewrite eq-b = cpfold-sound cᵗ s 
+   ... | not n  rewrite eq-bp rewrite eq-b rewrite eq-b = cpfold-sound cᵗ s 
+   ... | and n n₁ rewrite eq-bp rewrite eq-b rewrite eq-b = cpfold-sound cᵗ s 
+
+   cpfold-seq : ∀ (c₁ c₂ : Command) (s : Store) 
+    -> ∞ ⊢ (ceval (seq c₁ c₂) s) ≈ (ceval (cpfold (seq c₁ c₂)) s)
+   cpfold-seq c₁ c₂ s 
+    with (cpfold-sound c₁ s)
+   ... | n = ?
+
+   cpfold-while : ∀ (b : BExp) (c : Command) (s : Store) 
+    -> ∞ ⊢ (ceval (while b c) s) ≈ (ceval (cpfold (while b c)) s)
+   cpfold-while b c s = {! !}
