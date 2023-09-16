@@ -16,6 +16,7 @@ open import Imp.Analysis.PureFolding.Arith
 open import Data.Bool renaming (not to lnot)
 open import Data.Integer.Properties as ℤ-Properties
 open import Data.Nat using () renaming (suc to ℕ-suc)
+open import Codata.Sized.Partial.Bisimilarity.Properties
 open import Codata.Sized.Partial.Relation.Binary.Convergence
 open import Codata.Sized.Partial.Bisimilarity.Relation.Binary.Equivalence renaming (refl to prefl ; sym to psym)
 ---
@@ -45,8 +46,6 @@ module _ where
  open import Imp.Semantics.BigStep.Functional.Properties
  open import Codata.Sized.Partial.Effectful renaming (bind to bindᵖ)
  open ≡-Reasoning 
-
-
 
  mutual
   cpfold-sound : ∀ (c : Command) (s : Store) -> ∞ ⊢ (ceval c s) ≈ (ceval (cpfold c) s)
@@ -116,10 +115,8 @@ module _ where
 
    cpfold-seq : ∀ (c₁ c₂ : Command) (s : Store) 
     -> ∞ ⊢ (ceval (seq c₁ c₂) s) ≈ (ceval (cpfold (seq c₁ c₂)) s)
-   cpfold-seq c₁ c₂ s 
-    with (cpfold-sound c₁ s)
-   ... | n = ?
-
+   cpfold-seq c₁ c₂ s = ? 
+   
    cpfold-while : ∀ (b : BExp) (c : Command) (s : Store) 
     -> ∞ ⊢ (ceval (while b c) s) ≈ (ceval (cpfold (while b c)) s)
-   cpfold-while b c s = {! !}
+   cpfold-while b c s = ?

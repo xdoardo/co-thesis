@@ -19,14 +19,6 @@ private
 
 beval : ∀ (b : BExp) (s : Store) -> Maybe Bool
 beval (const c) s = just c 
-beval (le a₁ a₂) s = do
-  v₁ <- aeval a₁ s
-  v₂ <- aeval a₂ s
-  just (v₁ ≤ᵇ v₂)
-beval (not b) s = do 
-  b <- beval b s
-  just (bnot b)
-beval (and b₁ b₂) s = do
-  b₁ <- beval b₁ s
-  b₂ <- beval b₂ s
-  just (b₁ ∧ b₂)
+beval (le a₁ a₂) s = aeval a₁ s >>= λ v₁ -> aeval a₂ s >>= λ v₂ -> just (v₁ ≤ᵇ v₂)
+beval (not b) s = beval b s >>= λ b -> just (bnot b) 
+beval (and b₁ b₂) s = beval b₁ s >>= λ b₁ -> beval b₂ s >>= λ b₂ -> just (b₁ ∧ b₂)

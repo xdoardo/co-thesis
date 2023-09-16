@@ -1,0 +1,37 @@
+* Formalizing operational semantics in a proof assistant 
+
+  1. [ ] Introduction 
+    - [ ] What is this thesis about
+    - [ ] What technologies I used 
+
+  2. [ ] Semantics 
+    - [ ] Introduction 
+    - [ ] Kinds of semantics 
+    - [ ] Proofs 
+
+  3. [ ] Induction and coinduction 
+    - [ ] Introduction 
+    - [ ] Infinite datatypes
+    - [ ] Infinite proofs 
+    - [ ] Relation with fixed points
+
+  4. [ ] Agda
+    - [ ] Dependent types
+    - [ ] Termination and productivity
+    - [ ] Sized types
+
+  5. [ ] The partiality monad
+    - [ ] Monads
+    - [ ] ~Maybe~, ~Delay~ and ~Thunk~
+  
+  6. [-] The *Imp* language 
+    - [X] Syntax
+       Goes in the introduction. Cite the syntactic 
+       elements, show the EBNF grammar.
+    - [ ] Semantics
+      Express using inference rules at this stage. 
+    - [ ] Analysis
+      + [ ] Definite initialization analysis
+	 Introduce the analysis, the Dia relation, variables, indicator
+	 functions and how they relate to stores.
+      + [ ] Pure constant folding

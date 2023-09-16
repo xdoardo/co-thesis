@@ -1,0 +1,82 @@
+---
+floyd-meaning:
+  type: article
+  parent:
+    - type: periodical
+      title: Mathematical aspects of computer science
+      volume: 19
+  author: "Floyd, R. W."
+  title: Assigning meanings to programs
+  date: 1967
+logical-foundations:
+  type: misc
+  title: Logical Foundations
+  author:
+    - "Pierce,  Benjamin C."
+    - "de Amorim, Arthur Azevedo"
+    - "Casinghino, Chris"
+    - "Gaboardi, Marco"
+    - "Greenberg, Michael"
+    - "Hriţcu, Cătălin"
+    - "Sjöberg, Vilhelm"
+    - "Yorgey , Brent"
+  date: 2023
+concrete-semantics:
+  type: book
+  title:
+    value: "Concrete Semantics: With Isabelle/HOL"
+    sentence-case: "Concrete semantics: with isabelle/hol"
+  date: 2014
+  isbn: "3319105418"
+  publisher: "Springer Publishing Company, Incorporated"
+  author:
+    - "Nipkow, Tobias"
+    - "Klein, Gerwin"
+moggi-monads:
+  type: article
+  doi: 10.1109/LICS.1989.39155
+  author: "Moggi, E."
+  date: 1989
+  parent:
+    - type: proceedings
+      title:
+        value: "[1989] Proceedings. Fourth Annual Symposium on Logic in Computer\n\t             Science"
+        sentence-case: "[1989] proceedings. fourth annual symposium on logic in computer\n\t             science"
+      issue: ""
+      volume: 0
+  page-range: 14-23
+  title: Computational lambda-calculus and monads
+monads-burritos:
+  type: misc
+  author: "Dominus, Mark"
+  date: 2009
+  note: "\\url{https://blog.plover.com/prog/burritos.html}"
+  title: Monads are like burritos
+capretta-delay:
+  type: article
+  title: General Recursion via Coinductive Types
+  url: "https://doi.org/10.2168/lmcs-1(2:1)2005"
+  parent:
+    - type: periodical
+      title: Logical Methods in Computer Science
+      publisher: Centre pour la Communication Scientifique Directe (CCSD)
+  date: 2005-07
+  doi: "10.2168/lmcs-1(2:1)2005"
+  author: "Capretta, Venanzio"
+abel-nbe:
+  type: article
+  title:
+    value: "Normalization by Evaluation in the Delay Monad: A Case Study for\n\t         Coinduction via Copatterns and Sized Types"
+    sentence-case: "Normalization by evaluation in the delay monad: a case study for\n\t         coinduction via copatterns and sized types"
+  doi: 10.4204/eptcs.153.4
+  page-range: 51-67
+  author:
+    - "Abel, Andreas"
+    - "Chapman, James"
+  parent:
+    - type: periodical
+      title: Electronic Proceedings in Theoretical Computer Science
+      volume: 153
+      publisher: Open Publishing Association
+  date: 2014-06
+  url: "https://doi.org/10.4204%2Feptcs.153.4"

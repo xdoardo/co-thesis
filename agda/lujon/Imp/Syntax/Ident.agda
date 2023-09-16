@@ -1,4 +1,3 @@
-{-# OPTIONS --allow-unsolved-metas #-} 
 ------------------------------------------------------------------------
 -- Identifiers and stores of Imp
 ------------------------------------------------------------------------
@@ -85,4 +84,4 @@ module _ where
  x ⊑ᵘ x₁ = ∀ {id : Ident} -> (∃ λ z -> x id ≡ just z) -> (∃ λ z -> x₁ id ≡ just z)
 
  ⊑ᵘ-trans : ∀ {s₁ s₂ s₃ : Store} (h₁ : s₁ ⊑ᵘ s₂) (h₂ : s₂ ⊑ᵘ s₃) -> s₁ ⊑ᵘ s₃
- ⊑ᵘ-trans h₁ h₂ =  ? 
+ ⊑ᵘ-trans h₁ h₂ id∈σ = h₂ (h₁ id∈σ) 
