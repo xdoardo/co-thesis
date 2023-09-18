@@ -10,7 +10,7 @@ open import Imp.Syntax.Ident
 open import Data.String using (_==_ ; String)
 open import Relation.Binary.PropositionalEquality
 open import Axiom.Extensionality.Propositional
-open import Data.IndicatorFunction (String) (_==_) renaming (IndicatorFunction to VarsSet) public
+open import Data.CharacteristicFunction (String) (_==_) renaming (CharacteristicFunction to VarsSet) public
 ---
 
 avars : (a : AExp) -> VarsSet
