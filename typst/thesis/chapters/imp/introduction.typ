@@ -52,14 +52,14 @@ for the other syntactic constructs.
     auto-vlines: false,
     auto-hlines: false,
     [```hs
-                Ident : Set
-                Ident = String
-              ```],
+                      Ident : Set
+                      Ident = String
+                    ```],
     [
       ```hs
-          Store : Set
-          Store = Ident -> Maybe ℤ
-          ```
+                Store : Set
+                Store = Ident -> Maybe ℤ
+                ```
     ],
   ),
   caption: "Datatypes for identifiers and stores",
@@ -75,89 +75,92 @@ earlier in that they are intended as functions from `Ident` to `Maybe ℤ`.
   auto-vlines: false,
   auto-hlines: false,
   [```hs
-            data AExp : Set where
-             const : (n : ℤ) -> AExp
-             var   : (id : Ident) -> AExp
-             plus  : (a₁ a₂ : AExp) -> AExp
-            ```],
+                data AExp : Set where
+                 const : (n : ℤ) -> AExp
+                 var   : (id : Ident) -> AExp
+                 plus  : (a₁ a₂ : AExp) -> AExp
+                ```],
   [```hs
-            data BExp : Set where
-             const : (b : Bool) -> BExp
-             le    : (a₁ a₂ : AExp) -> BExp
-             not   : (b : BExp) -> BExp
-             and   : (b₁ b₂ : BExp) -> BExp
-            ```],
+                data BExp : Set where
+                 const : (b : Bool) -> BExp
+                 le    : (a₁ a₂ : AExp) -> BExp
+                 not   : (b : BExp) -> BExp
+                 and   : (b₁ b₂ : BExp) -> BExp
+                ```],
   colspanx(2)[```hs
-            data Command : Set where
-             skip   : Command
-             assign : (id : Ident) -> (a : AExp) -> Command
-             seq    : (c₁ c₂ : Command) -> Command
-             ifelse : (b : BExp) -> (c₁ c₂ : Command) -> Command
-             while  : (b : BExp) -> (c : Command) -> Command
-            ```],
-), 
-  caption: "Datatype for expressions of Imp", 
-  supplement: "Listing"
-)<code-imp-expressions>
+                data Command : Set where
+                 skip   : Command
+                 assign : (id : Ident) -> (a : AExp) -> Command
+                 seq    : (c₁ c₂ : Command) -> Command
+                 ifelse : (b : BExp) -> (c₁ c₂ : Command) -> Command
+                 while  : (b : BExp) -> (c : Command) -> Command
+                ```],
+), caption: "Datatype for expressions of Imp", supplement: "Listing")<code-imp-expressions>
 
 === Properties of stores<subsection-imp-introduction-store-properties>
-The first properties we show regard stores. We equip stores with the trivial operations 
-of adding an identifier, merging two stores and joining two stores, as shown in @code-imp-stores.
+The first properties we show regard stores. We equip stores with the trivial
+operations of adding an identifier, merging two stores and joining two stores,
+as shown in @code-imp-stores.
 
-#figure(
-```hs 
- empty : Store 
- empty = λ _ -> nothing 
- update : (id₁ : Ident) -> (v : ℤ) -> (s : Store) -> Store 
- update id₁ v s id₂ 
-  with id₁ == id₂ 
- ... | true = (just v) 
+#figure(```hs
+ empty : Store
+ empty = λ _ -> nothing
+ update : (id₁ : Ident) -> (v : ℤ) -> (s : Store) -> Store
+ update id₁ v s id₂
+  with id₁ == id₂
+ ... | true = (just v)
  ... | false = (s id₂)
- join : (s₁ s₂ : Store) -> Store 
- join s₁ s₂ id 
-  with (s₁ id) 
- ... | just v = just v 
- ... | nothing = s₂ id 
- merge : (s₁ s₂ : Store) -> Store 
- merge s₁ s₂ = 
-  λ id -> (s₁ id) >>= 
-   λ v₁ -> (s₂ id) >>= 
+ join : (s₁ s₂ : Store) -> Store
+ join s₁ s₂ id
+  with (s₁ id)
+ ... | just v = just v
+ ... | nothing = s₂ id
+ merge : (s₁ s₂ : Store) -> Store
+ merge s₁ s₂ =
+  λ id -> (s₁ id) >>=
+   λ v₁ -> (s₂ id) >>=
     λ v₂ -> if (⌊ v₁ ≟ v₂ ⌋) then just v₁ else nothing
-```,
-caption: "Operations on stores")<code-imp-stores>
+```, caption: "Operations on stores")<code-imp-stores>
 
 // @TODO: Change "inclusion"!
 A trivial property of stores is that of unvalued inclusion, that is, a property
-stating that if an identifier has a value in a store $sigma_1$, then it also
-has a value (not necessarily the same) in another store $sigma_2$:
+stating that if an identifier has a value in a store $sigma_1$, then it also has
+a value (not necessarily the same) in another store $sigma_2$:
 
-#property(name: "Unvalued store inclusion")[
-Let $sigma_1$ and $sigma_2$ be two stores. We define the unvalued inclusion between them as
+#property(
+  name: "Unvalued store inclusion",
+)[
+    Let $sigma_1$ and $sigma_2$ be two stores. We define the unvalued inclusion
+    between them as
 
-$ forall id,  paren.l space exists space z, space sigma_1 id equiv "just" z space paren.r  -> paren.l space exists space z, space sigma_2 id equiv "just" z space paren.r $
+    $ forall id, paren.l space exists space z, space sigma_1 id equiv "just" z space paren.r -> paren.l space exists space z, space sigma_2 id equiv "just" z space paren.r $
 
-and we denote it with $sigma_1 space subset.eq.sq^u space sigma_2$.
-In Agda: 
-```hs
-_⊑ᵘ_ : Store -> Store -> Set 
-σ₁ ⊑ᵘ σ₂ = ∀ {id : Ident} -> (∃ λ z -> σ₁ id ≡ just z) -> (∃ λ z -> σ₂ id ≡ just z) 
-```
+    and we denote it with $sigma_1 space subset.sq^u space sigma_2$. 
+    In Agda: 
+// typstfmt::off
+    ```hs 
+    ```
+// typstfmt::on
 <imp-property-store-unvalued-inclusion>
-]
+  ]
 
-We equip  #thmref(<imp-property-store-unvalued-inclusion>)[Property] with a notion of transitivity. 
+We equip #thmref(<imp-property-store-unvalued-inclusion>)[Property] with a
+notion of transitivity.
 
-#theorem(name: "Transitivity of unvalued store inclusion")[
- Let $sigma_1$, $sigma_2$ and $sigma_3$ be three stores. Then 
+#theorem(
+  name: "Transitivity of unvalued store inclusion",
+)[
+    Let $sigma_1$, $sigma_2$ and $sigma_3$ be three stores. Then
 
- $ sigma_1 subset.eq.sq^u sigma_2 and sigma_2 subset.eq.sq^u sigma_3 -> sigma_1 subset.eq.sq^u sigma_3 $
-  
- In Agda: 
-```hs
-⊑ᵘ-trans : ∀ {σ₁ σ₂ σ₃ : Store} (h₁ : σ₁ ⊑ᵘ σ₂) (h₂ : σ₂ ⊑ᵘ σ₃) -> σ₁ ⊑ᵘ σ₃
-⊑ᵘ-trans h₁ h₂ id∈σ₁ = h₂ (h₁ id∈σ₁) 
-```
-]
+    $ sigma_1 subset.sq^u sigma_2 and sigma_2 subset.sq^u sigma_3 -> sigma_1 subset.sq^u sigma_3 $
+
+    In Agda: 
+// typstfmt::off
+    ```hs 
+    ```
+// typstfmt::on
+<imp-thm-store-inclusion-transitivity>
+  ]
 
 The operations we define on stores are multiple: adding an identifier paired
 with a value to a store, removing an identifier from a store, joining stores and
@@ -178,29 +181,38 @@ merging stores. We now define notations:
   store that contains an $id$ if and only if $sigma_1 id equiv "just" v$ and $sigma_2 id equiv "just" v$ as $sigma_1 sect sigma_2$.
 
 === Properties of expressions<subsection-imp-introduction-expressions-properties>
-The properties of expressions we show here regard the syntactic relation
-between elements. The property we define is that of _subterm relation_. In
-Agda, as will be shown in the definitions, these properties are implemented as
-datatypes. Properties #thmref(<imp-property-command-subterm>),
+The properties of expressions we show here regard the syntactic relation between
+elements. The property we define is that of _subterm relation_. In Agda, as will
+be shown in the definitions, these properties are implemented as datatypes.
+Properties #thmref(<imp-property-command-subterm>),
 #thmref(<imp-property-bool-subterm>) and #thmref(<imp-property-arith-subterm>)
 will be used later to relate semantic aspects of subterms with that of the
 containing term itself or vice versa.
 
-#property(name: "Arithmetic subterms")[
-  Let $a_1$ and $a_2$ be arithmetic expressions.
+#property(
+  name: "Arithmetic subterms",
+)[
+    Let $a_1$ and $a_2$ be arithmetic expressions.
 
-  Then
-  $ a_1 space subset.eq.sq^a "plus" space a_1 space a_2 $
-  $ a_2 space subset.eq.sq^a "plus" space a_1 space a_2 $
+    Then
 
- In Agda: 
- ```hs
-data _⊏ᵃ_ : AExp -> AExp -> Set where 
-  plus-l : (a a₁ : AExp) -> a ⊏ᵃ (plus a a₁)
-  plus-r : (a a₁ : AExp) -> a₁ ⊏ᵃ (plus a a₁)
- ```
- <imp-property-arith-subterm>
-]
+    #align(center, tablex(
+      columns: 2,
+      align: center + horizon,
+      auto-vlines: false,
+      auto-hlines: false,
+      inset: 10pt,
+      [$a_1 space subset.sq^a "plus" space a_1 space a_2$],
+      [$a_2 space subset.sq^a "plus" space a_1 space a_2 $],
+    ))
+
+    In Agda: 
+// typstfmt::off
+    ```hs 
+    ```
+// typstfmt::on
+    <imp-property-arith-subterm>
+  ]
 
 #property(
   name: "Boolean subterms",
@@ -209,23 +221,33 @@ data _⊏ᵃ_ : AExp -> AExp -> Set where
     expressions.
 
     Then
-    $ a_1 space subset.eq.sq^b "le" space a_1 space a_2 $
-    $ a_2 space subset.eq.sq^b "le" space a_1 space a_2 $
-    $ b_1 space subset.eq.sq^b "and" space b_1 space b_2 $
-    $ b_2 space subset.eq.sq^b "and" space b_1 space b_2 $
-    $ b_1 space subset.eq.sq^b "not" space b_1 $
+    #align(center, tablex(
+      columns: 2,
+      align: center + horizon,
+      auto-vlines: false,
+      auto-hlines: false,
+      inset: 10pt,
+      [$a_1 space subset.sq^b "le" space a_1 space a_2$],
+      [$a_2 space subset.sq^b "le" space a_1 space a_2$],
+      [$b_1 space subset.sq^b "and" space b_1 space b_2$],
+      [$b_2 space subset.sq^b "and" space b_1 space b_2$],
+      colspanx(2)[$b_1 space subset.sq^b "not" space b_1$],
+    ))
 
-In Agda: 
-```hs
-data _⊑ᵇ_  : {A : Set} -> A -> BExp -> Set where
- not : (b : BExp) -> b ⊑ᵇ (not b)
- and-l : (b₁ b₂ : BExp) -> b₁ ⊑ᵇ (and b₁ b₂)
- and-r : (b₁ b₂ : BExp) -> b₂ ⊑ᵇ (and b₁ b₂)
- le-l : (a₁ a₂ : AExp) -> a₁ ⊑ᵇ (le a₁ a₂)
- le-r : (a₁ a₂ : AExp) -> a₂ ⊑ᵇ (le a₁ a₂)
-```
- <imp-property-bool-subterm>
-]
+// typstfmt::off
+    In Agda: 
+     ```hs data 
+      _⊑ᵇ_ : {A : Set} -> A -> BExp -> Set where 
+        not : (b : BExp) -> b ⊑ᵇ (not b) 
+        and-l : (b₁ b₂ : BExp) -> b₁ ⊑ᵇ (and b₁ b₂) 
+        and-r : (b₁ b₂ : BExp) -> b₂ ⊑ᵇ (and b₁ b₂) 
+        le-l : (a₁ a₂ : AExp) -> a₁ ⊑ᵇ (le a₁ a₂) 
+        le-r : (a₁ a₂ : AExp) -> a₂ ⊑ᵇ (le a₁ a₂) 
+    ``` 
+// typstfmt::on
+    In Agda: 
+<imp-property-bool-subterm>
+  ]
 
 #property(
   name: "Command subterms",
@@ -234,28 +256,27 @@ data _⊑ᵇ_  : {A : Set} -> A -> BExp -> Set where
     expression and $c_1$ and $c_2$ be commands.
 
     Then
-    $ a space subset.eq.sq^c "assign" space id space a $
-    $ c_1 space subset.eq.sq^c "seq" space c_1 space c_2 $
-    $ c_2 space subset.eq.sq^c "seq" space c_1 space c_2 $
-    $ b space subset.eq.sq^c "if" space b space space c_1 space c_2 $
-    $ c_1 space subset.eq.sq^c "if" space b space c_1 space c_2 $
-    $ c_2 space subset.eq.sq^c "if" space b space c_1 space c_2 $
-    $ b space subset.eq.sq^c "while" space b space c_1 $
-    $ c_1 space subset.eq.sq^c "while" space b space c_1 $
+    #align(center, tablex(
+      columns: 4,
+      align: center + horizon,
+      auto-vlines: false,
+      auto-hlines: false,
+      inset: 10pt,
+      [$a space subset.sq^c "assign" space id space a$],
+      [$c_1 space subset.sq^c "seq" space c_1 space c_2$],
+      [$c_2 space subset.sq^c "seq" space c_1 space c_2$],
+      [$b space subset.sq^c "if" space b space space c_1 space c_2$],
+      [$c_1 space subset.sq^c "if" space b space c_1 space c_2$],
+      [$c_2 space subset.sq^c "if" space b space c_1 space c_2$],
+      [$b space subset.sq^c "while" space b space c_1$],
+      [$c_1 space subset.sq^c "while" space b space c_1$],
+    ))
+    In Agda: 
 
- In Agda:
- ```hs
- data _⊑ᶜ_ : {A : Set} -> A -> Command -> Set where
-  assign : (id : Ident) (a : AExp) -> a ⊑ᶜ (assign id a)
-  seq-l : (c₁ c₂ : Command) -> c₁ ⊑ᶜ (seq c₁ c₂)
-  seq-r : (c₁ c₂ : Command) -> c₂ ⊑ᶜ (seq c₁ c₂)
-  ifelse-b : (b : BExp) -> (c₁ c₂ : Command) -> b ⊑ᶜ (ifelse b c₁ c₂)
-  ifelse-l : (b : BExp) -> (c₁ c₂ : Command) -> c₁ ⊑ᶜ (ifelse b c₁ c₂)
-  ifelse-r : (b : BExp) -> (c₁ c₂ : Command) -> c₂ ⊑ᶜ (ifelse b c₁ c₂)
-  while-b : (b : BExp) -> (c : Command) -> b ⊑ᶜ (while b c)
-  while-c : (b : BExp) -> (c : Command) -> c ⊑ᶜ (while b c)
-
- ```
- <imp-property-command-subterm>
-]
+// typstfmt::off
+    ```hs 
+    ```
+// typstfmt::on
+    <imp-property-command-subterm>
+  ]
 

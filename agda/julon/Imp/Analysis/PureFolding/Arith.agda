@@ -23,8 +23,8 @@ apfold (plus a₁ a₂) with (apfold a₁) | (apfold a₂)
 -- Properties of pure constant folding 
 ------------------------------------------------------------------------
 module _ where
- open import Relation.Binary.PropositionalEquality
  open import Imp.Semantics.BigStep.Functional
+ open import Relation.Binary.PropositionalEquality
  open ≡-Reasoning 
 
  -- Pure constant folding preserves semantics.

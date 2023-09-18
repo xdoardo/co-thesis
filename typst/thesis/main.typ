@@ -3,7 +3,8 @@
 #import "./includes.typ": *
 
 #show: thesis.with(
-  title: "Use of coinduction in the analysis and optimization\n of imperative languages",
+  title: "Program Transformations in the Delay Monad",
+  subtitle: "A Case Study for Coinduction via Copatterns and Sized Types",
   author: "Edoardo Marangoni",
   figure: align(bottom, image("./figures/Minerva.png", width: 28%)),
   university: "University of Milan",
@@ -23,13 +24,12 @@
 
     #v(1fr)
   #smallcaps("no generative artificial intelligence was used in
-  this work.")
-
-  ]
+  this work.") ],
 )
 
 
 #include "./chapters/index.typ"
+#appendix(include "./appendices/index.typ")
 
+#show bibliography: set text(13pt)
 #bibliography("./db.yaml", title: [Bibliography], style: "mla")
-#show bibliography: set text(8pt)

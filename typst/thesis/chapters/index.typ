@@ -1,4 +1,4 @@
-#include "./semantics/index.typ"
+#include "./introduction.typ"
 #include "./coinduction/index.typ"
 #include "./agda/index.typ"
 #include "./partiality/index.typ"
