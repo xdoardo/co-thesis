@@ -18,7 +18,7 @@ first a function to compute the set of variables used in arithmetic and boolean
 expressions. The objective is to come up with a _set_ of identifiers that appear
 in the expression: we chose to represent sets in Agda using indicator functions,
 which we trivially define as parametric functions from a parametric set to the
-set of booleans, that is ```hs IndicatorFunction = A -> Bool```; later, we will
+set of booleans, that is ```hs CharacteristicFunction = A -> Bool```; later, we will
 instantiate this type for identifiers, giving the resulting type the name of
 ```hs VarsSet```. Foremost, we give a (parametric) notion of members equivalence
 (that is, a function ```hs _==_ : A -> A -> Bool```); then, we equip indicator
@@ -26,24 +26,24 @@ functions of the usual operations on sets: insertion, union, and intersection
 and define the usual property of inclusion.
 
 #figure(```hs
-∅ : IndicatorFunction
+∅ : CharacteristicFunction
 ∅ = λ _ -> false
 
-_↦_ : (v : A) -> (s : IndicatorFunction) -> IndicatorFunction
+_↦_ : (v : A) -> (s : CharacteristicFunction) -> CharacteristicFunction
 (v ↦  s) x = (v == x) ∨ (s x)
 
-_∪_ : (s₁ s₂ : IndicatorFunction) -> IndicatorFunction
+_∪_ : (s₁ s₂ : CharacteristicFunction) -> CharacteristicFunction
 (s₁ ∪ s₂) x = (s₁ x) ∨ (s₂ x)
 
-_∩_ : (s₁ s₂ : IndicatorFunction) -> IndicatorFunction
+_∩_ : (s₁ s₂ : CharacteristicFunction) -> CharacteristicFunction
 (s₁ ∩ s₂) x = (s₁ x) ∧ (s₂ x)
 
-_⊆_ : (s₁ s₂ : IndicatorFunction) -> Set a
+_⊆_ : (s₁ s₂ : CharacteristicFunction) -> Set a
 s₁ ⊆ s₂ = ∀ x -> (x-in-s₁ : s₁ x ≡ true) -> s₂ x ≡ true
 ```, caption: "Implementation of indicator functions in Agda")<code-indicator-function>
 
 //typstfmt::off
-Important properties of ```hs IndicatorFunction```s (and thus of ```hs VarsSet```s) follows.
+Important properties of ```hs CharacteristicFunction```s (and thus of ```hs VarsSet```s) follows.
 //typstfmt::on
 #theorem(
   name: "Equivalence of indicator functions",
@@ -53,7 +53,7 @@ Important properties of ```hs IndicatorFunction```s (and thus of ```hs VarsSet``
 
 //typstfmt::off
 ```hs
-if-ext : ∀ {s₁ s₂ : IndicatorFunction} -> (a-ex : ∀ x -> s₁ x ≡ s₂ x) -> s₁ ≡ s₂
+if-ext : ∀ {s₁ s₂ : CharacteristicFunction} -> (a-ex : ∀ x -> s₁ x ≡ s₂ x) -> s₁ ≡ s₂
 ```
 //typstfmt::on
 <thm-if-equiv>
@@ -61,7 +61,7 @@ if-ext : ∀ {s₁ s₂ : IndicatorFunction} -> (a-ex : ∀ x -> s₁ x ≡ s₂
 #theorem(name: "Neutral element of union")[
 //typstfmt::off
 ```hs 
-∪-∅ : ∀ {s : IndicatorFunction} -> (s ∪ ∅) ≡ s
+∪-∅ : ∀ {s : CharacteristicFunction} -> (s ∪ ∅) ≡ s
 ```
 //typstfmt::on
 <thm-if-neutral-union>
@@ -70,14 +70,14 @@ if-ext : ∀ {s₁ s₂ : IndicatorFunction} -> (a-ex : ∀ x -> s₁ x ≡ s₂
 #theorem(name: "Update inclusion")[
 //typstfmt::off
 ```hs 
-↦=>⊆ : ∀ {id} {s : IndicatorFunction} -> s ⊆ (id ↦ s)
+↦=>⊆ : ∀ {id} {s : CharacteristicFunction} -> s ⊆ (id ↦ s)
 ```
 //typstfmt::on
 ]
 #theorem(name: "Transitivity of inclusion")[
 //typstfmt::off
 ```hs
-⊆-trans : ∀ {s₁ s₂ s₃ : IndicatorFunction} -> (s₁⊆s₂ : s₁ ⊆ s₂)
+⊆-trans : ∀ {s₁ s₂ s₃ : CharacteristicFunction} -> (s₁⊆s₂ : s₁ ⊆ s₂)
             -> (s₂⊆s₃ : s₂ ⊆ s₃) -> s₁ ⊆ s₃
 ```
 //typstfmt::on
