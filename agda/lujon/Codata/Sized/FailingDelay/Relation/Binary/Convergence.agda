@@ -5,11 +5,12 @@
 module Codata.Sized.FailingDelay.Relation.Binary.Convergence where
 
 open import Size
-open import Function using (case_of_)
+open import Data.Or
 open import Data.Nat
 open import Data.Maybe
 open import Data.Product
 open import Codata.Sized.Thunk
+open import Function using (case_of_)
 open import Codata.Sized.FailingDelay.Effectful
 open import Codata.Sized.Delay.WeakBisimilarity
 open import Codata.Sized.Delay hiding (_⇓ ; bind)
@@ -77,3 +78,6 @@ module _ {ℓ} {A : Set ℓ} where
  bindxf⇓-x⇓=>f⇓ {later x} {f} {v} {v'} (laterₗ h⇓) (laterₗ {xs} hx⇓) | later x₁ 
   rewrite eq-fx
   =  bindxf⇓-x⇓=>f⇓ {later x₁} h⇓ hx⇓
+
+postulate 
+ three-states : ∀ {a} {A : Set a} {x : Delay (Maybe A) ∞} -> XOr (x ⇓) (XOr (x ⇑) (x ↯))
