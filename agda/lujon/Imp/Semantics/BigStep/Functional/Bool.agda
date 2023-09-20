@@ -5,9 +5,9 @@ module Imp.Semantics.BigStep.Functional.Bool where
 
 open import Data.Maybe
 open import Imp.Syntax 
+open import Data.Integer using (_≤ᵇ_ ; ℤ)
 open import Imp.Semantics.BigStep.Functional.Arith
 open import Data.Bool using (Bool ; _∧_ ; _∨_ ) renaming (not to bnot)
-open import Data.Integer using (_≤ᵇ_ ; ℤ)
 ---
 
 private 

@@ -11,7 +11,7 @@ open import Codata.Sized.Thunk
 open import Data.Maybe renaming (_>>=_ to _>>=m_)
 open import Imp.Semantics.BigStep.Functional.Bool
 open import Imp.Semantics.BigStep.Functional.Arith
-open import Codata.Sized.Partial.Effectful renaming (bind to _>>=p_)
+open import Codata.Sized.FailingDelay.Effectful renaming (bind to _>>=p_)
 --
 
 ------------------------------------------------------------------------ 

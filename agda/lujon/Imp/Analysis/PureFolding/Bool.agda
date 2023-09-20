@@ -30,8 +30,8 @@ bpfold (and b₁ b₂) with (bpfold b₁) | (bpfold b₂)
 -- Properties of constant folding 
 ------------------------------------------------------------------------
 module _ where
- open import Relation.Binary.PropositionalEquality
  open import Imp.Semantics.BigStep.Functional 
+ open import Relation.Binary.PropositionalEquality
  open ≡-Reasoning 
 
  -- Folding preserves semantics.

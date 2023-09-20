@@ -16,9 +16,7 @@ open import Imp.Analysis.PureFolding.Arith
 open import Data.Bool renaming (not to lnot)
 open import Data.Integer.Properties as ℤ-Properties
 open import Data.Nat using () renaming (suc to ℕ-suc)
-open import Codata.Sized.Partial.Bisimilarity.Properties
-open import Codata.Sized.Partial.Relation.Binary.Convergence
-open import Codata.Sized.Partial.Bisimilarity.Relation.Binary.Equivalence renaming (refl to prefl ; sym to psym)
+open import Codata.Sized.FailingDelay.Relation.Binary.Convergence
 ---
 
 -- Pure constant folding of boolean expressions
@@ -41,16 +39,17 @@ module _ where
  open import Codata.Sized.Delay
  open import Codata.Sized.Thunk
  open import Imp.Semantics.BigStep.Functional 
- open import Codata.Sized.Partial.Bisimilarity
+ open import Codata.Sized.Delay.WeakBisimilarity
  open import Relation.Binary.PropositionalEquality
  open import Imp.Semantics.BigStep.Functional.Properties
- open import Codata.Sized.Partial.Effectful renaming (bind to bindᵖ)
+ open import Codata.Sized.FailingDelay.Effectful renaming (bind to bindᵖ)
+ open import Codata.Sized.Delay.WeakBisimilarity.Relation.Binary.Equivalence using (≡=>≋)
  open ≡-Reasoning 
 
  mutual
-  cpfold-sound : ∀ (c : Command) (s : Store) -> ∞ ⊢ (ceval c s) ≈ (ceval (cpfold c) s)
-  cpfold-sound skip s rewrite (cpfold-skip) = nowj refl 
-  cpfold-sound (assign id a) s = ≡=>≈ (cpfold-assign a id s)
+  cpfold-sound : ∀ (c : Command) (s : Store) -> ∞ ⊢ (ceval c s) ≋ (ceval (cpfold c) s)
+  cpfold-sound skip s rewrite (cpfold-skip) = now refl 
+  cpfold-sound (assign id a) s = ≡=>≋ (cpfold-assign a id s)
   cpfold-sound (ifelse b cᵗ cᶠ) s = cpfold-if b cᵗ cᶠ s
   cpfold-sound (seq c₁ c₂) s = cpfold-seq c₁ c₂ s
   cpfold-sound (while b c) s = cpfold-while b c s 
@@ -84,7 +83,7 @@ module _ where
    ... | refl = refl 
 
    cpfold-if : ∀ (b : BExp) (cᵗ cᶠ : Command) (s : Store) 
-    -> ∞ ⊢ (ceval (ifelse b cᵗ cᶠ) s) ≈ (ceval (cpfold (ifelse b cᵗ cᶠ)) s)
+    -> ∞ ⊢ (ceval (ifelse b cᵗ cᶠ) s) ≋ (ceval (cpfold (ifelse b cᵗ cᶠ)) s)
    cpfold-if b cᵗ cᶠ s
     with (bpfold-sound b s)
    ... | bsound   
@@ -93,9 +92,9 @@ module _ where
     rewrite eq-b 
     rewrite (sym bsound) 
     with (bpfold b) in eq-bp
-   ... | le a₁ a₂ rewrite eq-bp rewrite eq-b rewrite eq-b = nown
-   ... | not n rewrite eq-bp rewrite eq-b rewrite eq-b = nown
-   ... | and n n₁ rewrite eq-bp rewrite eq-b rewrite eq-b = nown
+   ... | le a₁ a₂ rewrite eq-bp rewrite eq-b rewrite eq-b = now refl
+   ... | not n rewrite eq-bp rewrite eq-b rewrite eq-b = now refl
+   ... | and n n₁ rewrite eq-bp rewrite eq-b rewrite eq-b = now refl
    cpfold-if b cᵗ cᶠ s | bsound | just false rewrite eq-b 
     rewrite eq-b 
     rewrite (sym bsound) 
@@ -114,9 +113,9 @@ module _ where
    ... | and n n₁ rewrite eq-bp rewrite eq-b rewrite eq-b = cpfold-sound cᵗ s 
 
    cpfold-seq : ∀ (c₁ c₂ : Command) (s : Store) 
-    -> ∞ ⊢ (ceval (seq c₁ c₂) s) ≈ (ceval (cpfold (seq c₁ c₂)) s)
+    -> ∞ ⊢ (ceval (seq c₁ c₂) s) ≋ (ceval (cpfold (seq c₁ c₂)) s)
    cpfold-seq c₁ c₂ s = ? 
    
    cpfold-while : ∀ (b : BExp) (c : Command) (s : Store) 
-    -> ∞ ⊢ (ceval (while b c) s) ≈ (ceval (cpfold (while b c)) s)
+    -> ∞ ⊢ (ceval (while b c) s) ≋ (ceval (cpfold (while b c)) s)
    cpfold-while b c s = ?

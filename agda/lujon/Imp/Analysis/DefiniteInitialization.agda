@@ -11,12 +11,11 @@ open import Data.Maybe
 open import Data.Product
 open import Codata.Sized.Thunk 
 open import Data.Bool.Properties
-open import Codata.Sized.Partial
 open import Data.String hiding (_≈_)
 open import Function using (case_of_)
 open import Imp.Semantics.BigStep.Functional
 open import Codata.Sized.Delay hiding (bind ; _⇓)
-open import Codata.Sized.Partial.Relation.Binary.Convergence 
+open import Codata.Sized.FailingDelay.Relation.Binary.Convergence 
 ---
 
 
@@ -38,11 +37,11 @@ module _ where
  open import Data.Empty
  open import Data.Integer
  open import Codata.Sized.Thunk
- open import Codata.Sized.Partial.Effectful 
- open import Codata.Sized.Partial.Bisimilarity
+ open import Codata.Sized.FailingDelay.Effectful 
+ open import Codata.Sized.Delay.WeakBisimilarity
  open import Relation.Binary.PropositionalEquality
  open import Imp.Semantics.BigStep.Functional.Properties
- open import Codata.Sized.Partial.Bisimilarity.Relation.Binary.Equivalence using (≡=>≈)
+ open import Codata.Sized.Delay.WeakBisimilarity.Relation.Binary.Equivalence using (≡=>≋)
 
 
  adia-sound : ∀ (a : AExp) (s : Store) -> (dia : avars a ⊆ dom s) -> (∃ λ v -> aeval a s ≡ just v)
@@ -117,10 +116,14 @@ module _ where
  mutual 
   dia-sound : ∀ (c : Command) (s : Store) (v v' : VarsSet) (dia : Dia v c v') (v⊆s : v ⊆ dom s)
    -> (h-err : (ceval c s) ↯) -> ⊥
+  dia-sound skip s v v' dia v⊆s (now ())
   dia-sound (assign id a) s v .(id ↦ v) (assign .a .v .id a⊆v) v⊆s h-err 
    with (adia-sound a s (⊆-trans a⊆v v⊆s))
-  ... | a' , eq-aeval rewrite eq-aeval rewrite eq-aeval with (h-err) 
-  ... | ()
+  ... | a' , eq-aeval 
+   rewrite eq-aeval 
+   rewrite eq-aeval 
+   with h-err
+  ... | now ()
   dia-sound (ifelse b cᵗ cᶠ) s v .(vᵗ ∩ vᶠ) (if .b .v vᵗ vᶠ .cᵗ .cᶠ b⊆v diaᶠ diaᵗ) v⊆s h-err 
     with (bdia-sound b s λ x x-in-s₁ → v⊆s x (b⊆v x x-in-s₁))
   ... | false , eq-beval rewrite eq-beval rewrite eq-beval = dia-sound cᶠ s v vᶠ diaᶠ v⊆s h-err
@@ -128,9 +131,9 @@ module _ where
    | true , eq-beval rewrite eq-beval rewrite eq-beval = dia-sound cᵗ s v vᵗ diaᵗ v⊆s h-err
   dia-sound (seq c₁ c₂) s v₁ v₃ dia v⊆s h-err with dia
   ... | seq .v₁ v₂ .v₃ .c₁ .c₂ dia-c₁ dia-c₂ with (ceval c₁ s) in eq-ceval-c₁
-  ... | now nothing = dia-sound c₁ s v₁ v₂ dia-c₁ v⊆s (≡=>≈ eq-ceval-c₁) 
+  ... | now nothing = dia-sound c₁ s v₁ v₂ dia-c₁ v⊆s (≡=>≋ eq-ceval-c₁) 
   ... | now (just s') rewrite eq-ceval-c₁ = 
-   dia-sound c₂ s' v₂ v₃ dia-c₂ (dia-ceval=>⊆ dia-c₁ v⊆s (≡=>≈ eq-ceval-c₁)) h-err
+   dia-sound c₂ s' v₂ v₃ dia-c₂ (dia-ceval=>⊆ dia-c₁ v⊆s (≡=>≋ eq-ceval-c₁)) h-err
   dia-sound (seq c₁ c₂) s v₁ v₃ dia v⊆s h-err | seq .v₁ v₂ .v₃ .c₁ .c₂ dia-c₁ dia-c₂  | later x 
    with (dia-sound c₁ s v₁ v₂ dia-c₁ v⊆s) 
   ... | c₁↯⊥ rewrite eq-ceval-c₁ = dia-sound-seq-later c₁↯⊥ dia-c₂ h h-err
@@ -140,14 +143,17 @@ module _ where
   dia-sound (while b c) s v v' dia v⊆s h-err with dia
   ... | while .b .v v₁ .c b⊆s dia-c 
    with (bdia-sound b s (λ x x-in-s₁ → v⊆s x (b⊆s x x-in-s₁)))
-  ... | false , eq-beval rewrite eq-beval = case h-err of λ () 
-  ... | true , eq-beval with (ceval c s) in eq-ceval-c
-  ... | now nothing = dia-sound c s v v₁ dia-c v⊆s (≡=>≈ eq-ceval-c) 
+  ... | false , eq-beval rewrite eq-beval
+   with h-err
+  ... | now ()
+  dia-sound (while b c) s v v' dia v⊆s h-err | while .b .v v₁ .c b⊆s dia-c 
+   | true , eq-beval with (ceval c s) in eq-ceval-c
+  ... | now nothing = dia-sound c s v v₁ dia-c v⊆s (≡=>≋ eq-ceval-c) 
   dia-sound (while b c) s v v' dia v⊆s h-err | while .b .v v₁ .c b⊆s dia-c 
    | true , eq-beval | now (just s') rewrite eq-beval rewrite eq-ceval-c 
    with h-err
   ... | laterₗ w↯ = 
-   dia-sound (while b c) s' v v dia (⊆-trans v⊆s (ceval⇓=>⊆ c s s' (≡=>≈ eq-ceval-c))) w↯
+   dia-sound (while b c) s' v v dia (⊆-trans v⊆s (ceval⇓=>⊆ c s s' (≡=>≋ eq-ceval-c))) w↯
   dia-sound (while b c) s v v' dia v⊆s h-err | while .b .v v₁ .c b⊆s dia-c 
    | true , eq-beval | later x with (dia-sound c s v v₁ dia-c v⊆s)
   ... | c↯⊥ rewrite eq-beval rewrite eq-ceval-c = dia-sound-while-later c↯⊥ dia h h-err 
@@ -160,10 +166,10 @@ module _ where
     (dia : Dia v (while b c) v) (l⇓s=>⊆ : ∀ {s : Store} -> ((later x) ⇓ s) -> v ⊆ dom s)
     (w↯ : (bind (later x) (λ s -> later (ceval-while c b s))) ↯) -> ⊥
    dia-sound-while-later {x} {b} {c} {v} l↯⊥ dia l⇓s=>⊆ w↯ with (force x) in eq-force-x
-   ... | now nothing = l↯⊥ (laterₗ (≡=>≈ eq-force-x)) 
+   ... | now nothing = l↯⊥ (laterₗ (≡=>≋ eq-force-x)) 
    dia-sound-while-later {x} {b} {c} {v} l↯⊥ dia l⇓s=>⊆ w↯ | now (just s') with w↯
    ... | laterₗ w↯' rewrite eq-force-x with w↯'
-   ... | laterₗ w↯'' = dia-sound (while b c) s' v v dia (l⇓s=>⊆ (laterₗ (≡=>≈ eq-force-x))) w↯''
+   ... | laterₗ w↯'' = dia-sound (while b c) s' v v dia (l⇓s=>⊆ (laterₗ (≡=>≋ eq-force-x))) w↯''
    dia-sound-while-later {x} {b} {c} {v} l↯⊥ dia l⇓s=>⊆ w↯ | later x₁ with w↯
    ... | laterₗ w↯' rewrite eq-force-x with w↯'
    ... | laterₗ w↯'' = dia-sound-while-force {x₁} fx↯=>⊥ dia fx⇓=>⊆ w↯''
@@ -181,21 +187,19 @@ module _ where
     (dia : Dia v (while b c) v) (l⇓s=>⊆ : ∀ {s : Store} -> ((force x) ⇓ s) -> v ⊆ dom s)
     (w↯ : (bind (force x) (λ s -> later (ceval-while c b s))) ↯) -> ⊥
    dia-sound-while-force {x} {b} {c} {v} l↯⊥ dia l⇓s=>⊆ w↯ with (force x) in eq-force-x
-   ... | now nothing = l↯⊥ nown
+   ... | now nothing = l↯⊥ w↯
    dia-sound-while-force {x} {b} {c} {v} l↯⊥ dia l⇓s=>⊆ w↯ | now (just s') 
     rewrite eq-force-x with w↯
-   ... | laterₗ w↯' = dia-sound (while b c) s' v v dia (l⇓s=>⊆ (nowj refl)) w↯'
+   ... | laterₗ w↯' = dia-sound (while b c) s' v v dia (l⇓s=>⊆ (now refl)) w↯'
    dia-sound-while-force {x} {b} {c} {v} l↯⊥ dia l⇓s=>⊆ w↯ | later x₁ = dia-sound-while-later {x₁} l↯⊥ dia l⇓s=>⊆ w↯
- 
- 
  
    dia-sound-seq-later : ∀ {x : Thunk (Delay (Maybe Store)) ∞} {c} {v₁ v₂ : VarsSet} (l↯⊥ : (later x)↯ -> ⊥) 
     (dia : Dia v₁ c v₂) (l⇓s=>⊆ : ∀ {s : Store} -> ((later x) ⇓ s) -> v₁ ⊆ dom s ) 
     (s↯ : (bind (later x) (ceval c)) ↯) -> ⊥
    dia-sound-seq-later {x} l↯⊥ dia l⇓s=>⊆ s↯ with (force x) in eq-force-x
-   ... | now nothing = l↯⊥ (laterₗ (≡=>≈ eq-force-x)) 
+   ... | now nothing = l↯⊥ (laterₗ (≡=>≋ eq-force-x)) 
    dia-sound-seq-later {x} {c} {v₁} {v₂} l↯⊥ dia l⇓s=>⊆ s↯ | now (just s') with s↯
-   ... | laterₗ s↯' rewrite eq-force-x = dia-sound c s' v₁ v₂ dia (l⇓s=>⊆ (laterₗ (≡=>≈ eq-force-x))) s↯'
+   ... | laterₗ s↯' rewrite eq-force-x = dia-sound c s' v₁ v₂ dia (l⇓s=>⊆ (laterₗ (≡=>≋ eq-force-x))) s↯'
    dia-sound-seq-later {x} {c} {v₁} {v₂} l↯⊥ dia l⇓s=>⊆ s↯ | later x₁ with s↯
    ... | laterₗ s↯' rewrite eq-force-x with s↯'
    ... | laterₗ s↯'' = dia-sound-seq-force {x₁} fx↯=>⊥ dia fx⇓=>⊆ s↯''
@@ -213,6 +217,6 @@ module _ where
     (dia : Dia v₁ c v₂) (f⇓s=>⊆ : ∀ {s : Store} -> ((force x) ⇓ s) -> v₁ ⊆ dom s ) 
     (s↯ : (bind (force x) (ceval c)) ↯) -> ⊥
    dia-sound-seq-force {x} {c} {v₁} {v₂} l↯⊥ dia f⇓s=>⊆ s↯ with (force x) in eq-force-x
-   ... | now (just s') rewrite eq-force-x = dia-sound c s' v₁ v₂ dia (f⇓s=>⊆ (nowj refl)) s↯
-   dia-sound-seq-force {x} l↯⊥ dia f⇓s=>⊆ s↯ | now nothing rewrite eq-force-x = l↯⊥ nown
+   ... | now (just s') rewrite eq-force-x = dia-sound c s' v₁ v₂ dia (f⇓s=>⊆ (now refl)) s↯
+   dia-sound-seq-force {x} l↯⊥ dia f⇓s=>⊆ s↯ | now nothing rewrite eq-force-x = l↯⊥ s↯ 
    dia-sound-seq-force {x} l↯⊥ dia f⇓s=>⊆ s↯ | later x₁ = dia-sound-seq-later {x₁} l↯⊥ dia f⇓s=>⊆ s↯
