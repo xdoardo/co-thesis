@@ -1,7 +1,5 @@
 module Lujon where 
 
-
-
 -- [misc]: Data 
 open import Data.And 
 open import Data.Or
@@ -31,7 +29,6 @@ module _ where
 
  t-failing : ∀ {i} {ℓ} {A : Set ℓ} -> never {A = A} {i = i} ≡ never {A = A} {i = i} 
  t-failing = _≡_.refl
-
 
  t : ∀ {i} {ℓ} {A : Set ℓ} -> i ⊢ (never {A = A}) ≋ (never {A = A})
  t = later λ where .force -> t

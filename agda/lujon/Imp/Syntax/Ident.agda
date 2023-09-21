@@ -80,8 +80,8 @@ module _ where
  x ≅ x₁ = ∀ {id : Ident} {z : ℤ} -> x id ≡ just z -> x₁ id ≡ just z
 
  -- Unvalued stores inclusion
- _⊑ᵘ_ : Store -> Store -> Set
- x ⊑ᵘ x₁ = ∀ {id : Ident} -> (∃ λ z -> x id ≡ just z) -> (∃ λ z -> x₁ id ≡ just z)
+ _∻_ : Store -> Store -> Set
+ x ∻ x₁ = ∀ {id : Ident} -> (∃ λ z -> x id ≡ just z) -> (∃ λ z -> x₁ id ≡ just z)
 
- ⊑ᵘ-trans : ∀ {s₁ s₂ s₃ : Store} (h₁ : s₁ ⊑ᵘ s₂) (h₂ : s₂ ⊑ᵘ s₃) -> s₁ ⊑ᵘ s₃
- ⊑ᵘ-trans h₁ h₂ id∈σ = h₂ (h₁ id∈σ) 
+ ∻-trans : ∀ {s₁ s₂ s₃ : Store} (h₁ : s₁ ∻ s₂) (h₂ : s₂ ∻ s₃) -> s₁ ∻ s₃
+ ∻-trans h₁ h₂ id∈σ = h₂ (h₁ id∈σ) 

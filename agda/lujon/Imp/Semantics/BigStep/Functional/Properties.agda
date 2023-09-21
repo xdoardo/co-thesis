@@ -33,98 +33,98 @@ open import Codata.Sized.Delay.WeakBisimilarity.Relation.Binary.Equivalence usin
 
 mutual 
  private
-  while-⊑ᵘ-later :  ∀ {x : Thunk (Delay (Maybe Store)) ∞} (c : Command) (b : BExp) (s s' : Store)  
-   (f : ∀ (sⁱ : Store) -> later x ⇓ sⁱ -> s ⊑ᵘ sⁱ) (h⇓ : ((later x) >>=ᵖ (λ s -> later (ceval-while c b s))) ⇓ s') 
-    -> s ⊑ᵘ s'
-  while-⊑ᵘ-later {x} c b s s' f (laterₗ h⇓) {id} (z , id∈s) 
+  while-∻-later :  ∀ {x : Thunk (Delay (Maybe Store)) ∞} (c : Command) (b : BExp) (s s' : Store)  
+   (f : ∀ (sⁱ : Store) -> later x ⇓ sⁱ -> s ∻ sⁱ) (h⇓ : ((later x) >>=ᵖ (λ s -> later (ceval-while c b s))) ⇓ s') 
+    -> s ∻ s'
+  while-∻-later {x} c b s s' f (laterₗ h⇓) {id} (z , id∈s) 
    with (force x) in eq-fx
   ... | now nothing 
    rewrite eq-fx  
    with h⇓
   ... | now ()
-  while-⊑ᵘ-later {x} c b s s' f (laterₗ (laterₗ w⇓)) {id} (z , id∈s) 
+  while-∻-later {x} c b s s' f (laterₗ (laterₗ w⇓)) {id} (z , id∈s) 
    | now (just sⁱ)
    with (beval b sⁱ) in eq-b
   ... | nothing rewrite eq-b
    with w⇓
   ... | now ()
-  while-⊑ᵘ-later {x} c b s s' f (laterₗ (laterₗ w⇓)) {id} (z , id∈s) | now (just sⁱ) | just false 
+  while-∻-later {x} c b s s' f (laterₗ (laterₗ w⇓)) {id} (z , id∈s) | now (just sⁱ) | just false 
    rewrite eq-b
    with w⇓
   ... | now refl = f sⁱ (laterₗ (≡=>≋ eq-fx)) (z , id∈s)
-  while-⊑ᵘ-later {x} c b s s' f (laterₗ (laterₗ w⇓)) {id} (z , id∈s) | now (just sⁱ) | just true 
+  while-∻-later {x} c b s s' f (laterₗ (laterₗ w⇓)) {id} (z , id∈s) | now (just sⁱ) | just true 
    rewrite eq-b 
    with (bindxf⇓=>x⇓ {x = ceval c sⁱ} {f = λ s -> later (ceval-while c b s)} w⇓) 
   ... | sⁱ' , cⁱ⇓sⁱ' 
    with (f sⁱ (laterₗ (≡=>≋ eq-fx)) {id})
   ... | s⊑sⁱ 
-   with (while-⊑ᵘ c b sⁱ s' (λ { s₁ sⁱ₁ c⇓sⁱ {id} (z' , id∈s₁) → ceval⇓=>⊑ᵘ c s₁ sⁱ₁ c⇓sⁱ {id} (z' , id∈s₁)}) w⇓ {id})
-  ... | sⁱ⊑s' = ⊑ᵘ-trans s⊑sⁱ sⁱ⊑s' {id} (z , id∈s) 
-  while-⊑ᵘ-later {x} c b s s' f (laterₗ h⇓) {id} (z , id∈s) 
-   | later x₁ = while-⊑ᵘ-later {x₁} c b s s' (λ { sⁱ x₂ x₃ → f sⁱ (laterₗ (≡=>⇓ eq-fx x₂)) x₃}) h⇓ {id} (z , id∈s)
+   with (while-∻ c b sⁱ s' (λ { s₁ sⁱ₁ c⇓sⁱ {id} (z' , id∈s₁) → ceval⇓=>∻ c s₁ sⁱ₁ c⇓sⁱ {id} (z' , id∈s₁)}) w⇓ {id})
+  ... | sⁱ⊑s' = ∻-trans s⊑sⁱ sⁱ⊑s' {id} (z , id∈s) 
+  while-∻-later {x} c b s s' f (laterₗ h⇓) {id} (z , id∈s) 
+   | later x₁ = while-∻-later {x₁} c b s s' (λ { sⁱ x₂ x₃ → f sⁱ (laterₗ (≡=>⇓ eq-fx x₂)) x₃}) h⇓ {id} (z , id∈s)
   
-  while-⊑ᵘ : ∀ (c : Command) (b : BExp) (s s' : Store) (f : ∀ (s sⁱ : Store) -> (ceval c s) ⇓ sⁱ -> s ⊑ᵘ sⁱ)
-   (h⇓ : ((ceval c s) >>=ᵖ (λ s -> later (ceval-while c b s))) ⇓ s') -> s ⊑ᵘ s'
-  while-⊑ᵘ c b s s' f h⇓ {id} 
+  while-∻ : ∀ (c : Command) (b : BExp) (s s' : Store) (f : ∀ (s sⁱ : Store) -> (ceval c s) ⇓ sⁱ -> s ∻ sⁱ)
+   (h⇓ : ((ceval c s) >>=ᵖ (λ s -> later (ceval-while c b s))) ⇓ s') -> s ∻ s'
+  while-∻ c b s s' f h⇓ {id} 
    with (ceval c s) in eq-c
   ... | now nothing 
    rewrite eq-c 
    with h⇓
   ... | now ()
-  while-⊑ᵘ c b s s' f (laterₗ w⇓) {id} | now (just sⁱ) 
+  while-∻ c b s s' f (laterₗ w⇓) {id} | now (just sⁱ) 
    rewrite eq-c 
    with (beval b sⁱ) in eq-b
   ... | nothing 
    rewrite eq-b 
    with w⇓
   ... | now ()
-  while-⊑ᵘ c b s s' f (laterₗ w⇓) {id} | now (just sⁱ) | just true 
-   rewrite eq-b = ⊑ᵘ-trans {s} {sⁱ} {s'} (f s sⁱ (≡=>≋ eq-c)) (while-⊑ᵘ c b sⁱ s' f w⇓) {id}
-  while-⊑ᵘ c b s s' f (laterₗ w⇓) {id} | now (just sⁱ) | just false 
+  while-∻ c b s s' f (laterₗ w⇓) {id} | now (just sⁱ) | just true 
+   rewrite eq-b = ∻-trans {s} {sⁱ} {s'} (f s sⁱ (≡=>≋ eq-c)) (while-∻ c b sⁱ s' f w⇓) {id}
+  while-∻ c b s s' f (laterₗ w⇓) {id} | now (just sⁱ) | just false 
    rewrite eq-b
    with w⇓
   ... | now refl = f s sⁱ (≡=>≋ eq-c) {id}
-  while-⊑ᵘ c b s s' f h⇓ {id} 
-   | later x = while-⊑ᵘ-later {x} c b s s' (λ { sⁱ x₁ x₂ → f s sⁱ (≡=>⇓ eq-c x₁) x₂}) h⇓
+  while-∻ c b s s' f h⇓ {id} 
+   | later x = while-∻-later {x} c b s s' (λ { sⁱ x₁ x₂ → f s sⁱ (≡=>⇓ eq-c x₁) x₂}) h⇓
 
- ceval⇓=>⊑ᵘ : ∀ (c : Command) (s s' : Store) (h⇓ : (ceval c s) ⇓ s') -> s ⊑ᵘ s'
- ceval⇓=>⊑ᵘ skip s .s (now refl) x = x
- ceval⇓=>⊑ᵘ (assign id a) s s' h⇓ {id₁} x
+ ceval⇓=>∻ : ∀ (c : Command) (s s' : Store) (h⇓ : (ceval c s) ⇓ s') -> s ∻ s'
+ ceval⇓=>∻ skip s .s (now refl) x = x
+ ceval⇓=>∻ (assign id a) s s' h⇓ {id₁} x
   with (aeval a s) in eq-aeval
  ... | just v with h⇓
  ... | now refl 
   with (id == id₁) in eq-id
  ... | true rewrite eq-id = v , refl 
  ... | false rewrite eq-id = x
- ceval⇓=>⊑ᵘ (assign id a) s s' h⇓ {id₁} x
+ ceval⇓=>∻ (assign id a) s s' h⇓ {id₁} x
   | nothing rewrite eq-aeval 
   with h⇓
  ... | now ()
- ceval⇓=>⊑ᵘ (ifelse b cᵗ cᶠ) s s' h⇓ x 
+ ceval⇓=>∻ (ifelse b cᵗ cᶠ) s s' h⇓ x 
   with (beval b s) in eq-b
- ... | just true rewrite eq-b = ceval⇓=>⊑ᵘ cᵗ s s' h⇓ x 
- ... | just false rewrite eq-b = ceval⇓=>⊑ᵘ cᶠ s s' h⇓ x 
+ ... | just true rewrite eq-b = ceval⇓=>∻ cᵗ s s' h⇓ x 
+ ... | just false rewrite eq-b = ceval⇓=>∻ cᶠ s s' h⇓ x 
  ... | nothing with h⇓
  ... | now () 
- ceval⇓=>⊑ᵘ (seq c₁ c₂) s s' h⇓ {id} 
+ ceval⇓=>∻ (seq c₁ c₂) s s' h⇓ {id} 
   with (bindxf⇓=>x⇓ {x = ceval c₁ s} {f = ceval c₂} h⇓)
  ... | sⁱ , c₁⇓sⁱ 
   with (bindxf⇓-x⇓=>f⇓ {x = ceval c₁ s} {f = ceval c₂} h⇓ c₁⇓sⁱ)
- ... | c₂⇓s' = ⊑ᵘ-trans (ceval⇓=>⊑ᵘ c₁ s sⁱ c₁⇓sⁱ {id}) (ceval⇓=>⊑ᵘ c₂ sⁱ s' c₂⇓s' {id}) {id}
- ceval⇓=>⊑ᵘ (while b c) s s' h⇓ {id} x 
+ ... | c₂⇓s' = ∻-trans (ceval⇓=>∻ c₁ s sⁱ c₁⇓sⁱ {id}) (ceval⇓=>∻ c₂ sⁱ s' c₂⇓s' {id}) {id}
+ ceval⇓=>∻ (while b c) s s' h⇓ {id} x 
   with (beval b s) in eq-b
  ... | just false with h⇓
  ... | now refl = x
- ceval⇓=>⊑ᵘ (while b c) s s' h⇓ {id} x
-  | just true rewrite eq-b = while-⊑ᵘ c b s s' (λ s₁ s₂ h -> ceval⇓=>⊑ᵘ c s₁ s₂ h) h⇓ {id} x
- ceval⇓=>⊑ᵘ (while b c) s s' h⇓ {id} x | nothing 
+ ceval⇓=>∻ (while b c) s s' h⇓ {id} x
+  | just true rewrite eq-b = while-∻ c b s s' (λ s₁ s₂ h -> ceval⇓=>∻ c s₁ s₂ h) h⇓ {id} x
+ ceval⇓=>∻ (while b c) s s' h⇓ {id} x | nothing 
   with h⇓
  ... | now ()
 
 
 ceval⇓=>⊆ : ∀ (c : Command) (s s' : Store) (h⇓ : (ceval c s) ⇓ s') -> (dom s) ⊆ (dom s')
 ceval⇓=>⊆ c s s' h⇓ x x-in-s₁ 
- with (ceval⇓=>⊑ᵘ c s s' h⇓)
+ with (ceval⇓=>∻ c s s' h⇓)
 ... | s⊑s' with (s x)  in eq-sx
 ... | just x₁ 
  with (s⊑s' {x} (x₁ , eq-sx))
