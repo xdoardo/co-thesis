@@ -6,12 +6,12 @@ module Imp.Semantics.BigStep.Functional.Command where
 open import Size
 open import Data.Bool
 open import Imp.Syntax 
-open import Codata.Sized.Delay
+open import Codata.Sized.Delay 
 open import Codata.Sized.Thunk
-open import Data.Maybe renaming (_>>=_ to _>>=m_)
+open import Data.Maybe hiding (_>>=_)
 open import Imp.Semantics.BigStep.Functional.Bool
 open import Imp.Semantics.BigStep.Functional.Arith
-open import Codata.Sized.FailingDelay.Effectful renaming (bind to _>>=p_)
+open import Codata.Sized.FailingDelay.Effectful renaming (bind to _>>=_)
 --
 
 ------------------------------------------------------------------------ 
@@ -26,11 +26,11 @@ mutual
  
  ceval : ∀ {i} -> (c : Command) -> (s : Store) -> Delay (Maybe Store) i
  ceval skip s = now (just s)
- ceval (assign id a) s = now (aeval a s >>=m λ v -> just (update id v s))
- ceval (seq c c₁) s = ceval c s >>=p λ s' -> ceval c₁ s'
- ceval (ifelse b c c₁) s = now (beval b s) >>=p (λ bᵥ -> (if bᵥ then ceval c s else ceval c₁ s))
- ceval (while b c) s = now (beval b s) >>=p (λ bᵥ -> 
+ ceval (assign id a) s = now (aeval a s) >>= λ v -> now (just (update id v s))
+ ceval (seq c c₁) s = ceval c s >>= λ s' -> ceval c₁ s'
+ ceval (ifelse b c c₁) s = now (beval b s) >>= (λ bᵥ -> (if bᵥ then ceval c s else ceval c₁ s))
+ ceval (while b c) s = now (beval b s) >>= (λ bᵥ -> 
    if bᵥ 
-   then (ceval c s >>=p  λ s -> later (ceval-while c b s))
+   then (ceval c s >>=  λ s -> later (ceval-while c b s))
    else now (just s)
   )
