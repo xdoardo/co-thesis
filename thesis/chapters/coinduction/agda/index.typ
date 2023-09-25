@@ -1,9 +1,9 @@
 == Agda<section-agda>
 
-In this section we will introduce the Agda programming language.
-
-1. the shortest history of proof assistants ever 
-2. what makes agda useful, i.e., dependent types
+In this section we will introduce the Agda programming language, a dependently
+typed programming language and proof assistant. We briefly introduce what proof
+assistants are, what makes proof assistants such as Agda useful and how Agda in
+particular deals with coinduction.
 
 #include "./dependent_types.typ"
 #include "./termination_productivity.typ"

@@ -9,24 +9,29 @@
   figure: align(bottom, image("./figures/Minerva.png", width: 28%)),
   university: "University of Milan",
   degree: "Master of Science",
-  msg: [ 
+  msg: [
 
     #v(0.4fr)
-  #align(right, text(style: "italic", 
-   ["...I can hardly understand, for instance, how a young man can decide to ride over 
+    #align(
+      right,
+      text(
+        style: "italic",
+        ["...I can hardly understand, for instance, how a young man can decide to ride
+          over
 
-   to the next village without being afraid that, quite apart from accidents, 
+          to the next village without being afraid that, quite apart from accidents,
 
-   even the span of a normal life that passes happily may be totally 
+          even the span of a normal life that passes happily may be totally
 
-   insufficient for such a ride."]))
-  #align(right, "Franz Kafka")
+          insufficient for such a ride."],
+      ),
+    )
+    #align(right, "Franz Kafka")
 
     #v(1fr)
-  #smallcaps("no generative artificial intelligence was used in
-  this work.") ],
+    #smallcaps("no generative artificial intelligence was used in
+     this work.")],
 )
-
 
 #include "./chapters/index.typ"
 #appendix(include "./appendices/index.typ")
