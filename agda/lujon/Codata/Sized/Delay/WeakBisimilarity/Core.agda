@@ -33,3 +33,20 @@ module _ {ℓ} {A : Set ℓ} where
  infix 1 _⊢_≋_
  _⊢_≋_ : ∀ i → Delay A ∞ → Delay A ∞ → Set ℓ
  _⊢_≋_ = WeakBisim _≡_
+
+module _ {a r b} {A : Set a} {B : Set b} {R : A -> B -> Set r} where
+ 
+ laterʳ⁻¹ : ∀  {i} {j : Size< i} {x y} -> WeakBisim R i x (later y) -> WeakBisim R j x (force y) 
+ laterʳ⁻¹ (later x) = laterₗ (force x)
+ laterʳ⁻¹ (laterᵣ x) = x
+ laterʳ⁻¹ (laterₗ x) = laterₗ (laterʳ⁻¹ x)  
+
+ laterˡ⁻¹ : ∀ {i} {j : Size< i}{x y} -> WeakBisim R i (later x) y -> WeakBisim R j (force x) y
+ laterˡ⁻¹ (later x) = laterᵣ (force x) 
+ laterˡ⁻¹ (laterₗ x) = x 
+ laterˡ⁻¹ (laterᵣ x) = laterᵣ (laterˡ⁻¹ x) 
+ 
+ later⁻¹ : ∀ {i} {j : Size< i} {x y} -> WeakBisim R i (later x) (later y) -> WeakBisim R j (force x) (force y)
+ later⁻¹ (later x) = force x
+ later⁻¹ (laterₗ x) = laterʳ⁻¹ x
+ later⁻¹ (laterᵣ x) = laterˡ⁻¹ x
