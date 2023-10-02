@@ -35,10 +35,29 @@ module _ {a b} {A : Set a} {B : Set b}
 module _ {a b c} {A : Set a} {B : Set b} {C : Set c}
          {r} {P : A → B → Set r} {Q : B → C → Set r} {R : A → C → Set r} where
 
- postulate
-  transitive : (trel : Trans P Q R) → ∀ {i} → Trans (WeakBisim P i) (WeakBisim Q i) (WeakBisim R i)
+ transitive-now : ∀ {i} {x y z} (t : Trans P Q R) (p : WeakBisim P ∞ (now x) y) 
+  (q : WeakBisim Q ∞ y z) -> WeakBisim R i (now x) z
+ transitive-now t (now p) (now q) = now (t p q)
+ transitive-now t (now p) (laterᵣ q) = laterᵣ (transitive-now t (now p) q) 
+ transitive-now t (laterᵣ p) (later x) = laterᵣ (transitive-now t p (force x))
+ transitive-now t (laterᵣ p) (laterᵣ q) = laterᵣ (transitive-now t p (laterˡ⁻¹ q))
+ transitive-now t (laterᵣ p) (laterₗ q) = transitive-now t p q
+ 
+ mutual 
+  transitive-later : ∀ {i} {x y z} (t : Trans P Q R) (p : WeakBisim P ∞ (later x) y) 
+   (q : WeakBisim Q ∞ y z) -> WeakBisim R i (later x) z
+  transitive-later t p (later q)  = later λ { .force → transitive t (later⁻¹ p) (force q) }
+  transitive-later t p (laterᵣ q) = later λ { .force → transitive t (laterˡ⁻¹ p) q }
+  transitive-later t p (laterₗ q) = transitive-later t (laterʳ⁻¹ p) q
+  transitive-later t (laterₗ p) (now q) = laterₗ (transitive t p (now q))
+
+  transitive : ∀ {i} (t : Trans P Q R) -> Trans (WeakBisim P ∞) (WeakBisim Q ∞) (WeakBisim R i)
+  transitive t {now x} p q = transitive-now t p q 
+  transitive t {later x} p q = transitive-later t p q 
+
 
 module _ {a} {A : Set a} where
+
 
  -- Pointwise Equality as a Bisimilarity
  refl : ∀ {i} -> Reflexive {a} {Delay A ∞} (i ⊢_≋_)
@@ -47,7 +66,7 @@ module _ {a} {A : Set a} where
  sym : ∀ {i} -> Symmetric {a} {Delay A ∞}(i ⊢_≋_)
  sym = symmetric Eq.sym
  
- trans : ∀ {i} -> Transitive {a} {Delay A ∞}(i ⊢_≋_)
+ trans : Transitive {a} {Delay A ∞} (∞ ⊢_≋_)
  trans = transitive Eq.trans
 
  ≡=>≋ : ∀ {a₁ a₂ : Delay A ∞} -> (h : a₁ ≡ a₂) -> (∀ {i} -> i ⊢ a₁ ≋ a₂)
