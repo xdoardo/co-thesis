@@ -10,10 +10,9 @@ to explain the concept of monad in various ways.
 
 A monad is a datatype equipped with (at least) two functions, `bind` (often
 `_>>=_`) and `unit`; in general, we can see monads as a structure used to
-combine computations. One of the most trivial instance of monad is the `Maybe`
+combine computations. One of the most common instance of monad is the `Maybe`
 monad, which we now present to investigate what monads are: in Agda, the `Maybe`
-monad is composed of a datatype
-
+monad is composed of a datatype 
 #agdacode[
 //typstfmt::off
 ```hs
@@ -23,14 +22,14 @@ data Maybe {a} (A : Set a) : Set a where
 ```
 //typstfmt::on
 ]
-and two functions representing its monadic features:
-
+// TODO label here to appropriate section
+(where `{a}` is the _level_, see @subsection-agda-types[Subsection]) and two
+functions representing its monadic features:
 #agdacode[
 //typstfmt::off
 ```hs
 unit : A -> Maybe A
 unit = just
-
 _>>=_ : Maybe A → (A → Maybe B) → Maybe B
 nothing >>= f = nothing
 just a  >>= f = f a
@@ -40,10 +39,18 @@ just a  >>= f = f a
 
 The `Maybe` monad is a structure that represents how to deal with computations
 that may result in a value but may also result in nothing; in general, the line
-of reasoning for monads is exactly this, they are a means to model a behaviour
-of the execution, or *effects*: in fact, they're also called "computation
-builders" in the context of programming. Let us give an example:
-#agdacode[
+of reasoning for monads is exactly this, they are a tool used to model some
+behaviour of the execution, which is also called *effect*. In the context of programming 
+monads are also "computation builders".
+
+Consider @code-monad-example: this example, even if simple, is a practical
+application of the line of reasoning a programmer applies when using monads. In
+this example, we want to simply increment an integer variable which might be,
+for some reason, unavailable. The `_>>=_` function encapsulates the reasoning
+that the programmer should make explicit, perhaps matching on the value of `x`,
+in a compositional and reusable fashion.
+
+#code(label:<code-monad-example>)[
 //typstfmt::off
 ```hs
   h : Maybe ℕ → Maybe ℕ
@@ -51,23 +58,22 @@ builders" in the context of programming. Let us give an example:
 ```
 //typstfmt::on
 ]
-
 The underlying idea of monads in the context of computer science, as explained
 by Moggi in @moggi-monads, is to describe "notions of computations" that may
-have consequences comparable to _side effects_ of imperative programming
-languages in pure functional languages.
+have consequences comparable to _side effects_ in pure functional languages.
 
 === Formal definition<subsubsection-monad-formal_def>
 We will now give a formal definition of what monads are. They're usually
 understood in the context of category theory and in particular _Kleisli
-triples_; here, we give a minimal definition inspired by @kohl-monads-cs.
+triples_; here, we give a minimal definition following @kohl-monads-cs.
 
 #definition(
   name: "Monad",
+  label: <def-monad>
 )[
     Let $A$, $B$ and $C$ be types. A monad $M$ is defined as the triple (`M` ,
-    `unit`, `_>>=_`) where `M` is a monadic constructor denoting some side-effect or
-    impure behaviour; `unit : A -> M A` represents the identity function and 
+    `unit`, `_>>=_`) where `M` is a monadic constructor; `unit : A -> M A`
+    represents the identity function and 
     // typstfmt::off
     `_>>=_ : M A -> (A -> M B) -> M B` is used for monadic composition.
     //typstfmt::on
@@ -90,8 +96,8 @@ the result of the computation. The second, `later`, embodies one "step" of delay
 and, of course, an infinite (coinductive) sequence of `later` indicates a
 non-terminating computation, practically making non-termination an effect.
 
-In Agda, the `Delay` type is defined as follows (using _sizes_ and _levels_, see
-@subsection-agda-sized_types[Subsection]):
+In Agda, the `Delay` type is defined as follows (using _sizes_ and
+_levels_, see @subsubsection-sizes-coinduction[Subsection]):
 #agdacode[
 //typstfmt::off
 ```hs
@@ -101,7 +107,7 @@ data Delay {ℓ} (A : Set ℓ) (i : Size) : Set ℓ where
 ```
 //typstfmt::on
 ]
-We equip with the following `bind` function:
+Paired with the following `bind` function (`return`,  or `unit`, is `now`).
 #agdacode[
 //typstfmt::off
 ```hs
@@ -115,19 +121,19 @@ In words, what `bind` does, is this: given a `Delay A i` `x`, it checks whether
 `x` contains an immediate result (i.e., `x ≡ now a`) and, if so, it applies the
 function `f`; if, otherwise, `x` is a step of delay, (i.e., `x ≡ later d`),
 `bind` delays the computation by wrapping the observation of `d` (represented
-as ```hs d .force```) in the `later` constructor. Of course, this is the only
+as ```hs d .force```) in the `later` constructor. This is the only
 possibile definition: for example,
 //typstfmt::off
 ```hs bind' (later d) f = bind' (d .force) f```
 //typstfmt::on
 would not pass the termination and productivity checker; in fact, take the
-`never` term as shown in #coderef(<code-never>): of course,
+`never` term as shown in @code-never: of course,
 //typstfmt::off
 ```hs bind' never f```
 //typstfmt::on
 would never terminate.
 
-#agdacode(ref: <code-never>)[
+#agdacode(label: <code-never>)[
 //typstfmt::off
 ```hs
  never : ∀ {i} -> Delay A i
@@ -146,7 +152,7 @@ of the `Delay` datatype and its monadic features.
 == Bisimilarity<subsection-monad-bisimilarity>
 Consider the following snippet. 
 #mycode(
-  ref: <code-comp-a>,
+  label: <code-comp-a>,
   "https://github.com/ecmma/co-thesis/blob/master/agda/lujon/Codata/Sized/Delay/Examples.agda#L9",
 )[
 //typstfmt::off
@@ -156,10 +162,10 @@ comp-a = now 0ℤ
 ```
 //typstfmt::on
   ]
-The term represents in #coderef(<code-comp-a>) a computation converging to the value `0` immediately, as
+The term represents in @code-comp-a a computation converging to the value `0` immediately, as
 no `later` appears in its definition.
 #mycode(
-  ref: <code-comp-b>,
+  label: <code-comp-b>,
   "https://github.com/ecmma/co-thesis/blob/master/agda/lujon/Codata/Sized/Delay/Examples.agda#L12",
 )[
 //typstfmt::off
@@ -172,10 +178,10 @@ comp-b = later λ where .force -> now 0ℤ
 The term above represent the same converging computation, albeit in a different
 number of steps. There are situations in which we want to consider equal
 computations that result in the same outcome, be it a concrete value (or
-failure) or a diverging computation. Of course, we cannot use Agda's
+failure) or a diverging computation. We cannot use Agda's
 propositional equality, as the two terms _are not the same_:
 #mycode(
-  ref: <code-comp-a-eq-comp-b>,
+  label: <code-comp-a-eq-comp-b>,
   "https://github.com/ecmma/co-thesis/blob/master/agda/lujon/Codata/Sized/Delay/Examples.agda#L15",
 )[
 //typstfmt::off
@@ -187,19 +193,17 @@ comp-a≡comp-b = refl
 //typstfmt::on
 ]
 
-We thus define an equivalence relation on `Delay` which we call *weak
+We thus define an equivalence relation on `Delay` known as *weak
 bisimilarity*. In words, weak bisimilarity relates two computations such that
 either both diverge or both converge to the same value, independent of the
 number of steps taken#footnote[ *Strong* bisimilarity, on the other hand,
 requires both computation to converge to the same value in the same number of
 steps; it is easy to show that strong bisimilarity implies weak bisimilarity.].
-The definition we give in #thmref(<def-weak-bisimilarity>)[Definition] follows 
-those given by 
 
-#todo([Tell more about where this definition comes from])
 
 #definition(
   name: "Weak bisimilarity",
+  label: <def-weak-bisimilarity>
 )[
     Let $a_1$ and $a_2$ be two terms of type $A$. Then, weak bisimilarity of terms
     of type `Delay A` is defined by the following inference rules.
@@ -233,14 +237,21 @@ those given by
         [$"later"_r$],
       ),
     )
-    <def-weak-bisimilarity>
   ]
 
-The implementation in Agda of #thmref(<def-weak-bisimilarity>)[Definition]
-follows the rules above but uses sized to deal with coinductive definitions (see
-@subsection-agda-sized_types[Subsection]).
+The implementation in Agda of @def-weak-bisimilarity follows the rules above
+but uses sizes to deal with coinductive definitions (see
+@subsubsection-sizes-coinduction[Subsection]) and retraces the definition of _strong_
+bisimilarity as implemented in Agda's standard library at the time of writing:
+the difference with the rules shown in @def-weak-bisimilarity is that in the
+latter the inference rules imply that propositional equality is the only kind
+of relation allowed for two terms to be weakly bisimilar at the level of
+non-delayed terms, while this definition allows terms of two potentially
+different "end" types to be bisimilar as long as they are related by some
+relation $R$. 
+
 #mycode(
-  ref: <code-weak-bisim>,
+  label: <code-weak-bisim>,
   "https://github.com/ecmma/co-thesis/blob/master/agda/lujon/Codata/Sized/Delay/WeakBisimilarity/Core.agda#L16",
 )[
 //typstfmt::off
@@ -257,12 +268,11 @@ data WeakBisim {a b r} {A : Set a} {B : Set b} (R : A -> B -> Set r) i :
 ```
 //typstfmt::on
   ]
-This definition also allows us to abstract over the relation between the values
-of the parameter type $A$ and have a single definition for multiple kinds of
-relations. Propositional equality is still the most frequently used relation, so
-we define a special notation for this specialization:
+Propositional equality is still the most frequently used
+relation, so we define a special notation for this specialization, which
+resembles that of the inference rules: 
 #mycode(
-  ref: <code-weak-bisim-propeq>,
+  label: <code-weak-bisim-propeq>,
   "https://github.com/ecmma/co-thesis/blob/master/agda/lujon/Codata/Sized/Delay/WeakBisimilarity/Core.agda#L33",
 )[
 //typstfmt::off
@@ -274,13 +284,16 @@ _⊢_≋_ = WeakBisim _≡_
 //typstfmt::on
 ]
 
-We also show that weak bisimilarity as we defined it is an equivalence relation.
-When expressing this theorem in Agda, it is also necessary to make the relation
-`R` we abstract over be an equivalence relation, as shown in
-#thmref(<thm-weak-bisimilarity-equivalence>)[Theorem].
+We also show that weak bisimilarity as we defined it is an equivalence
+relation. When expressing this theorem in Agda, it is also necessary to make
+the relation `R` we abstract over be an equivalence relation, as shown in
+@thm-weak-bisimilarity-equivalence; as shown in
+@danielsson-operational-semantics, the transitivity proof is not claimed to be
+size preserving. 
 
 #theorem(
   name: "Weak bisimilarity is an equivalence relation",
+  label: <thm-weak-bisimilarity-equivalence>
 )[
     #mycode(
       "https://github.com/ecmma/co-thesis/blob/master/agda/lujon/Codata/Sized/Delay/WeakBisimilarity/Relation/Binary/Equivalence.agda",
@@ -290,22 +303,20 @@ When expressing this theorem in Agda, it is also necessary to make the relation
 ```hs
 reflexive : ∀ {i} (r-refl : Reflexive R)  -> Reflexive (WeakBisim R i)
 symmetric : ∀ {i} (r-sym : Sym P Q) -> Sym (WeakBisim P i) (WeakBisim Q i)
-transitive : ∀ {i} (r-trans : Trans P Q R)
-              -> Trans (WeakBisim P i) (WeakBisim Q i) (WeakBisim R i)
+transitive : ∀ {i} (r-trans : Trans P Q R) -> Trans (WeakBisim P ∞) (WeakBisim Q ∞) (WeakBisim R i)
 ```
 //typstfmt::on
       ]
-    <thm-weak-bisimilarity-equivalence>
-  ]
+]
 
-#thmref(<thm-delay-monad>)[Theorem] affirms that `Delay` is a monad up to weak
-bisimilarity.
+@thm-delay-monad states that `Delay` is a monad up to weak bisimilarity.
 
 #theorem(
   name: [`Delay` is a monad],
+  label: <thm-delay-monad>
 )[
     The triple (`Delay`, `now`, `bind`) is a monad and respects monad laws up to
-    bisimilarity. In Agda:
+    weak bisimilarity. In Agda:
     #mycode(
       "https://github.com/ecmma/co-thesis/blob/master/agda/lujon/Codata/Sized/Delay/Examples.agda#L19",
       proof: <proof-delay-monad>,
@@ -318,21 +329,24 @@ associativity : ∀ {i} {x : Delay A ∞} {f : A -> Delay B ∞}
   {g : B -> Delay C ∞} -> i ⊢ (x >>= f) >>= g ≋ x >>= λ y -> (f y >>= g)
 ```
 //typstfmt::on
-      ]
-    <thm-delay-monad>
-  ]
+]]
 
 == Convergence, divergence and failure<section-convergence>
-Now that we have a means to relate computations, we also want to define
-propositions to characterize them. The `Delay` monads allows us to model the
-effect of non-termination, but we also want to model the behaviour of program
-that terminate but in a wrong way, which we name _failing_. We model this effect
-with the aid of the `Maybe` monad, creating a new monad that combines the two
-behaviours: we baptize this new monad `FailingDelay`. This monad does not have a
-specific datatype (as it is the combination of two existing monads), so we
-directly show the definition of `bind` in Agda (#coderef(<code-bind-fd>)).
+Using the relation of weak bisimilarity, we want to define a characterization
+of computations, which we will use later when expressing theorems regarding the
+semantics of the language we will consider. 
+
+The `Delay` monads allows us to model the effect of non-termination, but, other
+than modeling converging computations, we also want to model the behaviour of
+computations that terminate but in a wrong way, which we name _failing_. We
+model this effect with the aid of the `Maybe` monad, creating a new monad that
+combines the two behaviours: we baptize this new monad `FailingDelay`. 
+
+This monad does not have a specific datatype (as it is the combination of two
+existing monads), so we directly show the definition of `bind` in Agda
+(@code-bind-fd).
 #mycode(
-ref: <code-bind-fd>,
+label: <code-bind-fd>,
 "https://github.com/ecmma/co-thesis/blob/master/agda/lujon/Codata/Sized/FailingDelay/Effectful.agda#L31",
 )[
 //typstfmt::off
@@ -346,14 +360,15 @@ bind (later x) f = later (λ where .force -> bind (x .force) f)
 //typstfmt::on
 ]
 
-Having a monad that deals with the three effects (if we consider convergence the
-third) we want to model, we now define proposition for these three states. The
-first we consider is termination (or convergence); in words, we define a program
-to converge when there exists a term `v` such that the program is (weakly)
-bisimilar to it (see #thmref(<def-converging-program>)[Definition]).
+Having a monad that deals with the three effects (if we consider convergence
+one) we want to model, we now define types for these three states. The
+first we consider is termination (or convergence); in words, we define a
+computation to converge when there exists a term `v` such that the computation
+is (weakly) bisimilar to it (see @def-converging-computation).
 
 #definition(
-  name: "Converging program",
+  name: "Converging computation",
+  label: <def-converging-computation>
 )[
       #mycode(
          "https://github.com/ecmma/co-thesis/blob/master/agda/lujon/Codata/Sized/FailingDelay/Relation/Binary/Convergence.agda#L21",
@@ -367,14 +382,13 @@ _⇓ : ∀ (x : Delay (Maybe A) ∞) -> Set ℓ
 x ⇓ = ∃ λ v -> ∞ ⊢ x ≋ (now (just v))
 ```
 //typstfmt::on
-        ]
-    <def-converging-program>
-  ]
-We then define a program to diverge when it is bisimilar to an infinite chain of
-`later`, which we named `never` in #coderef(<code-never>) (see
-#thmref(<def-diverging-program>)[Definition]).
+]]
+We then define a computation to diverge when it is bisimilar to an infinite chain of
+`later`, which we named `never` in @code-never (see
+@def-diverging-computation).
 #definition(
-  name: "Diverging program",
+  name: "Diverging computation",
+  label: <def-diverging-computation>
 )[      #mycode(
          "https://github.com/ecmma/co-thesis/blob/master/agda/lujon/Codata/Sized/FailingDelay/Relation/Binary/Convergence.agda#L30",
       )[
@@ -384,11 +398,12 @@ _⇑ : ∀ (x : Delay (Maybe A) ∞) -> Set ℓ
 x ⇑ = ∞ ⊢ x ≋ never
 ```
 //typstfmt::on
-] <def-diverging-program>]
-The third and last possibility is for a program to fail: such a program
-converges but to no value (see #thmref(<def-failing-program>)[Definition]).
+]]
+The third and last possibility is for a computation to fail: such a computation 
+converges but to no value (see @def-failing-computation).
 #definition(
-  name: "Failing program",
+  name: "Failing computation",
+  label: <def-failing-computation>
 )[      #mycode(
          "https://github.com/ecmma/co-thesis/blob/master/agda/lujon/Codata/Sized/FailingDelay/Relation/Binary/Convergence.agda#L27",
       )[
@@ -398,11 +413,13 @@ _↯ : ∀ (x : Delay (Maybe A) ∞) -> Set ℓ
 x ↯ = ∞ ⊢ x ≋ now nothing
 ```
 //typstfmt::on
-] <def-failing-program>]
-We can say that a program, in our semantics, cannot show any other kind of
-behaviour, therefore theorem #thmref(<thm-exec>)[Theorem] seems clearly true; in
-a constructive environment like Agda we can, however, only postulate it.
-#theorem(
+]]
+We can already say that a computation, in the semantics we will define later,
+will not show any other kind of behaviour, therefore @post-exec seems clearly
+true; in a constructive environment like Agda we can, however, only postulate
+it, as a proof would essentially be a solution to the halting problem. 
+#postulate(
+  label: <post-exec>
   )[
       #mycode(
          "https://github.com/ecmma/co-thesis/blob/master/agda/lujon/Codata/Sized/FailingDelay/Relation/Binary/Convergence.agda#L83",
@@ -413,4 +430,4 @@ a constructive environment like Agda we can, however, only postulate it.
                   -> XOr (x ⇓) (XOr (x ⇑) (x ↯))
 ```
 //typstfmt::off
-] <thm-exec> ]
+]]

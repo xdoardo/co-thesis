@@ -35,21 +35,21 @@ module _ where
  open ≡-Reasoning 
 
  -- Folding preserves semantics.
- bpfold-sound : ∀ b s  -> (beval b s ≡ beval (bpfold b) s)
- bpfold-sound (const b) s  = refl
- bpfold-sound (le a₁ a₂) s rewrite (apfold-sound a₁ s) rewrite (apfold-sound a₂ s) 
+ bpfold-safe : ∀ b s  -> (beval b s ≡ beval (bpfold b) s)
+ bpfold-safe (const b) s  = refl
+ bpfold-safe (le a₁ a₂) s rewrite (apfold-safe a₁ s) rewrite (apfold-safe a₂ s) 
   with (apfold a₁) | (apfold a₂)
  ... | const n | const n₁ = refl
  ... | const n | var id = refl
  ... | const n | plus v₂ v₃ = refl
  ... | var id | v₂ = refl
  ... | plus v₁ v₃ | v₂ = refl
- bpfold-sound (not b) s rewrite (bpfold-sound b s) with (bpfold b) 
+ bpfold-safe (not b) s rewrite (bpfold-safe b s) with (bpfold b) 
  ... | const b₁ = refl
  ... | le a₁ a₂ = refl
  ... | not v = refl
  ... | and v v₁ = refl
- bpfold-sound (and b₁ b₂) s rewrite (bpfold-sound b₁ s) rewrite (bpfold-sound b₂ s) 
+ bpfold-safe (and b₁ b₂) s rewrite (bpfold-safe b₁ s) rewrite (bpfold-safe b₂ s) 
   with (bpfold b₁) | (bpfold b₂) 
  ... | const b | const b₃ = refl
  ... | const b | le a₁ a₂ = refl

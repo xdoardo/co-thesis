@@ -49,3 +49,25 @@ monad = record
   { rawApplicative = applicative
   ; _>>=_  = bind
   }
+
+module _ {ℓ ℓ′} {A : Set ℓ} {B : Set ℓ′} where
+ open import Codata.Sized.Delay.WeakBisimilarity 
+ open import Codata.Sized.Delay.WeakBisimilarity.Relation.Binary.Equivalence 
+  renaming (refl to prefl ; trans to ptrans ; sym to psym)
+
+ bindx-≋ : ∀ {i} {x x' : Delay (Maybe A) ∞} {f : A -> Delay (Maybe B) ∞} (h-x : ∞ ⊢ x ≋ x') -> i ⊢ (bind x f) ≋ (bind x' f)
+ bindx-≋ (now eq) rewrite eq = prefl
+ bindx-≋ (laterᵣ h-x) = laterᵣ (bindx-≋ h-x) 
+ bindx-≋ (laterₗ h-x) = laterₗ (bindx-≋ h-x) 
+ bindx-≋ (later x) = later λ where .force -> bindx-≋ (force x)
+
+ bindf-≋ : ∀ {i} {x : Delay (Maybe A) ∞} {f f' : A -> Delay (Maybe B) ∞} (h-f : ∀ v -> i ⊢ f v ≋ f' v) 
+  -> i ⊢ (bind x f) ≋ (bind x f')
+ bindf-≋ {_} {now (just x)} h-f = h-f x
+ bindf-≋ {_} {now nothing} h-f = prefl 
+ bindf-≋ {_} {later x} h-f = later λ where .force -> bindf-≋ {x = force x} h-f
+
+ bind-≋ : ∀ {i} {x x' : Delay (Maybe A) ∞} {f f' : A -> Delay (Maybe B) ∞} (h-x : ∞ ⊢ x ≋ x') 
+  (h-f : ∀ v -> ∞ ⊢ f v ≋ f' v) -> i ⊢ (bind x f) ≋ (bind x' f')
+ bind-≋ {i} {x} {x'} {f} {f'} h-x h-f = 
+  ptrans (bindx-≋ {f = f} h-x) (bindf-≋ {x = x'} h-f)

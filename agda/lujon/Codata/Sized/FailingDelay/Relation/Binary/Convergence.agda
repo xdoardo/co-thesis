@@ -79,5 +79,9 @@ module _ {ℓ} {A : Set ℓ} where
   rewrite eq-fx
   =  bindxf⇓-x⇓=>f⇓ {later x₁} h⇓ hx⇓
 
+ bind-x↯=>↯ : ∀ {x} {f} (h↯ : x ↯) -> bind x f ↯
+ bind-x↯=>↯ (now refl) = now refl
+ bind-x↯=>↯ (laterₗ h↯) = laterₗ (bind-x↯=>↯ h↯)
+
 postulate 
  three-states : ∀ {a} {A : Set a} {x : Delay (Maybe A) ∞} -> XOr (x ⇓) (XOr (x ⇑) (x ↯))

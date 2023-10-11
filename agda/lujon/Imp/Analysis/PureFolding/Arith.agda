@@ -28,12 +28,12 @@ module _ where
  open ≡-Reasoning 
 
  -- Pure constant folding preserves semantics.
- apfold-sound : ∀ a s -> (aeval a s ≡ aeval (apfold a) s)
- apfold-sound (const n) _ = refl
- apfold-sound (var id) _ = refl
- apfold-sound (plus a₁ a₂) s 
-  rewrite (apfold-sound a₁ s) 
-  rewrite (apfold-sound a₂ s)  
+ apfold-safe : ∀ a s -> (aeval a s ≡ aeval (apfold a) s)
+ apfold-safe (const n) _ = refl
+ apfold-safe (var id) _ = refl
+ apfold-safe (plus a₁ a₂) s 
+  rewrite (apfold-safe a₁ s) 
+  rewrite (apfold-safe a₂ s)  
   with (apfold a₁) in eq-a₁ | (apfold a₂) in eq-a₂
  ... | const n | const n₁  = refl
  ... | const n | var id     = refl

@@ -1,7 +1,8 @@
 #import "@preview/prooftrees:0.1.0"
-#import "@preview/ctheorems:0.1.0": *
+#import "@local/boxes:0.1.0": *
 #import "@preview/tablex:0.0.5": tablex, rowspanx, colspanx
 #import "@preview/cetz:0.1.1": *
+#import "@preview/diagraph:0.1.0": *
 
 #let print = false
 
@@ -35,181 +36,141 @@
 //Function to insert TODOs outline
 #let todo_outline = outline(title: [TODOs], target: figure.where(kind: "todo"))
 
-#let coderef(label) = thmref(label)[snippet]
-
-
-#let __agdabox = thmbox(
+#let __agdabox = boxenv(
   "code",
-  none,
-  fill: rgb("#dfebeb"),
-  stroke: none,
-  inset: 10pt,
-  radius: 0.3em,
-  breakable: false,
-  padding: (top: 0pt, bottom: 0pt),
-  namefmt: x => [],
-  titlefmt: strong,
-  bodyfmt: x => x,
-  separator: [],
-  numbering: "1.1",
-  base: "heading",
-  base_level: none,
-).with(numbering: none)
-
-#let agdacode(ref: none, url: none, body) = {
-
-  let b(_, _) = {
-    [#underline(text(font: "PragmataPro Mono Liga", size: 8pt, "see proof"))]
-  }
-
-
-  align(center, __agdabox[
-    #body
-    #align(center, [
-      #if ref != none {
-        text(font: "PragmataPro Mono Liga", size: 8pt, "snippet " + thmref(ref))
-        h(5pt)
-      }
+  "snippet",
+  heading,
+  2,
+  fmt: (name, number, body, url: none, label: none) => rect(
+    width: 100%,
+    fill: rgb("#dfebeb"),
+    radius: 0.3em,
+    inset: 10pt,
+    align(center, [
+      #body
+      #text(font: "PragmataPro Mono Liga", size: 8pt, "snippet " + number)
+      #h(5pt)
       #text(font: "PragmataPro Mono Liga", size: 8pt, "from Agda's stdlib")
       #if url != none and (not print) {
+        h(5pt)
         link(
           url,
           underline(text(font: "PragmataPro Mono Liga", size: 8pt, "see code")),
         )
       }
-    ])
+    ]),
+  ),
+)
 
-    #if ref != none {
-      ref
-    }
-  ])
+#let agdacode(label: none, url: none, placement: none, body) = {
+  align(center, __agdabox(body, label: label, url: url, placement: placement))
 }
 
-#let __codebox = thmbox(
+#let __codebox = boxenv(
   "code",
-  none,
-  fill: rgb(133, 144, 192, 10%),
-  stroke: none,
-  inset: 10pt,
-  radius: 0.3em,
-  breakable: false,
-  padding: (top: 0pt, bottom: 0pt),
-  namefmt: x => [],
-  titlefmt: strong,
-  bodyfmt: x => x,
-  separator: [],
-  numbering: "1.1",
-  base: "heading",
-  base_level: none,
-).with(numbering: none)
+  "snippet",
+  heading,
+  2,
+  fmt: (name, number, body, url: none) => rect(
+    width: 100%,
+    fill: rgb(133, 144, 192, 10%),
+    radius: 0.3em,
+    inset: 10pt,
+    align(center, [
+      #body
 
-
-#let code(ref: none, from: none, url: none, body) = {
-  let b(_, _) = {
-    [#underline(text(font: "PragmataPro Mono Liga", size: 8pt, "see proof"))]
-  }
-
-  align(center, __codebox[
-    #body
-    #align(center, [
-      #if ref != none {
-        text(font: "PragmataPro Mono Liga", size: 8pt, "snippet " + thmref(ref))
-        h(5pt)
-      }
-      #if from != none {
-        text(font: "PragmataPro Mono Liga", size: 8pt, "from " + from)
-        h(5pt)
-      }
+      #text(font: "PragmataPro Mono Liga", size: 8pt, "snippet " + number)
       #if url != none and (not print) {
+        h(5pt)
         link(
           url,
           underline(text(font: "PragmataPro Mono Liga", size: 8pt, "see code")),
         )
       }
-    ])
+    ]),
+  ),
+)
 
-    #if ref != none {
-      ref
-    }
-  ])
+#let code(label: none, from: none, url: none, placement: none, body) = {
+  align(center, __codebox(body, label: label, url: url, placement: placement))
 }
 
-
-#let __mycodebox = thmbox(
+#let __mycodebox = boxenv(
   "code",
-  none,
-  fill: rgb("#eeffee"),
-  stroke: none,
-  inset: 10pt,
-  radius: 0.3em,
-  breakable: false,
-  padding: (top: 0pt, bottom: 0pt),
-  namefmt: x => [],
-  titlefmt: strong,
-  bodyfmt: x => x,
-  separator: [],
-  numbering: "1.1",
-  base: "heading",
-  base_level: none,
-).with(numbering: none)
+  "snippet",
+  heading,
+  2,
+  fmt: (name, number, body, label: none, url: none, proof: none) => rect(
+    width: 100%,
+    fill: rgb("#eeffee"),
+    radius: 0.3em,
+    inset: 10pt,
+    align(
+      center,
+      [
+        #body
 
+        #if not print {
+          link(
+            url,
+            underline(text(font: "PragmataPro Mono Liga", size: 8pt, "see code")),
+          )
+        }
+        #if label != none {
+          text(font: "PragmataPro Mono Liga", size: 8pt, ref(label))
+          h(5pt)
+        }
+        #if proof != none and (not print) {
+          h(5pt)
+          underline(
+            lower(text(font: "PragmataPro Mono Liga", size: 8pt, "see " + ref(proof))),
+          )
+        }
+        #if number != none {
+          h(5pt)
+          lower(text(font: "PragmataPro Mono Liga", size: 8pt, "snippet " + number))
+        }
+      ],
+    ),
+  ),
+)
 
-#let mycode(ref: none, proof: none, url, body) = {
-  let b(_, _) = {
-    [#underline(text(font: "PragmataPro Mono Liga", size: 8pt, "see proof"))]
-  }
-
-  align(center, __mycodebox[
-    #body
-    #align(center, [
-      #if ref != none {
-        text(font: "PragmataPro Mono Liga", size: 8pt, "snippet " + thmref(ref))
-        h(5pt)
-      }
-      #if not print {
-        link(
-          url,
-          underline(text(font: "PragmataPro Mono Liga", size: 8pt, "see code")),
-        )
-      }
-      #if proof != none and (not print) {
-        h(5pt)
-        thmref(proof, fmt: b, makelink: true)
-      }
-    ])
-
-    #if ref != none {
-      ref
-    }
-  ])
+#let mycode(label: none, proof: none, placement: none, url, body) = {
+  align(
+    center,
+    __mycodebox(body, label: label, url: url, proof: proof, placement: none),
+  )
 }
 
+#let theorem = boxenv("theorem", "Theorem", heading, 2)
+#let lemma = boxenv("lemma", "Lemma", heading, 2)
+#let corollary = boxenv("corollary", "Corollary", heading, 2)
+#let definition = boxenv("definition", "Definition", heading, 2)
+#let postulate = boxenv("postulate", "Postulate", heading, 2)
+#let proof = boxenv("proof", "Proof", heading, 2)
+#let refproof = boxenv(
+  "proof",
+  "Proof",
+  heading,
+  2,
+  fmt: (name, number, body, thmref: none) => {
+    strong("Proof") + [ #number ]
+    [(for #ref(thmref))]
+    if name != none { [ (#name) ] }
+    h(10pt)
+    body
+  },
+)
+
+/// ---
 #let conv(c, v) = { $#c arrow.b.double #v$ }
 #let div(c) = { $#c arrow.t.double$ }
 #let fails(c) = { $#c arrow.zigzag$ }
-
-#let theorem = thmbox("theorem", "Theorem", inset: (x: 1.2em, top: 0.2em), breakable: false)
-#let lemma = thmbox("lemma", "Lemma", inset: (x: 1.2em, top: 0.2em), breakable: false)
-
-#let corollary = thmplain("corollary", "Corollary", base: "theorem", titlefmt: strong)
-
-#let definition = thmbox(
-  "definition",
-  "Definition",
-  inset: (x: 1.2em, top: 10pt),
-  breakable: false,
-)
-#let property = thmbox(
-  "property",
-  "Property",
-  inset: (x: 1.2em, top: 10pt, bottom: 10pt),
-  stroke: rgb("#000000"),
-)
-
-#let example = thmplain("example", "Example", numbering: none)
-#let proof = thmplain(
-  "proof",
-  "Proof",
-  base: "theorem",
-  bodyfmt: body => [#body #h(1fr) $square$],
-).with(numbering: none)
+#let now = "now"
+#let nothing = "nothing"
+#let just = "just"
+#let ceval = "ceval"
+#let skip = "skip"
+#let assign = "assign"
+#let cwhile = "while"
+#let aeval = "aeval"

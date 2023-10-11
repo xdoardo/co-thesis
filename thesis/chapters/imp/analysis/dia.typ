@@ -1,14 +1,16 @@
 #import "/includes.typ":*
 #import "@preview/prooftrees:0.1.0"
 
+#let bisim = "≋"
 #let conv(c, v) = { $#c arrow.b.double #v$ }
 #let div(c) = { $#c arrow.t.double$ }
 #let fails(c) = { $#c arrow.zigzag$ }
 
+#linebreak()
 === Definite initialization analysis<subsection-imp-analysis_optimization-dia>
 The first transformation we describe is *definite initialization analysis*. In
 general, the objective of this analysis is to ensure that no variable is ever
-used before being initialized, which is the kind of failure, among many, we
+used before being initialized, which is exactly the only kind of failure we
 chose to model.
 
 ==== Variables and indicator functions<subsubsection-imp-dia-vars>
@@ -19,14 +21,20 @@ in the expression: we chose to represent sets in Agda using characteristic
 functions, which we simply define as parametric functions from a parametric set
 to the set of booleans, that is ```hs CharacteristicFunction = A -> Bool```;
 later, we will instantiate this type for identifiers, giving the resulting type
-the name of ```hs VarsSet```. Foremost, we give a (parametric) notion of members
-equivalence (that is, a function ```hs _==_ : A -> A -> Bool```); then, we equip
-characteristic functions of the usual operations on sets: insertion, union, and
-intersection and the usual definition of inclusion.
+the name of ```hs VarsSet```. First, we give a (parametric) notion of members
+equivalence (that is, a function ```hs _==_ : A -> A -> Bool```); then, we the
+usual operations on sets (insertion, union, and intersection) and the usual
+definition of inclusion for characteristic functions.
 
-#mycode(ref: <code-charfun>, "https://github.com/ecmma/co-thesis/blob/master/agda/lujon/Data/CharacteristicFunction.agda#L13")[
+#mycode(label: <code-charfun>, "https://github.com/ecmma/co-thesis/blob/master/agda/lujon/Data/CharacteristicFunction.agda#L13")[
 //typstfmt::off
 ```hs
+module Data.CharacteristicFunction {a} (A : Set a) (_==_ : A -> A -> Bool) where
+-- ...
+CharacteristicFunction : Set a
+CharacteristicFunction = A -> Bool 
+-- ...
+
 ∅ : CharacteristicFunction
 ∅ = λ _ -> false
 
@@ -47,6 +55,7 @@ s₁ ⊆ s₂ = ∀ x -> (x-in-s₁ : s₁ x ≡ true) -> s₂ x ≡ true
 
 #theorem(
   name: "Equivalence of characteristic functions",
+  label: <thm-cf-equiv>
 )[
 
   (using the *Axiom of extensionality*)
@@ -57,20 +66,17 @@ cf-ext : ∀ {s₁ s₂ : CharacteristicFunction}
     (a-ex : ∀ x -> s₁ x ≡ s₂ x) -> s₁ ≡ s₂
 ```
 //typstfmt::on
-]
-<thm-cf-equiv>
-]
+]] 
 
-#theorem(name: "Neutral element of union")[
+#theorem(name: "Neutral element of union", 
+label: <thm-if-neutral-union>)[
 #mycode("https://github.com/ecmma/co-thesis/blob/master/agda/lujon/Data/CharacteristicFunction.agda#L58")[
 //typstfmt::off
 ```hs
 ∪-∅ : ∀ {s : CharacteristicFunction} -> (s ∪ ∅) ≡ s
 ```
 //typstfmt::on
-]
-<thm-if-neutral-union>
-]
+]] 
 
 #theorem(name: "Update inclusion")[
 #mycode("https://github.com/ecmma/co-thesis/blob/master/agda/lujon/Data/CharacteristicFunction.agda#L61")[
@@ -79,9 +85,8 @@ cf-ext : ∀ {s₁ s₂ : CharacteristicFunction}
 ↦=>⊆ : ∀ {id} {s : CharacteristicFunction} -> s ⊆ (id ↦ s)
 ```
 //typstfmt::on
-]
-]
-#theorem(name: "Transitivity of inclusion")[
+]]
+#theorem(name: "Transitivity of inclusion", label: <thm-cf-trans> )[
 #mycode("https://github.com/ecmma/co-thesis/blob/master/agda/lujon/Data/CharacteristicFunction.agda#L87")[
 //typstfmt::off
 ```hs
@@ -89,13 +94,11 @@ cf-ext : ∀ {s₁ s₂ : CharacteristicFunction}
             -> (s₂⊆s₃ : s₂ ⊆ s₃) -> s₁ ⊆ s₃
 ```
 //typstfmt::on
-]
-<thm-if-trans>
-]
+]] 
 
 We will also need a way to get a ```hs VarsSet``` from a ```hs Store```, which
-is shown in #coderef(<code-store-domain>).
-#mycode(ref: <code-store-domain>, "https://github.com/ecmma/co-thesis/blob/master/agda/lujon/Imp/Syntax/Vars.agda#L35")[
+is shown in @code-store-domain.
+#mycode(label: <code-store-domain>, "https://github.com/ecmma/co-thesis/blob/master/agda/lujon/Imp/Syntax/Vars.agda#L35")[
 //typsfmt::off
 ```hs
 dom : Store -> VarsSet
@@ -107,17 +110,17 @@ dom s x with (s x)
 ]
 
 ==== Realization<subsubsection-imp-dia-vars>
-Following @concrete-semantics, the first formal tool we need is a means to
+Following @concrete-semantics, the first formal tool we need is a way to
 compute the set of variables mentioned in expressions, shown in
-#coderef(<code-avars>) and #coderef(<code-bvars>). We also need a function to compute the set of variables that
-are definitely initialized in commands, which is shown in #coderef(<code-cvars>).
+@code-avars and @code-bvars. We also need a function to compute the set of variables that
+are definitely initialized in commands, which is shown in @code-cvars.
 #grid(
 columns: 2,
 //align: center + horizon,
 //auto-vlines: false,
 //auto-hlines: false,
 gutter: 5pt, 
-mycode(ref: <code-avars>, "https://github.com/ecmma/co-thesis/blob/master/agda/lujon/Imp/Syntax/Vars.agda#L16")[
+mycode(label: <code-avars>, "https://github.com/ecmma/co-thesis/blob/master/agda/lujon/Imp/Syntax/Vars.agda#L16")[
 //typstfmt::off
 ```hs
 avars : (a : AExp) -> VarsSet
@@ -128,7 +131,7 @@ avars (plus a₁ a₂) =
 ```
 //typstfmt::on
 ],
-mycode(ref: <code-bvars>, "https://github.com/ecmma/co-thesis/blob/master/agda/lujon/Imp/Syntax/Vars.agda#L21")[
+mycode(label: <code-bvars>, "https://github.com/ecmma/co-thesis/blob/master/agda/lujon/Imp/Syntax/Vars.agda#L21")[
 //typstfmt::off
 ```hs
 bvars : (b : BExp) -> VarsSet
@@ -141,7 +144,7 @@ bvars (and b b₁) =
 ```
 //typstfmt::on
 ])
-#mycode(ref: <code-cvars>, "https://github.com/ecmma/co-thesis/blob/master/agda/lujon/Imp/Syntax/Vars.agda#L27")[
+#mycode(label: <code-cvars>, "https://github.com/ecmma/co-thesis/blob/master/agda/lujon/Imp/Syntax/Vars.agda#L27")[
 //typstfmt::off
 ```hs
 cvars : (c : Command) -> VarsSet
@@ -154,10 +157,10 @@ cvars (while b c) =  ∅
 //typstfmt::on
 ]
 
-It is worth to reflect upon the definition of #coderef(<code-cvars>). What this
-code does it compute the set of _initialized_ variables in a command `c`; as
+It is worth to reflect upon the definition of @code-cvars. This 
+code computes the set of _initialized_ variables in a command `c`; as
 done in @concrete-semantics, we construct this set of initialized variables in
-the most careful way possible: of course, `skip` does not have any initialized
+the most conservative way possible: of course, `skip` does not have any initialized
 variable and `assign id a` adds `id` to the set of initialized variables. 
 
 However, when considering composite commands, we must consider that, except for
@@ -169,19 +172,19 @@ initialized wheter one or the other executes. The same reasoning applies to
 `while b c`: we cannot possibly know whether or not `c` will ever execute, thus
 we consider no new variables initialized.
 
-At this point it should be clear that `cvars c` computes the set of initialized
-variables in a conservative fashion, it is not necessarily true that the actual
-execution of the command will not add additional variables: however, knowing
-that if a the evaluation of a command in a store $sigma$ converges to a value
-$sigma'$, that is $#conv([$c$, $sigma$], $sigma'$)$ then by
-#thmref(<lemma-ceval-store-tilde>)[Lemma] $"dom" sigma subset.eq "dom" sigma'$;
+At this point it should be clear that as `cvars c` computes the set of
+initialized variables in a conservative fashion, it is not necessarily true
+that the actual execution of the command will not add additional variables:
+however, knowing that if the evaluation of a command in a store $sigma$
+converges to a value $sigma'$, that is $#conv([$c$, $sigma$], $sigma'$)$ then by
+@lemma-ceval-store-tilde[Lemma] $"dom" sigma subset.eq "dom" sigma'$;
 this allows us to show the following lemma.
 
-#lemma()[
-    Let $c$ be a command and $sigma_1$ and $sigma_2$ be two stores. Then
+#lemma(label: <lemma-ceval-sc-subeq>)[
+    Let $c$ be a command and $sigma$ and $sigma'$ be two stores. Then
     #align(center, 
-    $#conv($"ceval" c space sigma_1$, $sigma_2$) -> ("dom" sigma_1 union
-    ("cvars" c)) space subset.eq ("dom" sigma_2)$)
+    $#conv($"ceval" c space sigma$, $sigma'$) -> ("dom" sigma_1 union
+    ("cvars" c)) space subset.eq ("dom" sigma')$)
 
 #mycode(proof: <proof-ceval-sc-subeq>, "https://github.com/ecmma/co-thesis/blob/master/agda/lujon/Imp/Semantics/BigStep/Functional/Properties.agda#L133")[
 //typstfmt::off
@@ -190,8 +193,7 @@ ceval⇓=>sc⊆s' :  ∀ (c : Command) (s s' : Store) (h⇓ : (ceval c s) ⇓ s'
                   -> (dom s ∪ (cvars c)) ⊆ (dom s')
 ```
 //typstfmt::on 
-<lemma-ceval-sc-subeq>
-]]
+]] 
 
 
 We now give inference rules that inductively build the relation that embodies
@@ -200,8 +202,8 @@ Agda, we define a datatype representing the relation of type
 //typstfmt::off
 ```hs Dia : VarsSet -> Command -> VarsSet -> Set```,
 //typstfmt::on
-which is shown in #coderef(<code-dia>). #thmref(<lemma-ceval-sc-subeq>)[Lemma]
-will allow us to show that there's a relation between  the `VarsSet` in the
+which is shown in @code-dia. @lemma-ceval-sc-subeq[Lemma]
+will allow us to show that there  is a relation between  the `VarsSet` in the
 `Dia` relation and the actual stores that are used in the execution of a
 command.
 
@@ -240,7 +242,7 @@ command.
   caption: "Inference rules for the definite initialization analysis",
   supplement: "Table",
 )<imp-dia-rel>
-#mycode(ref: <code-dia>, "https://github.com/ecmma/co-thesis/blob/master/agda/lujon/Imp/Analysis/DefiniteInitialization.agda#L22")[
+#mycode(label: <code-dia>, "https://github.com/ecmma/co-thesis/blob/master/agda/lujon/Imp/Analysis/DefiniteInitialization.agda#L22")[
 //typstfmt::off
 ```hs
 data Dia : VarsSet -> Command -> VarsSet -> Set where
@@ -258,192 +260,127 @@ data Dia : VarsSet -> Command -> VarsSet -> Set where
 
 What we want to show now is that if ```hs Dia``` holds, then the evaluation of
 a command $c$ does not result in an error: while
-#thmref(<thm-adia-sound>)[Theorem] and #thmref(<thm-bdia-sound>)[Theorem] show
+@thm-adia-safe and @thm-bdia-safe show
 that if the variables in an arithmetic expression or a boolean expression are
 contained in a store the result of their evaluation cannot be a failure (i.e.
 they result in "just" something, as it cannot diverge),
-#thmref(<thm-dia-sound>)[Theorem] shows that if ```hs Dia``` holds, then the
+@thm-dia-safe shows that if ```hs Dia``` holds, then the
 evaluation of a program failing is absurd: therefore, by
-#thmref(<thm-exec>)[Theorem], the program either diverges or converges to some
+@post-exec, the program either diverges or converges to some
 value.
 
-#theorem( name: "Soundness of definite initialization for arithmetic expressions")[
-#mycode(proof: <proof-adia-sound>, "https://github.com/ecmma/co-thesis/blob/master/agda/lujon/Imp/Analysis/DefiniteInitialization.agda#L47")[
+#theorem( name: "Safety of arithmetic expressions", label: <thm-adia-safe>)[
+#mycode(proof: <proof-adia-safe>, "https://github.com/ecmma/co-thesis/blob/master/agda/lujon/Imp/Analysis/DefiniteInitialization.agda#L47")[
 //typstfmt::off
 ```hs 
-adia-sound : ∀ (a : AExp) (s : Store) (dia : avars a ⊆ dom s)
+adia-safe : ∀ (a : AExp) (s : Store) (dia : avars a ⊆ dom s)
                   -> (∃ λ v -> aeval a s ≡ just v)
 ```
 //typstfmt::on
-] <thm-adia-sound> ]
+]] 
 
-#theorem(name: "Soundness of definite initialization for boolean expressions")[
- #mycode(proof: <proof-bdia-sound>, "https://github.com/ecmma/co-thesis/blob/master/agda/lujon/Imp/Analysis/DefiniteInitialization.agda#L60")[
+#theorem(name: "Safety of boolean expressions", label: <thm-bdia-safe>)[
+ #mycode(proof: <proof-bdia-safe>, "https://github.com/ecmma/co-thesis/blob/master/agda/lujon/Imp/Analysis/DefiniteInitialization.agda#L60")[
 //typstfmt::off
 ```hs
-bdia-sound : ∀ (b : BExp) (s : Store) (dia : bvars b ⊆ dom s)
+bdia-safe : ∀ (b : BExp) (s : Store) (dia : bvars b ⊆ dom s)
               -> (∃ λ v -> beval b s ≡ just v)
 ```
 //typstfmt::on
-] <thm-bdia-sound> ]
+]] 
 
 #theorem(
-  name: "Soundness of definite initialization for commands",
+  name: "Safety of definite initialization for commands",
+  label: <thm-dia-safe>
 )[
-#mycode(proof: <proof-dia-sound>, "https://github.com/ecmma/co-thesis/blob/master/agda/lujon/Imp/Analysis/DefiniteInitialization.agda#L117")[
+#mycode(proof: <proof-dia-safe>, "https://github.com/ecmma/co-thesis/blob/master/agda/lujon/Imp/Analysis/DefiniteInitialization.agda#L117")[
 //typstfmt::off
 ```hs
-dia-sound : ∀ (c : Command) (s : Store) (v v' : VarsSet) (dia : Dia v c v')
+dia-safe : ∀ (c : Command) (s : Store) (v v' : VarsSet) (dia : Dia v c v')
   (v⊆s : v ⊆ dom s) -> (h-err : (ceval c s) ↯) -> ⊥
 ```
 //typstfmt::on
-] <thm-dia-sound> ]
-We now show an idea of the proof in a discursive manner (the full proof, in
-Agda, is in #coderef(<proof-dia-sound>)). Let us start with the two simple
-(non-recursive) cases. The first is `c ≡ skip`, where we have the following situation:
-#code()[
-//typstfmt::off
-```hs
- dia-sound' skip s v v' dia v⊆s h-err = {! !}
--- ————————————————————————————————————————————————————————————
--- Goal: ⊥
--- ————————————————————————————————————————————————————————————
--- dia : Dia v skip v'
--- h-err : WeakBisim _≡_ ∞ (ceval skip s) (now nothing)
--- s : Ident → Maybe ℤ
--- v v' : String → Bool
--- v⊆s : (x : String) → v x ≡ true → dom s x ≡ true
--- ————————————————————————————————————————————————————————————
-```
-//typstfmt::on
-]
-Forcing Agda to inspect `h-err`, we get the assumption that `just s ≡ nothing`;
-inspecting this assumption we easily get #coderef(<dia-sound-skip>). 
-#mycode(ref: <dia-sound-skip>, "https://github.com/ecmma/co-thesis/blob/master/agda/lujon/Imp/Analysis/DefiniteInitialization.agda#L119")[
-//typstfmt::off
-```hs
-  dia-sound skip s v v' dia v⊆s (now ())
-```
-//typstfmt::on
-  ]
-Let us move to the second "easy" case, assignment: 
-#code()[
-//typstfmt::off
-```hs 
-dia-sound' (assign id a) s v v' dia v⊆s h-err = {! !}
--- ————————————————————————————————————————————————————————————
--- Goal: ⊥
--- ————————————————————————————————————————————————————————————
--- a : AExp
--- dia : Dia v (assign id a) v'
--- h-err : WeakBisim _≡_ ∞ (ceval (assign id a) s) (now nothing)
--- id : String
--- s : Ident → Maybe ℤ
--- v v' : String → Bool
--- v⊆s : (x : String) → v x ≡ true → dom s x ≡ true
--- ————————————————————————————————————————————————————————————
-```
-//typstfmt::on
-]
-We can make Agda aware of what `v'` is, that is, `v' ≡ (id ↦ v)` by splitting on `dia`:
-#code()[
-```hs
- dia-sound' (assign id a) s v .(id ↦ v) (assign .a .v .id a⊆v) v⊆s h-err = {! !}
-```
-]
-And using the value of `aeval a s` using `adia-sound`
-(#thmref(<thm-adia-sound>)[Theorem]) we conclude this piece of proof as shown in
-#coderef(<dia-sound-assign>).
-#mycode(ref: <dia-sound-assign>, "https://github.com/ecmma/co-thesis/blob/master/agda/lujon/Imp/Analysis/DefiniteInitialization.agda#L120")[
-//typstfmt::off
-```hs
-  dia-sound (assign id a) s v .(id ↦ v) (assign .a .v .id a⊆v) v⊆s h-err 
-   with (adia-sound a s (⊆-trans a⊆v v⊆s))
-  ... | a' , eq-aeval 
-   rewrite eq-aeval 
-   rewrite eq-aeval 
-   with h-err
-  ... | now ()
-```
-//typstfmt::on
-]
+]] 
 
-Let us examine a bit more difficult case, `while`, as shown in #coderef(<ex-dia-sound-while>).
-//typstfmt::off
-In this case, we proceed with the value of `beval b s` using `bdia-sound`
-(#thmref(<thm-bdia-sound>)[Theorem]) we get to two outcomes: 
-if `beval b s ≡ just false`, then `ceval (while b c) s` converges to `s` 
-itself, and we get to the same absurd hypothesis `just s ≡ nothing`, which
-concludes this branch of the proof.
-//typstfmt::on
-If, instead, `beval b s ≡ just true`, we consider the value of `ceval c s`
-(#coderef(<dia-sound-while>)), which can have three outcomes: it can fail, that
-is `ceval c s ≡ now nothing` and we conclude this branch of the proof with a
-recursive call on `dia-sound c`; it can converge to `ceval c s ≡ now (just s)'`
-and we conclude this branch of the proof with a recursive call on `dia-sound (while b c) s'`. 
+We now show an idea of the proof (the full proof, in Agda, is in
+@proof-dia-safe), examining the two base cases `c ≡ skip` and `c ≡ assign id a`
+and the coinductive case `c ≡ while b c'`. The proof for the base cases is, in
+words, based on the idea that the evaluation cannot possibly go wrong: note
+that by the hypotheses, we have that `(ceval c s) ↯`, which we can express in
+math as $ceval space c space sigma bisim now nothing$.
 
-#code(ref: <ex-dia-sound-while>)[
+
+#show figure.where(kind: "boxenv"): set block(breakable: true)
+#proof[
+  1. Let $c$ be the command `skip`. Then, for any store $sigma$, by the
+    definition of `ceval` in @code-ceval and by the inference rule $arrow.b.double$skip in
+    @imp-commands-semantics, the evaluation of $c$ in the store $sigma$ must be 
+    #align(center, $ceval "skip" sigma eq.triple now (just sigma)$)
+
+    Given the hypothesis that #fails([c, $sigma$]), we now have that it must be
+    $now nothing bisim now (just sigma )$, which is false for any $sigma$, making the hypothesis
+    #fails([c, $sigma$]) impossible.
+  2. Let $c$ be the command `assign id a`, for some identifier $id$ and
+    arithmetic expression $a$. By the hypothesis, we have that it must be $"Dia"
+    v space (assign id a) space v'$ for some $v$ and $v'$, which entails that
+    the variables that appear in $a$, which we named $"avars" a$, are all
+    initialized in $v$, that is $"avars" a subset.eq v$; this and the
+    hypothesis that $v subset.eq "dom" sigma$ imply by @thm-cf-trans
+    that $"avars" a subset.eq "dom" sigma$.
+
+    By @thm-adia-safe, with the assumption that $"avars" a subset.eq "dom" sigma$, 
+    it must be $aeval a sigma eq.triple just n$ for some $n : ZZ$. Again, by the 
+    definition of `ceval` in @code-ceval and by the inference rule $arrow.b.double$assign 
+    in @imp-commands-semantics, the evaluation of $c$ in the store $sigma$ must be 
+
+    #align(center, $ceval (assign id a) space sigma eq.triple now (just ("update"
+    id n space sigma))$)
+
+    and, as before, by the hypothesis that $c$ fails it must thus be that $now
+    nothing bisim now (just ("update" id n space sigma))$, which is impossible for any $sigma$, 
+    making the hypotesis #fails([c]) impossible.
+
+  3. Let $c$ be the command `while b c'` for some boolean expression $b$ and
+    some command $c'$. By @thm-bdia-safe, with the assumption that $"bvars" b
+    subset.eq "dom" sigma$, it must be $"beval" b space sigma eq.triple "just" v$ for some
+    $v : BB$. 
+
+    #linebreak()
+    If $v eq.triple "false"$, then by the  definition of `ceval` in
+    @code-ceval and by the inference rule $arrow.b.double$while-false in
+    @imp-commands-semantics, the evaluation of $c$ in the store $sigma$ must be 
+
+    #align(center, $ceval ("while" b space c') space sigma eq.triple now ("just" sigma)$)
+
+    making the hypothesis that the evaluation of $c$ fails impossible. 
+
+    #linebreak()
+    If, instead, $v eq.triple "true"$, we must evaluate $c'$ in $sigma$. 
+    The case $c' eq.triple now nothing$ is impossible by the inductive hypothesis.
+
+    #linebreak()
+    If $c' eq.triple now (just sigma')$ for some $sigma'$, then, by recursion, it must be
+    #align(center, [```hs dia-sound (while b c) s' v v dia (⊆-trans v⊆s (ceval⇓=>⊆ c s s' (≡=>≋ eq-ceval-c))) w↯```])
+
+    #linebreak()
+    Finally, if $c' eq.triple "later" x$ for some $x$, then we can prove inductively that  
+#mycode("https://github.com/ecmma/co-thesis/blob/master/agda/lujon/Imp/Analysis/DefiniteInitialization.agda#L165", proof: <proof-dia-sound-while-later>)[
 //typstfmt::off
 ```hs
- dia-sound' (while b c) s v v' dia v⊆s h-err = {! !}
--- ————————————————————————————————————————————————————————————
--- Goal: ⊥
--- ————————————————————————————————————————————————————————————
--- b : BExp
--- c : Command
--- dia : Dia v (while b c) v'
--- h-err : WeakBisim _≡_ ∞ (ceval (while b c) s) (now nothing)
--- s : Ident → Maybe ℤ
--- v v' : String → Bool
--- v⊆s : (x : String) → v x ≡ true → dom s x ≡ true
--- ————————————————————————————————————————————————————————————
+dia-sound-while-later : ∀ {x : Thunk (Delay (Maybe Store)) ∞} {b c} {v} 
+ (l↯⊥ : (later x)↯ -> ⊥) (dia : Dia v (while b c) v) 
+ (l⇓s=>⊆ : ∀ {s : Store} -> ((later x) ⇓ s) -> v ⊆ dom s)
+ (w↯ : (bind (later x) (λ s -> later (ceval-while c b s))) ↯) -> ⊥
 ```
 //typstfmt::on
-]
+] ]
 
-#mycode(ref: <dia-sound-while>, "https://github.com/ecmma/co-thesis/blob/master/agda/lujon/Imp/Analysis/DefiniteInitialization.agda#L149")[
-//typstfmt::off
-```hs
-dia-sound (while b c) s v v' dia v⊆s h-err | true 
- with (ceval c s) in eq-ceval-c --- <- here
-... | now nothing = dia-sound c s v v₁ dia-c v⊆s (≡=>≋ eq-ceval-c) 
-dia-sound (while b c) s v v' dia v⊆s h-err | true | now (just s')  
- with h-err
-... | laterₗ w↯ = 
- dia-sound (while b c) s' v v dia 
-    (⊆-trans v⊆s (ceval⇓=>⊆ c s s' (≡=>≋ eq-ceval-c))) w↯
-dia-sound (while b c) s v v' dia v⊆s h-err | true | later x 
- with (dia-sound c s v v₁ dia-c v⊆s)
-... | c↯⊥  = dia-sound-while-later c↯⊥ dia h h-err 
-```
-//typstfmt::on
-  ]
-If, finally, `ceval c s ≡ later x`, we use an helper function (a lemma), shown
-in #coderef(<dia-sound-while-later>).
-#mycode(ref: <dia-sound-while-later>, "https://github.com/ecmma/co-thesis/blob/master/agda/lujon/Imp/Analysis/DefiniteInitialization.agda#L165")[
-//typstfmt::off
-```hs
-dia-sound-while-force : ∀ {x : Thunk (Delay (Maybe Store)) ∞} {b c} {v} 
-  (l↯⊥ : (force x)↯ -> ⊥) (dia : Dia v (while b c) v) 
-  (l⇓s=>⊆ : ∀ {s : Store} -> ((force x) ⇓ s) -> v ⊆ dom s) 
-  (w↯ : (bind (force x) (λ s -> later (ceval-while c b s))) ↯) -> ⊥
-dia-sound-while-force {x} {b} {c} {v} l↯⊥ dia l⇓s=>⊆ w↯ 
- with (force x) in eq-force-x
-... | now nothing = l↯⊥ w↯
-dia-sound-while-force {x} {b} {c} {v} l↯⊥ dia l⇓s=>⊆ w↯ | now (just s') 
- rewrite eq-force-x 
- with w↯
-... | laterₗ w↯' = 
- dia-sound (while b c) s' v v dia (l⇓s=>⊆ (now refl)) w↯'
-dia-sound-while-force {x} {b} {c} {v} l↯⊥ dia l⇓s=>⊆ w↯ | later x₁ = 
- dia-sound-while-later {x₁} l↯⊥ dia l⇓s=>⊆ w↯
-```
-//typstfmt::on
-]
+The proof works by unwinding, inductively, the assumption that #fails([c]): if
+it fails, then $ceval space c space sigma$ must eventually converge to $"now" space "nothing"$.
+The proof thus works by showing base cases and, in the case of $"seq" space c_1 space c_2$
+and $"while" space b space c' space eq.triple space "if" space b space "then" space ("seq" space c' space ("while" space b space c')) space "else" space "skip"$, 
+showing that by inductive hypotesis $c_1$ or $c'$ cannot possibly fail; then,
+the assumption becomes that it is the second command ($c_2$ or $"while" space b space c'$)
+that fails, which we can inductively show absurd.
 
-What this last piece of code does is coinductively "unwind" the execution of
-`while b c` to check whether or not `ceval c` in a generic store `s` converges
-to a store `s'`; if so, then check that `ceval (while b c) s'` does not fail by
-checking that `ceval c s'` does not fail and so on; while if `ceval c s` fails,
-use the assumption that it can't fail (which is just a preventive call to
-`dia-sound`).
+#show figure.where(kind: "boxenv"): set block(breakable: false)

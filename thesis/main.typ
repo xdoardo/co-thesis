@@ -1,40 +1,37 @@
 #import "@local/thesis:1.0.0": *
 
 #import "./includes.typ": *
+#set cite(style: "numerical")
+#show bibliography: set text(13pt)
 
 #show: thesis.with(
   title: "Program Transformations in the Delay Monad",
   subtitle: "A Case Study for Coinduction via Copatterns and Sized Types",
   author: "Edoardo Marangoni",
   figure: align(bottom, image("./figures/Minerva.png", width: 28%)),
-  university: "University of Milan",
+  university: [University of Milan],
+  department: [Department of Computer Science and Technology],
   degree: "Master of Science",
-  msg: [
-
-    #v(0.4fr)
-    #align(
-      right,
-      text(
-        style: "italic",
-        ["...I can hardly understand, for instance, how a young man can decide to ride
-          over
-
-          to the next village without being afraid that, quite apart from accidents,
-
-          even the span of a normal life that passes happily may be totally
-
-          insufficient for such a ride."],
-      ),
-    )
-    #align(right, "Franz Kafka")
-
-    #v(1fr)
-    #smallcaps("no generative artificial intelligence was used in
-     this work.")],
+  msg: include "./msg.typ",
+  supervisor: [Prof. Alberto Momigliano],
+  year: [Academic Year 2022-2023], 
+  number: [num. 973597], 
 )
 
+#pagebreak()
+#pagebreak(to: "odd")
 #include "./chapters/index.typ"
-#appendix(include "./appendices/index.typ")
 
-#show bibliography: set text(13pt)
-#bibliography("./db.yaml", title: [Bibliography], style: "mla")
+#pagebreak()
+#pagebreak(to: "odd")
+#appendix([#include "./appendices/index.typ"])
+
+
+#set page(header: none)
+
+#pagebreak()
+#pagebreak(to: "odd")
+#include "./thanks.typ"
+
+#pagebreak(to: "odd")
+#bibliography("./db.bib")

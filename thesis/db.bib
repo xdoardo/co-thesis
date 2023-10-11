@@ -1,137 +1,662 @@
-@article{floyd-meaning,
-	author = {Floyd, R. W.},
-	journal = {Mathematical aspects of computer science},
-	title = {Assigning meanings to programs},
-	volume = {{19}},
-	year = {{1967}},
-}
-
-@misc{logical-foundations,
-	author = { Benjamin C. Pierce and Arthur Azevedo de Amorim and Chris
-	          Casinghino and Marco Gaboardi and Michael Greenberg and Cătălin
-	          Hriţcu and Vilhelm Sjöberg and Brent Yorgey },
-	title = {Logical Foundations},
-	year = {{2023}},
-	note = {[Accessed 13-09-2023]},
+@book{software-foundations,
+	author = {Benjamin C. Pierce and Arthur {Azevedo de Amorim} and Chris Casinghino and Marco Gaboardi and Michael Greenberg and C\v{a}t\v{a} lin Hri\c{t}cu and Vilhelm Sj\"{o}berg and Brent Yorgey},
+	title = {Software Foundations},
+	year = {2017},
+	publisher = {Electronic textbook},
+	plclub = {Yes},
+	bcp = {Yes},
+	url = {https://softwarefoundations.cis.upenn.edu/},
+	keys = {verification,books},
+	note = {Version 5.0. \URL{http://www.cis.upenn.edu/~bcpierce/sf}},
+	ebook = {http://www.cis.upenn.edu/~bcpierce/sf},
+	japanese = {http://proofcafe.org/sf},
 }
 
 @book{concrete-semantics,
-	author = {Nipkow, Tobias and Klein, Gerwin},
-	title = {Concrete Semantics: With Isabelle/HOL},
+	author = {Tobias Nipkow and Gerwin Klein},
+	title = {Concrete Semantics - With Isabelle/HOL},
+	publisher = {Springer},
 	year = {2014},
-	isbn = {3319105418},
-	publisher = {Springer Publishing Company, Incorporated},
-	abstract = {Part I of this book is a practical introduction to working with
-	            the Isabelle proof assistant. It teaches you how to write
-	            functional programs and inductive definitions and how to prove
-	            properties about them in Isabelles structured proof language. Part
-	            II is an introduction to the semantics of imperative languages with
-	            an emphasis on applications like compilers and program analysers.
-	            The distinguishing feature is that all the mathematics has been
-	            formalised in Isabelle and much of it is executable. Part I
-	            focusses on the details of proofs in Isabelle; Part II can be read
-	            even without familiarity with Isabelles proof language, all proofs
-	            are described in detail but informally. The book teaches the reader
-	            the art of precise logical reasoning and the practical use of a
-	            proof assistant as a surgical tool for formal proofs about computer
-	            science artefacts. In this sense it represents a formal approach to
-	            computer science, not just semantics. The Isabelle formalisation,
-	            including the proofs and accompanying slides, are freely available
-	            online, and the book is suitable for graduate students, advanced
-	            undergraduate students, and researchers in theoretical computer
-	            science and logic.},
+	url = {https://doi.org/10.1007/978-3-319-10542-0},
+	doi = {10.1007/978-3-319-10542-0},
+	isbn = {978-3-319-10541-3},
+	timestamp = {Fri, 02 Nov 2018 09:27:06 +0100},
+	biburl = {https://dblp.org/rec/books/sp/NipkowK14.bib},
+	bibsource = {dblp computer science bibliography, https://dblp.org},
 }
+
 @inproceedings{moggi-monads,
-	author = {Moggi, E.},
-	booktitle = {[1989] Proceedings. Fourth Annual Symposium on Logic in Computer
-	             Science},
-	title = {Computational lambda-calculus and monads},
+	author = {Eugenio Moggi},
+	title = {Computational Lambda-Calculus and Monads},
+	booktitle = {Proceedings of the Fourth Annual Symposium on Logic in Computer Science {(LICS} '89), Pacific Grove, California, USA, June 5-8, 1989},
+	pages = {14--23},
+	publisher = {{IEEE} Computer Society},
 	year = {1989},
-	volume = {},
-	number = {},
-	pages = {14-23},
+	url = {https://doi.org/10.1109/LICS.1989.39155},
 	doi = {10.1109/LICS.1989.39155},
+	timestamp = {Fri, 24 Mar 2023 00:01:49 +0100},
+	biburl = {https://dblp.org/rec/conf/lics/Moggi89.bib},
+	bibsource = {dblp computer science bibliography, https://dblp.org},
 }
+
+
+
 @article{capretta-delay,
-	doi = {10.2168/lmcs-1(2:1)2005},
-	url = {https://doi.org/10.2168/lmcs-1(2:1)2005},
-	year = {2005},
-	month = jul,
-	publisher = {Centre pour la Communication Scientifique Directe ({CCSD})},
-	volume = {Volume 1, Issue 2},
 	author = {Venanzio Capretta},
-	title = {General Recursion via Coinductive Types},
-	journal = {Logical Methods in Computer Science},
+	title = {General recursion via coinductive types},
+	journal = {Log. Methods Comput. Sci.},
+	volume = {1},
+	number = {2},
+	year = {2005},
+	url = {https://doi.org/10.2168/LMCS-1(2:1)2005},
+	doi = {10.2168/LMCS-1(2:1)2005},
+	timestamp = {Thu, 25 Jun 2020 21:32:12 +0200},
+	biburl = {https://dblp.org/rec/journals/lmcs/Capretta05.bib},
+	bibsource = {dblp computer science bibliography, https://dblp.org},
 }
-@article{abel-nbe,
-	doi = {10.4204/eptcs.153.4},
-	url = {https://doi.org/10.4204%2Feptcs.153.4},
-	year = 2014,
-	month = {jun},
-	publisher = {Open Publishing Association},
+
+@inproceedings{abel-nbe,
+	author = {Andreas Abel and James Chapman},
+	editor = {Paul Blain Levy and Neel Krishnaswami},
+	title = {Normalization by Evaluation in the Delay Monad: {A} Case Study for Coinduction via Copatterns and Sized Types},
+	booktitle = {Proceedings 5th Workshop on Mathematically Structured Functional Programming, MSFP@ETAPS 2014, Grenoble, France, 12 April 2014},
+	series = {{EPTCS}},
 	volume = {153},
 	pages = {51--67},
-	author = {Andreas Abel and James Chapman},
-	title = {Normalization by Evaluation in the Delay Monad: A Case Study for
-	         Coinduction via Copatterns and Sized Types},
-	journal = {Electronic Proceedings in Theoretical Computer Science},
+	year = {2014},
+	url = {https://doi.org/10.4204/EPTCS.153.4},
+	doi = {10.4204/EPTCS.153.4},
+	timestamp = {Wed, 29 Sep 2021 08:56:00 +0200},
+	biburl = {https://dblp.org/rec/journals/corr/AbelC14.bib},
+	bibsource = {dblp computer science bibliography, https://dblp.org},
 }
+
 @article{kohl-monads-cs,
 	url = {https://ncatlab.org/nlab/files/KohlSchwaiger-Monads.pdf},
 	year = 2021,
 	author = {Christina Kohl and Christina Schwaiger},
-	title = {Monads in Computer Science}
+	title = {Monads in Computer Science},
 }
+
 @inproceedings{danielsson-operational-semantics,
-  doi = {10.1145/2364527.2364546},
-  url = {https://doi.org/10.1145/2364527.2364546},
-  year = {2012},
-  month = sep,
-  publisher = {{ACM}},
-  author = {Nils Anders Danielsson},
-  title = {Operational semantics using the partiality monad},
-  booktitle = {Proceedings of the 17th {ACM} {SIGPLAN} international conference on Functional programming}
+	author = {Nils Anders Danielsson},
+	editor = {Peter Thiemann and Robby Bruce Findler},
+	title = {Operational semantics using the partiality monad},
+	booktitle = {{ACM} {SIGPLAN} International Conference on Functional Programming, ICFP'12, Copenhagen, Denmark, September 9-15, 2012},
+	pages = {127--138},
+	publisher = {{ACM}},
+	year = {2012},
+	url = {https://doi.org/10.1145/2364527.2364546},
+	doi = {10.1145/2364527.2364546},
+	timestamp = {Thu, 24 Jun 2021 16:19:30 +0200},
+	biburl = {https://dblp.org/rec/conf/icfp/Danielsson12.bib},
+	bibsource = {dblp computer science bibliography, https://dblp.org},
 }
+
 @incollection{chapman-delay-quotient,
-  doi = {10.1007/978-3-319-25150-9_8},
-  url = {https://doi.org/10.1007/978-3-319-25150-9_8},
-  year = {2015},
-  publisher = {Springer International Publishing},
-  pages = {110--125},
-  author = {James Chapman and Tarmo Uustalu and Niccol{\`{o}} Veltri},
-  title = {Quotienting the Delay Monad by Weak Bisimilarity},
-  booktitle = {Theoretical Aspects of Computing - {ICTAC} 2015}
+	doi = {10.1007/978-3-319-25150-9_8},
+	url = {https://doi.org/10.1007/978-3-319-25150-9_8},
+	year = {2015},
+	publisher = {Springer International Publishing},
+	pages = {110--125},
+	author = {James Chapman and Tarmo Uustalu and Niccol{\`{o}} Veltri},
+	title = {Quotienting the Delay Monad by Weak Bisimilarity},
+	booktitle = {Theoretical Aspects of Computing - {ICTAC} 2015},
 }
 @article{leroy-coinductive-bigstep,
-  doi = {10.48550/ARXIV.0808.0586},
-  url = {https://arxiv.org/abs/0808.0586},
-  author = {Leroy,  Xavier and Grall,  Hervé},
-  keywords = {Programming Languages (cs.PL),  FOS: Computer and information sciences,  FOS: Computer and information sciences},
-  title = {Coinductive big-step operational semantics},
-  publisher = {arXiv},
-  year = {2008},
-  copyright = {arXiv.org perpetual,  non-exclusive license}
+	author = {Xavier Leroy and Herv{\'{e}} Grall},
+	title = {Coinductive big-step operational semantics},
+	journal = {Inf. Comput.},
+	volume = {207},
+	number = {2},
+	pages = {284--304},
+	year = {2009},
+	url = {https://doi.org/10.1016/j.ic.2007.12.004},
+	doi = {10.1016/j.ic.2007.12.004},
+	timestamp = {Fri, 12 Feb 2021 22:15:37 +0100},
+	biburl = {https://dblp.org/rec/journals/iandc/LeroyG09.bib},
+	bibsource = {dblp computer science bibliography, https://dblp.org},
 }
-@article{abel-miniagda,
-  doi = {10.48550/ARXIV.1012.4896},
-  url = {https://arxiv.org/abs/1012.4896},
-  author = {Abel,  Andreas},
-  keywords = {Programming Languages (cs.PL),  Logic in Computer Science (cs.LO),  FOS: Computer and information sciences,  FOS: Computer and information sciences,  F.4.1},
-  title = {MiniAgda: Integrating Sized and Dependent Types},
-  publisher = {arXiv},
-  year = {2010},
-  copyright = {arXiv.org perpetual,  non-exclusive license}
+
+@inproceedings{abel-miniagda,
+	author = {Andreas Abel},
+	editor = {Ekaterina Komendantskaya and Ana Bove and Milad Niqui},
+	title = {MiniAgda: Integrating Sized and Dependent Types},
+	booktitle = {Partiality and Recursion in Interactive Theorem Provers, PAR@ITP 2010, Edinburgh, UK, July 15, 2010},
+	series = {EPiC Series},
+	volume = {5},
+	pages = {18--33},
+	publisher = {EasyChair},
+	year = {2010},
+	url = {https://doi.org/10.29007/322q},
+	doi = {10.29007/322q},
+	timestamp = {Sun, 15 Aug 2021 00:16:55 +0200},
+	biburl = {https://dblp.org/rec/conf/itp/000110.bib},
+	bibsource = {dblp computer science bibliography, https://dblp.org},
 }
-@misc{pickard-compilers,
-  doi = {10.1145/3473587},
-  url = {https://doi.org/10.1145/3473587},
+
+
+@article{acerbi-plato,
+	doi = {10.1007/s004070000020},
+	url = {https://doi.org/10.1007/s004070000020},
+	year = {2000},
+	month = aug,
+	publisher = {Springer Science and Business Media {LLC}},
+	volume = {55},
+	number = {1},
+	pages = {57--76},
+	author = {F. Acerbi},
+	title = {Plato: Parmenides 149a7-c3. A Proof by Complete Induction?},
+	journal = {Archive for History of Exact Sciences},
+}
+
+@inproceedings{pous-coinduction,
+	author = {Damien Pous},
+	editor = {Martin Grohe and Eric Koskinen and Natarajan Shankar},
+	title = {Coinduction All the Way Up},
+	booktitle = {Proceedings of the 31st Annual {ACM/IEEE} Symposium on Logic in Computer Science, {LICS} '16, New York, NY, USA, July 5-8, 2016},
+	pages = {307--316},
+	publisher = {{ACM}},
+	year = {2016},
+	url = {https://doi.org/10.1145/2933575.2934564},
+	doi = {10.1145/2933575.2934564},
+	timestamp = {Wed, 11 Aug 2021 11:51:24 +0200},
+	biburl = {https://dblp.org/rec/conf/lics/Pous16.bib},
+	bibsource = {dblp computer science bibliography, https://dblp.org},
+}
+@book{pierce-types,
+	author = {Benjamin C. Pierce},
+	title = {Types and programming languages},
+	publisher = {{MIT} Press},
+	year = {2002},
+	isbn = {978-0-262-16209-8},
+	timestamp = {Thu, 03 Feb 2011 10:51:35 +0100},
+	biburl = {https://dblp.org/rec/books/daglib/0005958.bib},
+	bibsource = {dblp computer science bibliography, https://dblp.org},
+}
+
+@misc{agda-docs,
+	author = {Ulf Norell and Andreas Abel and others},
+	title = {Agda documentation},
+	url = {https://agda.readthedocs.io/en/v2.6.3.20230914/index.html},
+	year = {2023},
+	note = {[Accessed 27-09-2023]},
+}
+
+@online{leroy-mechsem,
+	author = {Xavier Leroy},
+	title = {Mechanized Semantics},
+	year = {2023},
+	url = {https://github.com/xavierleroy/cdf-mech-sem},
+	note = {GitHub repository},
+}
+
+@inproceedings{danielsson-beating-productivity,
+	author = {Nils Anders Danielsson},
+	editor = {Ekaterina Komendantskaya and Ana Bove and Milad Niqui},
+	title = {Beating the Productivity Checker Using Embedded Languages},
+	booktitle = {Partiality and Recursion in Interactive Theorem Provers, PAR@ITP 2010, Edinburgh, UK, July 15, 2010},
+	series = {EPiC Series},
+	volume = {5},
+	pages = {34--54},
+	publisher = {EasyChair},
+	year = {2010},
+	url = {https://doi.org/10.29007/l41f},
+	doi = {10.29007/l41f},
+	timestamp = {Sun, 15 Aug 2021 00:16:55 +0200},
+	biburl = {https://dblp.org/rec/conf/itp/Danielsson10.bib},
+	bibsource = {dblp computer science bibliography, https://dblp.org},
+}
+
+@misc{abel-eslli,
+	author = {Andreas Abel},
+	title = {Type theory - Coinduction in Type Theory},
+	url = {https://www.cse.chalmers.se/~abela/esslli2016/talkESSLLI-coinduction.pdf},
+	journal = {www.cse.chalmers.se},
+	publisher = {ESSLLI 2016},
+} 
+
+@inproceedings{nakata-coinductive-while,
+	author = {Keiko Nakata and Tarmo Uustalu},
+	editor = {Stefan Berghofer and Tobias Nipkow and Christian Urban and Makarius Wenzel},
+	title = {Trace-Based Coinductive Operational Semantics for While},
+	booktitle = {Theorem Proving in Higher Order Logics, 22nd International Conference, TPHOLs 2009, Munich, Germany, August 17-20, 2009. Proceedings},
+	series = {Lecture Notes in Computer Science},
+	volume = {5674},
+	pages = {375--390},
+	publisher = {Springer},
+	year = {2009},
+	url = {https://doi.org/10.1007/978-3-642-03359-9\_26},
+	doi = {10.1007/978-3-642-03359-9\_26},
+	timestamp = {Tue, 14 May 2019 10:00:48 +0200},
+	biburl = {https://dblp.org/rec/conf/tphol/NakataU09.bib},
+	bibsource = {dblp computer science bibliography, https://dblp.org},
+}
+
+@misc{agda-repo,
+	author = {Agda},
+	title = {GitHub - agda/agda: Agda is a dependently typed programming language and interactive theorem prover.},
+	url = {https://github.com/agda/agda},
+	note = {[Accessed 29-09-2023]},
+}
+
+
+
+@Book{hott-book,
+  author =    {The {Univalent Foundations Program}},
+  title =     {Homotopy Type Theory: Univalent Foundations of Mathematics},
+  url = {https://homotopytypetheory.org/book},
+  address =   {Institute for Advanced Study},
+  year =      2013}
+
+@article{vezzosi-cubical-agda,
+  author       = {Andrea Vezzosi and Anders M{\"{o}}rtberg and Andreas Abel},
+  title        = {Cubical Agda: {A} dependently typed programming language with univalence and higher inductive types},
+  journal      = {J. Funct. Program.},
+  volume       = {31},
+  pages        = {e8},
+  year         = {2021},
+  url          = {https://doi.org/10.1017/S0956796821000034},
+  doi          = {10.1017/S0956796821000034},
+  timestamp    = {Sun, 16 May 2021 00:13:31 +0200},
+  biburl       = {https://dblp.org/rec/journals/jfp/VezzosiMA21.bib},
+  bibsource    = {dblp computer science bibliography, https://dblp.org}
+}
+@article{cohen-cubical,
+  author       = {Cyril Cohen and Thierry Coquand and Simon Huber and Anders M{\"{o}}rtberg},
+  title        = {Cubical Type Theory: a constructive interpretation of the univalence axiom},
+  journal      = {CoRR},
+  volume       = {abs/1611.02108},
+  year         = {2016},
+  url          = {http://arxiv.org/abs/1611.02108},
+  eprinttype    = {arXiv},
+  eprint       = {1611.02108},
+  timestamp    = {Mon, 13 Aug 2018 16:48:16 +0200},
+  biburl       = {https://dblp.org/rec/journals/corr/CohenCHM16.bib},
+  bibsource    = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{coquand-emacs,
+author = {Coquand, Catarina and Synek, Dan and Takeyama, Makoto},
+title = {An Emacs-Interface for Type-Directed Support for Constructing Proofs and Programs}
+}
+
+
+@phdthesis{norell-thesis,
+  author  = {Ulf Norell},
+  title	  = {Towards a practical programming language based on dependent type theory},
+  school  = {Department of Computer Science and Engineering, Chalmers University of Technology},
+  year	  = 2007,
+  month	  = {September},
+  address = {SE-412 96 G\"{o}teborg, Sweden}
+}
+@article{geuvers-history,
+  doi = {10.1007/s12046-009-0001-5},
+  url = {https://doi.org/10.1007/s12046-009-0001-5},
+  year = {2009},
+  month = feb,
+  publisher = {Springer Science and Business Media {LLC}},
+  volume = {34},
+  number = {1},
+  pages = {3--25},
+  author = {Herman Geuvers},
+  title = {Proof assistants: History,  ideas and future},
+  journal = {Sadhana}
+}
+
+@Inbook{debruijn-automath,
+author="de Bruijn, N. G.",
+editor="Siekmann, J{\"o}rg H. and Wrightson, Graham",
+title="AUTOMATH, a Language for Mathematics",
+bookTitle="Automation of Reasoning: 2: Classical Papers on Computational Logic 1967--1970",
+year="1983",
+publisher="Springer Berlin Heidelberg",
+address="Berlin, Heidelberg",
+pages="159--200",
+abstract="AUTOMATH is a language intended for expressing detailed mathematical thoughts. It is not a programming language, although it has several features in common with existing programming languages. It is defined by a grammar, and every text written according to its rules is claimed to correspond to correct mathematics. It can be used to express a large part (see 1.6) of mathematics, and admits many ways for laying the foundations. The rules are such that a computer can be instructed to check whether texts written in the language are correct. These texts are not restricted to proofs of single theorems; they can contain entire mathematical theories, including the rules of inference used in such theories.",
+isbn="978-3-642-81955-1",
+doi="10.1007/978-3-642-81955-1_11",
+url="https://doi.org/10.1007/978-3-642-81955-1_11"
+}
+
+@incollection{howard-formulae,
+	author = {William Alvin Howard},
+	booktitle = {To H. B. Curry: Essays on Combinatory Logic, Lambda Calculus, and Formalism},
+	editor = {Haskell Curry and Hindley B. and Seldin J. Roger and P. Jonathan},
+	publisher = {Academic Press},
+	title = {The Formulae-as-Types Notion of Construction},
+	year = {1980}
+}
+
+@book{heyting-intuitionism,
+  title={Intuitionism: An Introduction},
+  author={Heyting, A.},
+  lccn={66080547},
+  series={Studies in logic and the foundations of mathematics},
+  url={https://books.google.it/books?id=4rhLAAAAMAAJ},
+  year={1966},
+  publisher={North-Holland Publishing Company}
+}
+@article{kolmogorov-intuitionism,
+  doi = {10.1007/bf01186549},
+  url = {https://doi.org/10.1007/bf01186549},
+  year = {1932},
+  month = dec,
+  publisher = {Springer Science and Business Media {LLC}},
+  volume = {35},
+  number = {1},
+  pages = {58--65},
+  author = {A. Kolmogoroff},
+  title = {Zur Deutung der intuitionistischen Logik},
+  journal = {Mathematische Zeitschrift}
+}
+@book{troelstra-intuitionism,
+  doi = {10.1007/bfb0080643},
+  url = {https://doi.org/10.1007/bfb0080643},
+  year = {1969},
+  publisher = {Springer Berlin Heidelberg},
+  author = {A. S. Troelstra},
+  title = {Principles of Intuitionism}
+}
+@article{coquand-coc,
+title = {The calculus of constructions},
+journal = {Information and Computation},
+volume = {76},
+number = {2},
+pages = {95-120},
+year = {1988},
+issn = {0890-5401},
+doi = {https://doi.org/10.1016/0890-5401(88)90005-3},
+url = {https://www.sciencedirect.com/science/article/pii/0890540188900053},
+author = {Thierry Coquand and Gérard Huet}
+}
+
+@article{plotkin-structural,
+  author       = {Gordon D. Plotkin},
+  title        = {A structural approach to operational semantics},
+  journal      = {J. Log. Algebraic Methods Program.},
+  volume       = {60-61},
+  pages        = {17--139},
+  year         = {2004},
+  timestamp    = {Mon, 18 May 2020 12:40:18 +0200},
+  biburl       = {https://dblp.org/rec/journals/jlp/Plotkin04a.bib},
+  bibsource    = {dblp computer science bibliography, https://dblp.org}
+}
+
+@inproceedings{kahn-natural,
+  author       = {Gilles Kahn},
+  editor       = {Franz{-}Josef Brandenburg and
+                  Guy Vidal{-}Naquet and
+                  Martin Wirsing},
+  title        = {Natural Semantics},
+  booktitle    = {{STACS} 87, 4th Annual Symposium on Theoretical Aspects of Computer
+                  Science, Passau, Germany, February 19-21, 1987, Proceedings},
+  series       = {Lecture Notes in Computer Science},
+  volume       = {247},
+  pages        = {22--39},
+  publisher    = {Springer},
+  year         = {1987},
+  url          = {https://doi.org/10.1007/BFb0039592},
+  doi          = {10.1007/BFb0039592},
+  timestamp    = {Tue, 14 May 2019 10:00:48 +0200},
+  biburl       = {https://dblp.org/rec/conf/stacs/Kahn87.bib},
+  bibsource    = {dblp computer science bibliography, https://dblp.org}
+}
+
+@inproceedings{pareto-sizes,
+author = {Hughes, John and Pareto, Lars and Sabry, Amr},
+title = {Proving the Correctness of Reactive Systems Using Sized Types},
+year = {1996},
+isbn = {0897917693},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/237721.240882},
+doi = {10.1145/237721.240882},
+abstract = {We have designed and implemented a type-based analysis for proving some basic properties of reactive systems. The analysis manipulates rich type expressions that contain information about the sizes of recursively defined data structures. Sized types are useful for detecting deadlocks, nontermination, and other errors in embedded programs. To establish the soundness of the analysis we have developed an appropriate semantic model of sized types.},
+booktitle = {Proceedings of the 23rd ACM SIGPLAN-SIGACT Symposium on Principles of Programming Languages},
+pages = {410–423},
+numpages = {14},
+location = {St. Petersburg Beach, Florida, USA},
+series = {POPL '96}
+}
+
+@article{uustalu-type-based-termination, 
+  title={Type-based termination of recursive definitions}, 
+  volume={14}, 
+  DOI={10.1017/S0960129503004122},
+  number={1}, 
+  journal={Mathematical Structures in Computer Science},
+  publisher={Cambridge University Press}, 
+  author={Barthe, G. and Frade, M. J. and Giménez, E. and Pinto, L. and Uustalu, T.},
+  year={2004}, 
+  pages={97–141}
+}
+
+@inproceedings{blanqui-type-based-termination,
+author = {Blanqui, Frédéric},
+year = {2004},
+month = {06},
+pages = {24-39},
+title = {A Type-Based Termination Criterion for Dependently-Typed Higher-Order Rewrite Systems},
+isbn = {978-3-540-22153-1},
+doi = {10.1007/978-3-540-25979-4_2}
+}
+
+
+@article{pientka-abel-copattern,
+author = {Abel, Andreas and Pientka, Brigitte and Thibodeau, David and Setzer, Anton},
+title = {Copatterns: Programming Infinite Structures by Observations},
+year = {2013},
+issue_date = {January 2013},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {48},
+number = {1},
+issn = {0362-1340},
+url = {https://doi.org/10.1145/2480359.2429075},
+doi = {10.1145/2480359.2429075},
+abstract = {Inductive datatypes provide mechanisms to define finite data such as finite lists and trees via constructors and allow programmers to analyze and manipulate finite data via pattern matching. In this paper, we develop a dual approach for working with infinite data structures such as streams. Infinite data inhabits coinductive datatypes which denote greatest fixpoints. Unlike finite data which is defined by constructors we define infinite data by observations. Dual to pattern matching, a tool for analyzing finite data, we develop the concept of copattern matching, which allows us to synthesize infinite data. This leads to a symmetric language design where pattern matching on finite and infinite data can be mixed.We present a core language for programming with infinite structures by observations together with its operational semantics based on (co)pattern matching and describe coverage of copatterns. Our language naturally supports both call-by-name and call-by-value interpretations and can be seamlessly integrated into existing languages like Haskell and ML. We prove type soundness for our language and sketch how copatterns open new directions for solving problems in the interaction of coinductive and dependent types.},
+journal = {SIGPLAN Not.},
+month = {jan},
+pages = {27–38},
+numpages = {12},
+keywords = {coinduction, introduction vs. elimination, functional programming, message passing, pattern matching}
+}
+
+  
+
+@inproceedings{10.1145/2429069.2429075,
+author = {Abel, Andreas and Pientka, Brigitte and Thibodeau, David and Setzer, Anton},
+title = {Copatterns: Programming Infinite Structures by Observations},
+year = {2013},
+isbn = {9781450318327},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/2429069.2429075},
+doi = {10.1145/2429069.2429075},
+abstract = {Inductive datatypes provide mechanisms to define finite data such as finite lists and trees via constructors and allow programmers to analyze and manipulate finite data via pattern matching. In this paper, we develop a dual approach for working with infinite data structures such as streams. Infinite data inhabits coinductive datatypes which denote greatest fixpoints. Unlike finite data which is defined by constructors we define infinite data by observations. Dual to pattern matching, a tool for analyzing finite data, we develop the concept of copattern matching, which allows us to synthesize infinite data. This leads to a symmetric language design where pattern matching on finite and infinite data can be mixed.We present a core language for programming with infinite structures by observations together with its operational semantics based on (co)pattern matching and describe coverage of copatterns. Our language naturally supports both call-by-name and call-by-value interpretations and can be seamlessly integrated into existing languages like Haskell and ML. We prove type soundness for our language and sketch how copatterns open new directions for solving problems in the interaction of coinductive and dependent types.},
+booktitle = {Proceedings of the 40th Annual ACM SIGPLAN-SIGACT Symposium on Principles of Programming Languages},
+pages = {27–38},
+numpages = {12},
+keywords = {pattern matching, functional programming, introduction vs. elimination, message passing, coinduction},
+location = {Rome, Italy},
+series = {POPL '13}
+}
+
+  
+
+@book{winskel-semantics,
+author = {Winskel, Glynn},
+title = {The Formal Semantics of Programming Languages: An Introduction},
+year = {1993},
+isbn = {0262231697},
+publisher = {MIT Press},
+address = {Cambridge, MA, USA}
+}
+
+  
+@inbook{allen-catalogue,
+  author    = {Allen, Frances},
+  title   = {Design and Optimization of Compilers},
+  chapter = {A Catalogue of Optimizing Transformation},
+  publisher = {Prentice-Hall},
+  isbn = {0132002043},
+  year      = {1972},
+  pages     = {1-30},
+}
+
+@manual{llvm,
+  title = {The LLVM Compiler Infrastructure},
+  author = {{LLVM Project}},
+  year = {2021},
+  url = {https://llvm.org/},
+  note = {Online; accessed September 2021},
+}
+
+
+
+@article{compcert,
+  author       = {Xavier Leroy},
+  title        = {A Formally Verified Compiler Back-end},
+  journal      = {J. Autom. Reason.},
+  volume       = {43},
+  number       = {4},
+  pages        = {363--446},
+  year         = {2009},
+  url          = {https://doi.org/10.1007/s10817-009-9155-4},
+  doi          = {10.1007/s10817-009-9155-4},
+  timestamp    = {Wed, 02 Sep 2020 13:29:59 +0200},
+  biburl       = {https://dblp.org/rec/journals/jar/Leroy09.bib},
+  bibsource    = {dblp computer science bibliography, https://dblp.org}
+}
+
+@software{coq,
+  author       = {The Coq Development Team},
+  title        = {The Coq Proof Assistant},
+  month        = jun,
+  year         = 2023,
+  publisher    = {Zenodo},
+  version      = {8.17},
+  doi          = {10.5281/zenodo.8161141},
+  url          = {https://doi.org/10.5281/zenodo.8161141}
+}
+@article{church-lambda,
+  doi = {10.2307/1968337},
+  url = {https://doi.org/10.2307/1968337},
+  year = {1932},
+  month = apr,
+  publisher = {{JSTOR}},
+  volume = {33},
+  number = {2},
+  pages = {346},
+  author = {Alonzo Church},
+  title = {A Set of Postulates for the Foundation of Logic},
+  journal = {The Annals of Mathematics}
+}
+@article{curry-functionality,
+  doi = {10.1073/pnas.20.11.584},
+  url = {https://doi.org/10.1073/pnas.20.11.584},
+  year = {1934},
+  month = nov,
+  publisher = {Proceedings of the National Academy of Sciences},
+  volume = {20},
+  number = {11},
+  pages = {584--590},
+  author = {H. B. Curry},
+  title = {Functionality in Combinatory Logic},
+  journal = {Proceedings of the National Academy of Sciences}
+}
+
+
+
+@inproceedings{lean-llvm,
+  title =	{{AliveInLean}: A Verified {LLVM} Peephole Optimization Verifier},
+  author =	{Juneyoung Lee and Chung-Kil Hur and Nuno P. Lopes},
+  booktitle =	{Proc. of the 31st International Conference on Computer-Aided Verification (CAV)},
+  doi =		{10.1007/978-3-030-25543-5_25},
+  month =	jul,
+  year =	2019
+}
+
+
+@article{zhao-llvm,
+author = {Zhao, Jianzhou and Nagarakatte, Santosh and Martin, Milo M.K. and Zdancewic, Steve},
+title = {Formalizing the LLVM Intermediate Representation for Verified Program Transformations},
+year = {2012},
+issue_date = {January 2012},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {47},
+number = {1},
+issn = {0362-1340},
+url = {https://doi.org/10.1145/2103621.2103709},
+doi = {10.1145/2103621.2103709},
+abstract = {This paper presents Vellvm (verified LLVM), a framework for reasoning about programs expressed in LLVM's intermediate representation and transformations that operate on it. Vellvm provides a mechanized formal semantics of LLVM's intermediate representation, its type system, and properties of its SSA form. The framework is built using the Coq interactive theorem prover. It includes multiple operational semantics and proves relations among them to facilitate different reasoning styles and proof techniques.To validate Vellvm's design, we extract an interpreter from the Coq formal semantics that can execute programs from LLVM test suite and thus be compared against LLVM reference implementations. To demonstrate Vellvm's practicality, we formalize and verify a previously proposed transformation that hardens C programs against spatial memory safety violations. Vellvm's tools allow us to extract a new, verified implementation of the transformation pass that plugs into the real LLVM infrastructure; its performance is competitive with the non-verified, ad-hoc original.},
+journal = {SIGPLAN Not.},
+month = {jan},
+pages = {427–440},
+numpages = {14},
+keywords = {memory safety, LLVM, Coq}
+}
+
+@article{zakowski-llvm,
+  doi = {10.1145/3473572},
+  url = {https://doi.org/10.1145/3473572},
   year = {2021},
   month = aug,
   publisher = {Association for Computing Machinery ({ACM})},
   volume = {5},
   number = {{ICFP}},
-  pages = {1--27},
-  author = {Mitchell Pickard and Graham Hutton},
-  title = {Calculating dependently-typed compilers (functional pearl)},
+  pages = {1--30},
+  author = {Yannick Zakowski and Calvin Beck and Irene Yoon and Ilia Zaichuk and Vadim Zaliva and Steve Zdancewic},
+  title = {Modular,  compositional,  and executable formal semantics for {LLVM} {IR}},
   journal = {Proceedings of the {ACM} on Programming Languages}
+}
+
+
+@inproceedings{sangiorgi-coinduction,
+  author       = {Davide Sangiorgi},
+  title        = {Bisimulation: From The Origins to Today},
+  booktitle    = {19th {IEEE} Symposium on Logic in Computer Science {(LICS} 2004),
+                  14-17 July 2004, Turku, Finland, Proceedings},
+  pages        = {298--302},
+  publisher    = {{IEEE} Computer Society},
+  year         = {2004},
+  url          = {https://doi.org/10.1109/LICS.2004.1319624},
+  doi          = {10.1109/LICS.2004.1319624},
+  timestamp    = {Fri, 24 Mar 2023 00:01:49 +0100},
+  biburl       = {https://dblp.org/rec/conf/lics/Sangiorgi04.bib},
+  bibsource    = {dblp computer science bibliography, https://dblp.org}
+}
+@book{sangiorgi-advanced-coinduction,
+  editor       = {Davide Sangiorgi and Jan J. M. M. Rutten},
+  title        = {Advanced Topics in Bisimulation and Coinduction},
+  series       = {Cambridge tracts in theoretical computer science},
+  volume       = {52},
+  publisher    = {Cambridge University Press},
+  year         = {2012},
+  url          = {http://www.cambridge.org/gb/knowledge/isbn/item6542021},
+  isbn         = {978-1-10-700497-9},
+  timestamp    = {Fri, 22 May 2020 12:02:52 +0200},
+  biburl       = {https://dblp.org/rec/books/cu/12/SR2012.bib},
+  bibsource    = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{hutton-compilers,
+author = {Bahr, Patrick and Hutton, Graham},
+title = {Monadic Compiler Calculation (Functional Pearl)},
+year = {2022},
+issue_date = {August 2022},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {6},
+number = {ICFP},
+url = {https://doi.org/10.1145/3547624},
+doi = {10.1145/3547624},
+abstract = {Bahr and Hutton recently developed a new approach to calculating correct compilers directly from specifications of their correctness. However, the methodology only considers converging behaviour of the source language, which means that the compiler could potentially produce arbitrary, erroneous code for source programs that diverge. In this article, we show how the methodology can naturally be extended to support the calculation of compilers that address both convergent and divergent behaviour simultaneously, without the need for separate reasoning for each aspect. Our approach is based on the use of the partiality monad to make divergence explicit, together with the use of strong bisimilarity to support equational-style calculations, but also generalises to other forms of effect by changing the underlying monad.},
+journal = {Proc. ACM Program. Lang.},
+month = {aug},
+articleno = {93},
+numpages = {29},
+keywords = {divergence, non-determinism, bisimilarity, program calculation}
 }
